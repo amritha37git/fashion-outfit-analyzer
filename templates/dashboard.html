@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">
+        Welcome, {{ user.username }} 👋
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>👕 Wardrobe</h5>
+                    <p>Manage your clothing items.</p>
+                    <a href="/wardrobe/" class="btn btn-primary">
+                        Open
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>🧠 AI Analysis</h5>
+                    <p>Analyze clothing images.</p>
+                    <a href="#" class="btn btn-secondary">
+                        Coming Soon
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5>✨ Outfit Recommendations</h5>
+                    <p>Generate outfit combinations.</p>
+                    <a href="#" class="btn btn-secondary">
+                        Coming Soon
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
