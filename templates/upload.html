@@ -1,20 +1,29 @@
-<h2>Upload Clothing Item</h2>
+{% extends 'base.html' %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+{% block content %}
 
-    <input type="text" name="name" placeholder="Item Name" required>
+<div class="container mt-5">
 
-    <select name="category" required>
-        <option value="">Select Category</option>
-        <option value="top">Top</option>
-        <option value="bottom">Bottom</option>
-        <option value="dress">Dress</option>
-        <option value="shoes">Shoes</option>
-        <option value="accessory">Accessory</option>
-    </select>
+    <div class="card shadow p-4">
 
-    <input type="file" name="image" required>
+        <h2 class="mb-4 text-center">
+            Add Clothing Item
+        </h2>
 
-    <button type="submit">Upload</button>
-</form>
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button class="btn btn-primary w-100">
+                Upload Clothing
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

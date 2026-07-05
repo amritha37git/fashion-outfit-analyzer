@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-4">
+            AI Clothing Analyzer
+        </h2>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Upload Clothing Image
+                </label>
+
+                <input
+                    type="file"
+                    name="image"
+                    class="form-control"
+                    required>
+            </div>
+
+            <button class="btn btn-success w-100">
+                Analyze with AI
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

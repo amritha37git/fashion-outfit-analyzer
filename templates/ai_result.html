@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-4">
+            AI Analysis Result
+        </h2>
+
+        <div class="text-center mb-4">
+            <img src="{{ image_url }}" class="img-fluid rounded" style="max-height:400px;">
+        </div>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Category</th>
+                <td>{{ category }}</td>
+            </tr>
+
+            <tr>
+                <th>Color</th>
+                <td>{{ color }}</td>
+            </tr>
+
+            <tr>
+                <th>Season</th>
+                <td>{{ season }}</td>
+            </tr>
+
+            <tr>
+                <th>Occasion</th>
+                <td>{{ occasion }}</td>
+            </tr>
+
+            <tr>
+                <th>Description</th>
+                <td>{{ description }}</td>
+            </tr>
+
+        </table>
+
+        <div class="text-center">
+
+            <button class="btn btn-success">
+                Save to Wardrobe
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
