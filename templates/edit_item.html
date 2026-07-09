@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card mx-auto" style="max-width:700px;">
+
+        <div class="card-body">
+
+            <h2>Edit Clothing Item</h2>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>Name</label>
+                <input class="form-control mb-3"
+                       name="name"
+                       value="{{ item.name }}">
+
+                <label>Category</label>
+                <input class="form-control mb-3"
+                       name="category"
+                       value="{{ item.category }}">
+
+                <label>Brand</label>
+                <input class="form-control mb-3"
+                       name="brand"
+                       value="{{ item.brand }}">
+
+                <label>Color</label>
+                <input class="form-control mb-3"
+                       name="color"
+                       value="{{ item.color }}">
+
+                <label>Season</label>
+                <input class="form-control mb-3"
+                       name="season"
+                       value="{{ item.season }}">
+
+                <label>Occasion</label>
+                <input class="form-control mb-3"
+                       name="occasion"
+                       value="{{ item.occasion }}">
+
+                <label>Description</label>
+
+                <textarea
+                    class="form-control mb-3"
+                    rows="4"
+                    name="description">{{ item.description }}</textarea>
+
+                <button class="btn btn-success">
+                    💾 Update Item
+                </button>
+
+                <a href="{% url 'wardrobe' %}"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

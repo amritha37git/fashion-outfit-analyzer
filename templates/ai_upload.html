@@ -1,39 +1,58 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Clothing Upload</title>
 
-{% block content %}
+    <style>
 
-<div class="container mt-5">
+        body{
+            font-family:Arial;
+            width:500px;
+            margin:auto;
+            margin-top:60px;
+        }
 
-    <div class="card shadow p-4">
+        h2{
+            text-align:center;
+        }
 
-        <h2 class="text-center mb-4">
-            AI Clothing Analyzer
-        </h2>
+        form{
+            border:1px solid #ddd;
+            padding:30px;
+            border-radius:10px;
+        }
 
-        <form method="POST" enctype="multipart/form-data">
+        button{
+            margin-top:20px;
+            width:100%;
+            padding:12px;
+            font-size:16px;
+            cursor:pointer;
+        }
 
-            {% csrf_token %}
+    </style>
 
-            <div class="mb-3">
-                <label class="form-label">
-                    Upload Clothing Image
-                </label>
+</head>
 
-                <input
-                    type="file"
-                    name="image"
-                    class="form-control"
-                    required>
-            </div>
+<body>
 
-            <button class="btn btn-success w-100">
-                Analyze with AI
-            </button>
+<h2>📸 AI Clothing Analyzer</h2>
 
-        </form>
+<form method="POST" enctype="multipart/form-data">
 
-    </div>
+    {% csrf_token %}
 
-</div>
+    <label><b>Select Clothing Image</b></label>
 
-{% endblock %}
+    <br><br>
+
+    <input type="file" name="image" required>
+
+    <button type="submit">
+        Analyze with AI
+    </button>
+
+</form>
+
+</body>
+</html>

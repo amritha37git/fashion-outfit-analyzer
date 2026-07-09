@@ -1,58 +1,65 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Analysis Result</title>
+</head>
+<body>
 
-{% block content %}
+<h2>AI Analysis Result</h2>
 
-<div class="container mt-5">
+<img src="{{ image_url }}" width="250"><br><br>
 
-    <div class="card shadow p-4">
+<form method="POST" action="{% url 'save_ai_item' %}">
+    {% csrf_token %}
 
-        <h2 class="text-center mb-4">
-            AI Analysis Result
-        </h2>
+    <input type="hidden" name="image" value="{{ image }}">
 
-        <div class="text-center mb-4">
-            <img src="{{ image_url }}" class="img-fluid rounded" style="max-height:400px;">
-        </div>
+    <label><b>Name</b></label><br>
+    <input type="text" name="name" value="{{ name }}" required><br><br>
 
-        <table class="table table-bordered">
+    <label><b>Category</b></label><br>
+    <select name="category">
+        <option {% if category == "Top" %}selected{% endif %}>Top</option>
+        <option {% if category == "Bottom" %}selected{% endif %}>Bottom</option>
+        <option {% if category == "Dress" %}selected{% endif %}>Dress</option>
+        <option {% if category == "Shoes" %}selected{% endif %}>Shoes</option>
+        <option {% if category == "Bag" %}selected{% endif %}>Bag</option>
+        <option {% if category == "Accessory" %}selected{% endif %}>Accessory</option>
+    </select>
+    <br><br>
 
-            <tr>
-                <th>Category</th>
-                <td>{{ category }}</td>
-            </tr>
+    <label><b>Brand</b></label><br>
+    <input type="text" name="brand" value="{{ brand }}"><br><br>
 
-            <tr>
-                <th>Color</th>
-                <td>{{ color }}</td>
-            </tr>
+    <label><b>Color</b></label><br>
+    <input type="text" name="color" value="{{ color }}"><br><br>
 
-            <tr>
-                <th>Season</th>
-                <td>{{ season }}</td>
-            </tr>
+    <label><b>Season</b></label><br>
+    <select name="season">
+        <option {% if season == "Summer" %}selected{% endif %}>Summer</option>
+        <option {% if season == "Winter" %}selected{% endif %}>Winter</option>
+        <option {% if season == "Rainy" %}selected{% endif %}>Rainy</option>
+        <option {% if season == "All Season" %}selected{% endif %}>All Season</option>
+    </select>
+    <br><br>
 
-            <tr>
-                <th>Occasion</th>
-                <td>{{ occasion }}</td>
-            </tr>
+    <label><b>Occasion</b></label><br>
+    <select name="occasion">
+        <option {% if occasion == "Casual" %}selected{% endif %}>Casual</option>
+        <option {% if occasion == "College" %}selected{% endif %}>College</option>
+        <option {% if occasion == "Office" %}selected{% endif %}>Office</option>
+        <option {% if occasion == "Party" %}selected{% endif %}>Party</option>
+        <option {% if occasion == "Wedding" %}selected{% endif %}>Wedding</option>
+    </select>
+    <br><br>
 
-            <tr>
-                <th>Description</th>
-                <td>{{ description }}</td>
-            </tr>
+    <label><b>Description</b></label><br>
+    <textarea name="description" rows="4" cols="50">{{ description }}</textarea>
+    <br><br>
 
-        </table>
+    <button type="submit">💾 Save to Wardrobe</button>
 
-        <div class="text-center">
+</form>
 
-            <button class="btn btn-success">
-                Save to Wardrobe
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-{% endblock %}
+</body>
+</html>
