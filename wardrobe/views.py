@@ -1,252 +1,352 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
 
 from .models import ClothingItem
 from .forms import ClothingItemForm
+
 from ai.detector import analyze_image
 
 
-# ==========================================
-# Manual Upload
-# ==========================================
+
+
 
 @login_required
 def upload_item(request):
 
+
     if request.method == "POST":
 
-        form = ClothingItemForm(request.POST, request.FILES)
+
+        form = ClothingItemForm(
+            request.POST,
+            request.FILES
+        )
+
+
 
         if form.is_valid():
 
-            clothing = form.save(commit=False)
-            clothing.user = request.user
-            clothing.save()
 
-            messages.success(
-                request,
-                "✅ Clothing item added successfully."
+            clothing = form.save(
+                commit=False
             )
 
-            return redirect("wardrobe")
+
+            clothing.user = request.user
+
+
+            clothing.save()
+
+
+
+            return redirect(
+                "wardrobe"
+            )
+
+
 
     else:
 
+
         form = ClothingItemForm()
 
+
+
     return render(
+
         request,
+
         "upload.html",
+
         {
-            "form": form
+            "form":form
         }
+
     )
 
 
-# ==========================================
-# Wardrobe
-# ==========================================
+
+
+
+
+
 
 @login_required
 def wardrobe(request):
 
+
     items = ClothingItem.objects.filter(
         user=request.user
-    ).order_by("-created_at")
-
-    search = request.GET.get("search", "")
-    category = request.GET.get("category", "")
-    color = request.GET.get("color", "")
-    season = request.GET.get("season", "")
-    occasion = request.GET.get("occasion", "")
-
-    if search:
-
-        items = items.filter(
-
-            Q(name__icontains=search) |
-            Q(color__icontains=search) |
-            Q(brand__icontains=search)
-
-        )
-
-    if category and category != "All":
-
-        items = items.filter(
-            category=category
-        )
-
-    if color and color != "All":
-
-        items = items.filter(
-            color__iexact=color
-        )
-
-    if season and season != "All":
-
-        items = items.filter(
-            season=season
-        )
-
-    if occasion and occasion != "All":
-
-        items = items.filter(
-            occasion=occasion
-        )
-
-    return render(
-        request,
-        "wardrobe.html",
-        {
-            "items": items,
-
-            "search": search,
-            "selected_category": category,
-            "selected_color": color,
-            "selected_season": season,
-            "selected_occasion": occasion,
-
-            "total_items": items.count()
-        }
     )
 
 
-# ==========================================
-# AI Upload
-# ==========================================
+
+    search=request.GET.get(
+        "search"
+    )
+
+
+    category=request.GET.get(
+        "category"
+    )
+
+
+    color=request.GET.get(
+        "color"
+    )
+
+
+    season=request.GET.get(
+        "season"
+    )
+
+
+    occasion=request.GET.get(
+        "occasion"
+    )
+
+
+
+    if search:
+
+        items=items.filter(
+            name__icontains=search
+        )
+
+
+
+    if category and category!="All":
+
+        items=items.filter(
+            category=category
+        )
+
+
+
+    if color and color!="All":
+
+        items=items.filter(
+            color__iexact=color
+        )
+
+
+
+    if season and season!="All":
+
+        items=items.filter(
+            season=season
+        )
+
+
+
+    if occasion and occasion!="All":
+
+        items=items.filter(
+            occasion=occasion
+        )
+
+
+
+    return render(
+
+        request,
+
+        "wardrobe.html",
+
+        {
+            "items":items
+        }
+
+    )
+
+
+
+
+
+
+
 
 @login_required
 def ai_upload(request):
 
-    if request.method == "POST":
 
-        image = request.FILES.get("image")
+    if request.method=="POST":
 
-        if not image:
 
-            messages.error(
-                request,
-                "Please choose an image."
-            )
-
-            return redirect("ai_upload")
-
-        fs = FileSystemStorage()
-
-        filename = fs.save(
-            image.name,
-            image
+        image=request.FILES.get(
+            "image"
         )
 
-        image_path = fs.path(filename)
 
-        try:
 
-            result = analyze_image(
+        if image:
+
+
+            fs=FileSystemStorage()
+
+
+
+            filename=fs.save(
+
+                image.name,
+
+                image
+
+            )
+
+
+
+            image_path=fs.path(
+                filename
+            )
+
+
+
+            result=analyze_image(
                 image_path
             )
 
-        except Exception:
 
-            result = {
 
-                "name": "Unknown Item",
+            return render(
 
-                "category": "Top",
+                request,
 
-                "brand": "Unknown",
+                "ai_result.html",
 
-                "color": "Unknown",
+                {
 
-                "season": "All Season",
 
-                "occasion": "Casual",
+                    "image":filename,
 
-                "description":
-                "AI analysis is currently unavailable. Please edit the details before saving."
 
-            }
+                    "image_url":
+                    fs.url(filename),
 
-        context = {
 
-            "image": filename,
+                    **result
 
-            "image_url": fs.url(filename),
+                }
 
-            **result
+            )
 
-        }
 
-        return render(
-            request,
-            "ai_result.html",
-            context
-        )
 
     return render(
+
         request,
+
         "ai_upload.html"
+
     )
 
 
-# ==========================================
-# Save AI Item
-# ==========================================
+
+
+
+
+
+
 
 @login_required
 def save_ai_item(request):
 
-    if request.method != "POST":
 
-        return redirect("ai_upload")
+    if request.method=="POST":
 
-    ClothingItem.objects.create(
 
-        user=request.user,
 
-        name=request.POST.get("name"),
+        image_path=request.POST.get(
+            "image"
+        )
 
-        category=request.POST.get("category"),
 
-        brand=request.POST.get("brand"),
 
-        color=request.POST.get("color"),
+        ClothingItem.objects.create(
 
-        season=request.POST.get("season"),
 
-        occasion=request.POST.get("occasion"),
+            user=request.user,
 
-        description=request.POST.get("description"),
 
-        image=request.POST.get("image"),
+            name=request.POST.get(
+                "name",
+                "Unknown Item"
+            ),
 
-        ai_generated=True,
 
-        ai_confidence=90
 
+            category=request.POST.get(
+                "category",
+                "Top"
+            ),
+
+
+
+            brand=request.POST.get(
+                "brand",
+                "Unknown"
+            ),
+
+
+
+            color=request.POST.get(
+                "color",
+                "Unknown"
+            ),
+
+
+
+            season=request.POST.get(
+                "season",
+                "All Season"
+            ),
+
+
+
+            occasion=request.POST.get(
+                "occasion",
+                "Casual"
+            ),
+
+
+
+            description=request.POST.get(
+                "description",
+                ""
+            ),
+
+
+
+            image=image_path
+
+        )
+
+
+
+        return redirect(
+            "wardrobe"
+        )
+
+
+
+    return redirect(
+        "ai_upload"
     )
 
-    messages.success(
-        request,
-        "✅ Item saved successfully."
-    )
-
-    return redirect("wardrobe")
 
 
-# ==========================================
-# Edit Item
-# ==========================================
+
+
+
+
+
 
 @login_required
-def edit_item(request, item_id):
+def edit_item(request,item_id):
 
-    item = get_object_or_404(
 
-        ClothingItem,
+    item=ClothingItem.objects.get(
 
         id=item_id,
 
@@ -254,26 +354,56 @@ def edit_item(request, item_id):
 
     )
 
-    if request.method == "POST":
 
-        item.name = request.POST.get("name")
-        item.category = request.POST.get("category")
-        item.brand = request.POST.get("brand")
-        item.color = request.POST.get("color")
-        item.season = request.POST.get("season")
-        item.occasion = request.POST.get("occasion")
-        item.description = request.POST.get("description")
 
-        item.manually_edited = True
+    if request.method=="POST":
+
+
+        item.name=request.POST.get(
+            "name"
+        )
+
+
+        item.category=request.POST.get(
+            "category"
+        )
+
+
+        item.brand=request.POST.get(
+            "brand"
+        )
+
+
+        item.color=request.POST.get(
+            "color"
+        )
+
+
+        item.season=request.POST.get(
+            "season"
+        )
+
+
+        item.occasion=request.POST.get(
+            "occasion"
+        )
+
+
+        item.description=request.POST.get(
+            "description"
+        )
+
+
 
         item.save()
 
-        messages.success(
-            request,
-            "✅ Item updated."
+
+
+        return redirect(
+            "wardrobe"
         )
 
-        return redirect("wardrobe")
+
 
     return render(
 
@@ -282,24 +412,23 @@ def edit_item(request, item_id):
         "edit_item.html",
 
         {
-
-            "item": item
-
+            "item":item
         }
 
     )
 
 
-# ==========================================
-# Delete Item
-# ==========================================
+
+
+
+
+
 
 @login_required
-def delete_item(request, item_id):
+def delete_item(request,item_id):
 
-    item = get_object_or_404(
 
-        ClothingItem,
+    item=ClothingItem.objects.get(
 
         id=item_id,
 
@@ -307,14 +436,12 @@ def delete_item(request, item_id):
 
     )
 
+
+
     item.delete()
 
-    messages.success(
 
-        request,
 
-        "🗑 Item deleted."
-
+    return redirect(
+        "wardrobe"
     )
-
-    return redirect("wardrobe")

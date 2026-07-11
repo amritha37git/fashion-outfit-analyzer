@@ -2,141 +2,234 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from wardrobe.models import ClothingItem
+
 from .recommendation import choose_best_outfits
+
 
 
 @login_required
 def stylist(request):
 
     recommendations = []
+
     occasion = ""
     weather = ""
 
     error_title = ""
     error_message = ""
 
+
+
     if request.method == "POST":
 
-        occasion = request.POST.get("occasion")
-        weather = request.POST.get("weather")
+
+        occasion = request.POST.get(
+            "occasion",
+            ""
+        )
+
+
+        weather = request.POST.get(
+            "weather",
+            ""
+        )
+
+
 
         clothes = ClothingItem.objects.filter(
             user=request.user
         )
 
-        # Wardrobe is empty
+
+
         if not clothes.exists():
 
-            error_title = "Your wardrobe is empty"
+
+            error_title = "👗 Wardrobe Empty"
+
 
             error_message = (
-                "Upload some clothing items before requesting outfit recommendations."
+                "Upload clothes to your wardrobe "
+                "before generating recommendations."
             )
+
+
 
         else:
 
+
             outfits = choose_best_outfits(
+
                 clothes,
+
                 occasion,
+
                 weather
+
             )
 
-            # No outfit found
+
+
             if not outfits:
 
-                categories = set(
-                    clothes.values_list("category", flat=True)
+
+                error_title = "😔 No Outfit Found"
+
+
+                error_message = (
+                    "No suitable combination found. "
+                    "Try adding more clothes."
                 )
 
-                required = [
-                    "Top",
-                    "Bottom",
-                    "Shoes",
-                    "Bag",
-                    "Accessory"
-                ]
 
-                missing = [
-                    category
-                    for category in required
-                    if category not in categories
-                ]
-
-                if missing:
-
-                    error_title = "Incomplete Wardrobe"
-
-                    error_message = (
-                        "You're missing: "
-                        + ", ".join(missing)
-                        + ". Upload these items for better recommendations."
-                    )
-
-                else:
-
-                    error_title = "No Matching Outfit"
-
-                    error_message = (
-                        f"We couldn't create a complete {occasion} outfit "
-                        f"for {weather.lower()} weather using your current wardrobe."
-                    )
 
             else:
 
+
                 titles = [
+
                     "🥇 Best Match",
-                    "🌟 Alternative Look",
+
+                    "🌟 Alternative Style",
+
                     "🔥 Trendy Choice"
+
                 ]
 
-                for i, outfit in enumerate(outfits):
 
-                    outfit_details = {}
 
-                    for category in [
+                for index, outfit in enumerate(outfits):
+
+
+                    items = {}
+
+
+
+                    categories = [
+
                         "Top",
+
                         "Bottom",
+
                         "Dress",
+
                         "Shoes",
+
                         "Bag",
+
                         "Accessory"
-                    ]:
+
+                    ]
+
+
+
+                    for category in categories:
+
 
                         item = outfit.get(category)
 
+
+
                         if item:
 
-                            outfit_details[category] = {
+
+                            items[category] = {
+
+
                                 "name": item.name,
+
+
                                 "color": item.color,
-                                "brand": item.brand,
+
+
+                                "brand":
+                                    getattr(
+                                        item,
+                                        "brand",
+                                        "Unknown"
+                                    ),
+
+
                                 "season": item.season,
+
+
                                 "occasion": item.occasion,
-                                "image": item.image.url if item.image else ""
+
+
+                                "image":
+                                    item.image.url
+                                    if item.image
+                                    else ""
+
                             }
+
+
+
 
                     recommendations.append({
 
-                        "title": titles[i] if i < len(titles) else f"Outfit {i+1}",
+                        "title":
+                            titles[index]
+                            if index < len(titles)
+                            else "Outfit",
 
-                        "score": outfit["score"],
 
-                        "reason": outfit["reason"],
+                        "score":
+                            outfit.get(
+                                "score",
+                                0
+                            ),
 
-                        "breakdown": outfit["breakdown"],
 
-                        "items": outfit_details
+                        "reason":
+                            outfit.get(
+                                "reason",
+                                ""
+                            ),
+
+
+                        "breakdown":
+                            outfit.get(
+                                "breakdown",
+                                {}
+                            ),
+
+
+                        "items":
+                            items
 
                     })
 
+
+
     return render(
+
         request,
+
         "stylist.html",
+
         {
-            "recommendations": recommendations,
-            "selected_occasion": occasion,
-            "selected_weather": weather,
-            "error_title": error_title,
-            "error_message": error_message,
+
+
+            "recommendations":
+                recommendations,
+
+
+            "selected_occasion":
+                occasion,
+
+
+            "selected_weather":
+                weather,
+
+
+            "error_title":
+                error_title,
+
+
+            "error_message":
+                error_message,
+
         }
+
     )

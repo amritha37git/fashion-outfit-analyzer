@@ -1,38 +1,103 @@
-OCCASION_MAP = {
+def valid_occasion(item, selected_occasion):
 
-    "College": ["College", "Casual"],
-
-    "Casual": ["Casual", "College"],
-
-    "Office": ["Office"],
-
-    "Party": ["Party", "Casual"],
-
-    "Wedding": ["Wedding", "Party"]
-}
+    item_occasion = item.occasion
 
 
-WEATHER_MAP = {
-
-    "Sunny": ["Summer", "All Season"],
-
-    "Cloudy": ["All Season"],
-
-    "Rainy": ["Rainy", "All Season"],
-
-    "Cold": ["Winter", "All Season"]
-}
+    # Exact match
+    if item_occasion == selected_occasion:
+        return True
 
 
-def valid_occasion(item, occasion):
 
-    allowed = OCCASION_MAP.get(occasion, [])
+    # Casual clothes are flexible
 
-    return item.occasion in allowed
+    if item_occasion == "Casual":
+
+        if selected_occasion in [
+            "College",
+            "Casual"
+        ]:
+            return True
+
+
+
+    # Party clothes can work for Wedding
+
+    if item_occasion == "Party":
+
+        if selected_occasion == "Wedding":
+            return True
+
+
+
+    # Wedding clothes can work for Party
+
+    if item_occasion == "Wedding":
+
+        if selected_occasion == "Party":
+            return True
+
+
+
+    return False
+
+
+
 
 
 def valid_weather(item, weather):
 
-    allowed = WEATHER_MAP.get(weather, [])
 
-    return item.season in allowed
+    season = item.season
+
+
+
+    weather_rules = {
+
+
+        "Sunny": [
+
+            "Summer",
+            "All Season"
+
+        ],
+
+
+
+        "Cloudy": [
+
+            "Summer",
+            "Winter",
+            "All Season"
+
+        ],
+
+
+
+        "Rainy": [
+
+            "Rainy",
+            "All Season"
+
+        ],
+
+
+
+        "Cold": [
+
+            "Winter",
+            "All Season"
+
+        ]
+
+    }
+
+
+
+    allowed_seasons = weather_rules.get(
+        weather,
+        []
+    )
+
+
+    return season in allowed_seasons

@@ -1,65 +1,287 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>AI Analysis Result</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>AI Analysis Result</h2>
 
-<img src="{{ image_url }}" width="250"><br><br>
+{% block content %}
 
-<form method="POST" action="{% url 'save_ai_item' %}">
-    {% csrf_token %}
 
-    <input type="hidden" name="image" value="{{ image }}">
+<div class="container py-5">
 
-    <label><b>Name</b></label><br>
-    <input type="text" name="name" value="{{ name }}" required><br><br>
 
-    <label><b>Category</b></label><br>
-    <select name="category">
-        <option {% if category == "Top" %}selected{% endif %}>Top</option>
-        <option {% if category == "Bottom" %}selected{% endif %}>Bottom</option>
-        <option {% if category == "Dress" %}selected{% endif %}>Dress</option>
-        <option {% if category == "Shoes" %}selected{% endif %}>Shoes</option>
-        <option {% if category == "Bag" %}selected{% endif %}>Bag</option>
-        <option {% if category == "Accessory" %}selected{% endif %}>Accessory</option>
-    </select>
-    <br><br>
+    <div class="card shadow-lg border-0">
 
-    <label><b>Brand</b></label><br>
-    <input type="text" name="brand" value="{{ brand }}"><br><br>
 
-    <label><b>Color</b></label><br>
-    <input type="text" name="color" value="{{ color }}"><br><br>
+        <div class="card-body p-5">
 
-    <label><b>Season</b></label><br>
-    <select name="season">
-        <option {% if season == "Summer" %}selected{% endif %}>Summer</option>
-        <option {% if season == "Winter" %}selected{% endif %}>Winter</option>
-        <option {% if season == "Rainy" %}selected{% endif %}>Rainy</option>
-        <option {% if season == "All Season" %}selected{% endif %}>All Season</option>
-    </select>
-    <br><br>
 
-    <label><b>Occasion</b></label><br>
-    <select name="occasion">
-        <option {% if occasion == "Casual" %}selected{% endif %}>Casual</option>
-        <option {% if occasion == "College" %}selected{% endif %}>College</option>
-        <option {% if occasion == "Office" %}selected{% endif %}>Office</option>
-        <option {% if occasion == "Party" %}selected{% endif %}>Party</option>
-        <option {% if occasion == "Wedding" %}selected{% endif %}>Wedding</option>
-    </select>
-    <br><br>
 
-    <label><b>Description</b></label><br>
-    <textarea name="description" rows="4" cols="50">{{ description }}</textarea>
-    <br><br>
+            <h1 class="text-center fw-bold mb-5">
 
-    <button type="submit">💾 Save to Wardrobe</button>
+                🤖 AI Analysis Result
 
-</form>
+            </h1>
 
-</body>
-</html>
+
+
+
+            <div class="row">
+
+
+
+                <!-- IMAGE -->
+
+                <div class="col-md-5 text-center">
+
+
+                    <img src="{{ image_url }}"
+
+                         class="img-fluid rounded shadow"
+
+                         style="max-height:450px;">
+
+
+                </div>
+
+
+
+
+
+                <!-- DETAILS -->
+
+
+                <div class="col-md-7">
+
+
+                    <div class="card shadow-sm">
+
+
+                        <div class="card-body">
+
+
+
+                            <h3 class="text-primary">
+
+                                {{ name }}
+
+                            </h3>
+
+
+
+                            <hr>
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    📂 Category
+                                </strong>
+
+                                <br>
+
+                                {{ category }}
+
+                            </p>
+
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    🏷 Brand
+                                </strong>
+
+                                <br>
+
+                                {{ brand }}
+
+                            </p>
+
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    🎨 Color
+                                </strong>
+
+                                <br>
+
+                                {{ color }}
+
+                            </p>
+
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    🌦 Season
+                                </strong>
+
+                                <br>
+
+
+                                <span class="badge bg-success">
+
+                                    {{ season }}
+
+                                </span>
+
+
+                            </p>
+
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    🎉 Occasion
+                                </strong>
+
+                                <br>
+
+
+                                <span class="badge bg-warning text-dark">
+
+                                    {{ occasion }}
+
+                                </span>
+
+
+                            </p>
+
+
+
+
+
+                            <p>
+
+                                <strong>
+                                    📝 Description
+                                </strong>
+
+                                <br>
+
+
+                                {{ description }}
+
+
+                            </p>
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- SAVE -->
+
+
+            <form method="POST"
+                  action="{% url 'save_ai_item' %}"
+                  class="mt-5">
+
+
+                {% csrf_token %}
+
+
+
+                <input type="hidden"
+                       name="name"
+                       value="{{ name }}">
+
+
+
+                <input type="hidden"
+                       name="category"
+                       value="{{ category }}">
+
+
+
+                <input type="hidden"
+                       name="brand"
+                       value="{{ brand }}">
+
+
+
+                <input type="hidden"
+                       name="color"
+                       value="{{ color }}">
+
+
+
+                <input type="hidden"
+                       name="season"
+                       value="{{ season }}">
+
+
+
+                <input type="hidden"
+                       name="occasion"
+                       value="{{ occasion }}">
+
+
+
+                <input type="hidden"
+                       name="description"
+                       value="{{ description }}">
+
+
+
+                <input type="hidden"
+                       name="image"
+                       value="{{ image }}">
+
+
+
+
+
+                <button class="btn btn-success btn-lg w-100">
+
+
+                    💾 Save to Wardrobe
+
+
+                </button>
+
+
+
+            </form>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}

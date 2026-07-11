@@ -4,293 +4,577 @@
 
 <div class="container py-5">
 
-    <div class="card shadow-lg border-0">
+<div class="card shadow-lg border-0">
 
-        <div class="card-body p-5">
+<div class="card-body p-5">
 
-            <div class="text-center mb-5">
 
-                <h1 class="fw-bold">
-                    🤖 AI Fashion Stylist
-                </h1>
+<div class="text-center mb-5">
 
-                <p class="text-muted">
-                    Discover your best outfits from your wardrobe.
-                </p>
+<h1 class="fw-bold">
+🤖 AI Fashion Stylist
+</h1>
 
-            </div>
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="fw-bold">
-                            Occasion
-                        </label>
-
-                        <select name="occasion" class="form-select">
-
-                            <option value="College" {% if selected_occasion == "College" %}selected{% endif %}>College</option>
-
-                            <option value="Office" {% if selected_occasion == "Office" %}selected{% endif %}>Office</option>
-
-                            <option value="Party" {% if selected_occasion == "Party" %}selected{% endif %}>Party</option>
-
-                            <option value="Wedding" {% if selected_occasion == "Wedding" %}selected{% endif %}>Wedding</option>
-
-                            <option value="Casual" {% if selected_occasion == "Casual" %}selected{% endif %}>Casual</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="fw-bold">
-                            Weather
-                        </label>
-
-                        <select name="weather" class="form-select">
-
-                            <option value="Sunny" {% if selected_weather == "Sunny" %}selected{% endif %}>Sunny</option>
-
-                            <option value="Cloudy" {% if selected_weather == "Cloudy" %}selected{% endif %}>Cloudy</option>
-
-                            <option value="Rainy" {% if selected_weather == "Rainy" %}selected{% endif %}>Rainy</option>
-
-                            <option value="Cold" {% if selected_weather == "Cold" %}selected{% endif %}>Cold</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <button class="btn btn-warning btn-lg w-100 mt-3">
-
-                    ✨ Recommend Outfits
-
-                </button>
-
-            </form>
-
-
-            <!-- Error Message -->
-
-            {% if error_title %}
-
-            <div class="alert alert-warning mt-5 shadow-sm">
-
-                <h4>⚠ {{ error_title }}</h4>
-
-                <p class="mb-3">
-
-                    {{ error_message }}
-
-                </p>
-
-                <a href="{% url 'upload' %}" class="btn btn-warning">
-
-                    ➕ Upload Clothing
-
-                </a>
-
-            </div>
-
-            {% endif %}
-
-
-            <!-- Recommendations -->
-
-            {% if recommendations %}
-
-            <hr class="my-5">
-
-            {% for outfit in recommendations %}
-
-            <div class="card shadow border-0 mb-5">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <h2>{{ outfit.title }}</h2>
-
-                        <h3 class="text-success">
-
-                            ⭐ {{ outfit.score }}/100
-
-                        </h3>
-
-                    </div>
-
-                    <hr>
-
-                    <div class="row">
-
-                        {% for category,item in outfit.items.items %}
-
-                        <div class="col-lg-3 col-md-6 mb-4">
-
-                            <div class="card h-100 shadow-sm">
-
-                                {% if item.image %}
-
-                                <img src="{{ item.image }}"
-                                     class="card-img-top"
-                                     style="height:260px;object-fit:cover;">
-
-                                {% else %}
-
-                                <div class="d-flex align-items-center justify-content-center bg-light"
-                                     style="height:260px;">
-
-                                    <span class="text-muted">
-                                        No Image
-                                    </span>
-
-                                </div>
-
-                                {% endif %}
-
-                                <div class="card-body">
-
-                                    <h5 class="text-center text-primary">
-
-                                        {{ category }}
-
-                                    </h5>
-
-                                    <hr>
-
-                                    <p><strong>Name</strong><br>{{ item.name }}</p>
-
-                                    <p><strong>Color</strong><br>{{ item.color }}</p>
-
-                                    <p><strong>Brand</strong><br>{{ item.brand }}</p>
-
-                                    <p><strong>Season</strong><br>{{ item.season }}</p>
-
-                                    <p><strong>Occasion</strong><br>{{ item.occasion }}</p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {% endfor %}
-
-                    </div>
-
-                    <div class="card bg-light border-0 mt-3">
-
-                        <div class="card-body">
-
-                            <h4>✨ Why this outfit works</h4>
-
-                            <p class="lead mb-0">
-
-                                {{ outfit.reason }}
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-4">
-
-                        <div class="col-md-3">
-
-                            <div class="card text-center">
-
-                                <div class="card-body">
-
-                                    <h5>🎨</h5>
-
-                                    <h6>Color Match</h6>
-
-                                    <h3>{{ outfit.breakdown.color|default:0 }}/40</h3>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-3">
-
-                            <div class="card text-center">
-
-                                <div class="card-body">
-
-                                    <h5>📅</h5>
-
-                                    <h6>Occasion</h6>
-
-                                    <h3>{{ outfit.breakdown.occasion|default:0 }}/30</h3>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-3">
-
-                            <div class="card text-center">
-
-                                <div class="card-body">
-
-                                    <h5>🌦️</h5>
-
-                                    <h6>Season</h6>
-
-                                    <h3>{{ outfit.breakdown.season|default:0 }}/20</h3>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-3">
-
-                            <div class="card text-center">
-
-                                <div class="card-body">
-
-                                    <h5>👔</h5>
-
-                                    <h6>Style</h6>
-
-                                    <h3>{{ outfit.breakdown.style|default:0 }}/20</h3>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {% endfor %}
-
-            {% endif %}
-
-        </div>
-
-    </div>
+<p class="text-muted">
+Discover your best outfits from your wardrobe.
+</p>
 
 </div>
+
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+
+<div class="row">
+
+
+<div class="col-md-6 mb-3">
+
+<label class="fw-bold">
+🎉 Occasion
+</label>
+
+
+<select name="occasion" class="form-select">
+
+
+<option value="College"
+{% if selected_occasion == "College" %}selected{% endif %}>
+College
+</option>
+
+
+<option value="Office"
+{% if selected_occasion == "Office" %}selected{% endif %}>
+Office
+</option>
+
+
+<option value="Party"
+{% if selected_occasion == "Party" %}selected{% endif %}>
+Party
+</option>
+
+
+<option value="Wedding"
+{% if selected_occasion == "Wedding" %}selected{% endif %}>
+Wedding
+</option>
+
+
+<option value="Casual"
+{% if selected_occasion == "Casual" %}selected{% endif %}>
+Casual
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+<div class="col-md-6 mb-3">
+
+<label class="fw-bold">
+🌦 Weather
+</label>
+
+
+<select name="weather" class="form-select">
+
+
+<option value="Sunny"
+{% if selected_weather == "Sunny" %}selected{% endif %}>
+Sunny
+</option>
+
+
+<option value="Cloudy"
+{% if selected_weather == "Cloudy" %}selected{% endif %}>
+Cloudy
+</option>
+
+
+<option value="Rainy"
+{% if selected_weather == "Rainy" %}selected{% endif %}>
+Rainy
+</option>
+
+
+<option value="Cold"
+{% if selected_weather == "Cold" %}selected{% endif %}>
+Cold
+</option>
+
+
+</select>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<button class="btn btn-warning btn-lg w-100 mt-3">
+
+✨ Generate AI Outfit
+
+</button>
+
+
+</form>
+
+
+
+
+
+{% if selected_occasion and selected_weather %}
+
+<div class="alert alert-info text-center mt-4">
+
+
+<strong>
+Searching outfit for:
+</strong>
+
+
+<br>
+
+
+🎉 {{selected_occasion}}
+
+&nbsp; | &nbsp;
+
+🌦 {{selected_weather}}
+
+
+</div>
+
+
+{% endif %}
+
+
+
+
+
+
+{% if error_title %}
+
+
+<div class="alert alert-danger mt-4">
+
+
+<h4>
+{{error_title}}
+</h4>
+
+
+<p>
+{{error_message}}
+</p>
+
+
+
+</div>
+
+
+{% endif %}
+
+
+
+
+
+
+
+{% if recommendations %}
+
+
+<hr class="my-5">
+
+
+
+<h2 class="text-center fw-bold mb-5">
+
+👗 AI Generated Outfit Suggestions
+
+</h2>
+
+
+
+
+
+{% for outfit in recommendations %}
+
+
+
+<div class="card shadow-lg border-0 mb-5">
+
+
+<div class="card-body">
+
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+<h3>
+
+{{outfit.title}}
+
+</h3>
+
+
+
+<span class="badge bg-success fs-5">
+
+⭐ {{outfit.score}}/100
+
+</span>
+
+
+</div>
+
+
+
+<hr>
+
+
+
+
+<div class="row">
+
+
+
+{% for category,item in outfit.items.items %}
+
+
+
+<div class="col-lg-4 col-md-6 mb-4">
+
+
+<div class="card h-100 shadow-sm">
+
+
+
+{% if item.image %}
+
+
+<img src="{{item.image}}"
+
+class="card-img-top"
+
+style="height:280px;object-fit:cover;">
+
+
+{% else %}
+
+
+<div class="bg-light text-center p-5">
+
+No Image
+
+</div>
+
+
+{% endif %}
+
+
+
+
+
+<div class="card-body">
+
+
+<h4 class="text-center text-primary">
+
+{{category}}
+
+</h4>
+
+
+
+<hr>
+
+
+
+<p>
+
+<b>Name</b><br>
+
+{{item.name}}
+
+</p>
+
+
+
+<p>
+
+🎨 <b>Color:</b>
+
+{{item.color}}
+
+</p>
+
+
+
+<p>
+
+🏷 <b>Brand:</b>
+
+{{item.brand}}
+
+</p>
+
+
+
+<p>
+
+☀️ <b>Season:</b>
+
+{{item.season}}
+
+</p>
+
+
+
+<p>
+
+🎉 <b>Occasion:</b>
+
+{{item.occasion}}
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+
+
+
+<hr>
+
+
+
+<h4>
+✨ Why this outfit works
+</h4>
+
+
+<p class="lead">
+
+{{outfit.reason}}
+
+</p>
+
+
+
+
+
+
+<h4 class="mt-4">
+
+📊 AI Match Analysis
+
+</h4>
+
+
+
+<div class="row text-center">
+
+
+
+<div class="col-md-4">
+
+
+<div class="card">
+
+<div class="card-body">
+
+
+🎨
+
+<br>
+
+Color
+
+
+<h4>
+
+{{outfit.breakdown.color|default:0}}/40
+
+</h4>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="col-md-4">
+
+
+<div class="card">
+
+<div class="card-body">
+
+
+🎉
+
+<br>
+
+Occasion
+
+
+<h4>
+
+{{outfit.breakdown.occasion|default:0}}/30
+
+</h4>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="col-md-4">
+
+
+<div class="card">
+
+<div class="card-body">
+
+
+🌦
+
+<br>
+
+Weather
+
+
+<h4>
+
+{{outfit.breakdown.season|default:0}}/20
+
+</h4>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="card bg-light border-0 mt-4">
+
+
+<div class="card-body text-center">
+
+
+<h4>
+🛒 Complete The Look
+</h4>
+
+
+<p>
+Find similar fashion items:
+</p>
+
+
+<button class="btn btn-dark">
+Amazon
+</button>
+
+
+<button class="btn btn-primary">
+Flipkart
+</button>
+
+
+<button class="btn btn-danger">
+Myntra
+</button>
+
+
+<button class="btn btn-warning">
+Meesho
+</button>
+
+
+</div>
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+{% endif %}
+
+
+
+</div>
+
+</div>
+
+</div>
+
 
 {% endblock %}

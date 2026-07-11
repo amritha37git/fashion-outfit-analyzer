@@ -1,144 +1,147 @@
 import os
 import json
-import time
 
 from dotenv import load_dotenv
+
 from google import genai
+
 from PIL import Image
 
+
+
 load_dotenv()
+
+
 
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
-DEFAULT_RESULT = {
-
-    "name": "Unknown Item",
-
-    "category": "Top",
-
-    "brand": "Unknown",
-
-    "color": "Unknown",
-
-    "season": "All Season",
-
-    "occasion": "Casual",
-
-    "description": "AI is temporarily unavailable. Please edit the details manually."
-}
 
 
-VALID_CATEGORIES = [
 
-    "Top",
-    "Bottom",
-    "Dress",
-    "Shirt",
-    "T-shirt",
-    "Hoodie",
-    "Jacket",
-    "Shoes",
-    "Bag",
-    "Accessory"
-
-]
+def detect_season(data):
 
 
-VALID_SEASONS = [
+    text = (
 
-    "Summer",
-    "Winter",
-    "Rainy",
-    "All Season"
+        data.get("description","")
 
-]
+        +
 
+        data.get("fabric","")
 
-VALID_OCCASIONS = [
+        +
 
-    "Casual",
-    "College",
-    "Office",
-    "Party",
-    "Wedding"
+        data.get("style","")
 
-]
+    ).lower()
 
 
-def clean_result(result):
 
-    for key, value in DEFAULT_RESULT.items():
+    if any(word in text for word in [
 
-        result.setdefault(key, value)
+        "wool",
 
-    result["name"] = result["name"].title()
+        "sweater",
 
-    result["brand"] = result["brand"].title()
+        "jacket",
 
-    result["color"] = result["color"].title()
+        "coat",
 
-    if result["category"] not in VALID_CATEGORIES:
+        "thick",
 
-        result["category"] = "Top"
+        "thermal"
 
-    if result["season"] not in VALID_SEASONS:
+    ]):
 
-        result["season"] = "All Season"
-
-    if result["occasion"] not in VALID_OCCASIONS:
-
-        result["occasion"] = "Casual"
-
-    return result
+        return "Winter"
 
 
-def optimize_image(image_path):
 
-    image = Image.open(image_path)
 
-    image.thumbnail((1024, 1024))
+    if any(word in text for word in [
 
-    return image
+        "raincoat",
+
+        "waterproof",
+
+        "windbreaker"
+
+    ]):
+
+        return "Rainy"
+
+
+
+
+    if any(word in text for word in [
+
+        "cotton",
+
+        "linen",
+
+        "short",
+
+        "sleeveless",
+
+        "light",
+
+        "chiffon"
+
+    ]):
+
+        return "Summer"
+
+
+
+
+    return "All Season"
+
+
+
+
+
 
 
 def analyze_image(image_path):
 
-    image = optimize_image(image_path)
+
+    image = Image.open(image_path)
+
+
 
     prompt = """
-You are an expert AI Fashion Stylist.
 
-Analyze ONLY the clothing item shown.
+You are an AI fashion expert.
 
-Return ONLY valid JSON.
+Analyze this clothing image.
+
+Return ONLY JSON.
+
+Format:
 
 {
-
 "name":"",
-
 "category":"",
-
 "brand":"",
-
 "color":"",
-
-"season":"",
-
+"fabric":"",
+"sleeves":"",
+"style":"",
 "occasion":"",
-
 "description":""
-
 }
+
+
 
 Rules:
 
-Name:
-Short clothing name.
 
-Category:
+
+category must be one:
+
 Top
 Bottom
 Dress
@@ -150,101 +153,190 @@ Shoes
 Bag
 Accessory
 
-Brand:
-Unknown if logo not visible.
 
-Color:
+
+brand:
+
+If no logo:
+Unknown
+
+
+
+color:
+
 Only dominant color.
 
-Season:
-Summer
-Winter
-Rainy
-All Season
 
-Occasion:
+
+occasion:
+
+Choose:
+
 Casual
 College
 Office
 Party
 Wedding
 
-Description:
-One short sentence.
 
-Return ONLY JSON.
 
-No markdown.
+fabric:
 
-No explanations.
+Estimate fabric.
+
+
+
+sleeves:
+
+Short
+Long
+Sleeveless
+
+
+
+style:
+
+Describe style briefly.
+
+
+
+description:
+
+One sentence.
+
+
+
+Do not add markdown.
+
 """
 
-    MAX_RETRIES = 3
 
-    for attempt in range(MAX_RETRIES):
 
-        try:
+    try:
 
-            response = client.models.generate_content(
 
-                model="gemini-2.5-flash-lite",
+        response = client.models.generate_content(
 
-                contents=[
+            model="gemini-2.5-flash-lite",
 
-                    prompt,
+            contents=[
 
-                    image
+                prompt,
 
-                ]
+                image
 
+            ]
+
+        )
+
+
+
+        text=response.text.strip()
+
+
+
+        text=(
+
+            text.replace(
+                "```json",
+                ""
             )
 
-            text = response.text.strip()
-
-            text = (
-
-                text.replace("```json", "")
-
-                    .replace("```", "")
-
-                    .strip()
-
+            .replace(
+                "```",
+                ""
             )
 
-            result = json.loads(text)
+            .strip()
 
-            return clean_result(result)
+        )
 
-        except json.JSONDecodeError:
 
-            print("Gemini returned invalid JSON.")
 
-            if attempt == MAX_RETRIES - 1:
+        result=json.loads(text)
 
-                return DEFAULT_RESULT.copy()
 
-        except Exception as e:
 
-            print(f"Attempt {attempt+1} failed:", e)
+        result.setdefault(
+            "name",
+            "Unknown Item"
+        )
 
-            if "503" in str(e):
 
-                time.sleep(3)
+        result.setdefault(
+            "brand",
+            "Unknown"
+        )
 
-                continue
 
-            if "429" in str(e):
+        result.setdefault(
+            "color",
+            "Unknown"
+        )
 
-                return {
 
-                    **DEFAULT_RESULT,
+        result.setdefault(
+            "occasion",
+            "Casual"
+        )
 
-                    "description": "Daily AI quota exceeded. Please try again tomorrow."
 
-                }
+        result.setdefault(
+            "description",
+            ""
+        )
 
-            if attempt == MAX_RETRIES - 1:
 
-                return DEFAULT_RESULT.copy()
 
-    return DEFAULT_RESULT.copy()
+        # ADD SEASON AUTOMATICALLY
+
+        result["season"] = detect_season(result)
+
+
+
+        return result
+
+
+
+    except Exception as e:
+
+
+
+        print(
+            "Gemini Error:",
+            e
+        )
+
+
+
+        return {
+
+
+            "name":
+            "Unknown Item",
+
+
+            "category":
+            "Top",
+
+
+            "brand":
+            "Unknown",
+
+
+            "color":
+            "Unknown",
+
+
+            "season":
+            "All Season",
+
+
+            "occasion":
+            "Casual",
+
+
+            "description":
+            "AI unavailable"
+
+        }
