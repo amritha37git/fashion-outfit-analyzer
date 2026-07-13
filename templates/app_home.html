@@ -1,0 +1,125 @@
+{% comment %} {% extends 'base.html' %}
+
+
+{% block title %}
+FashionAI
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="text-center mt-5">
+
+
+<h1>
+Welcome back, {{ user.username }}
+</h1>
+
+
+<p class="lead">
+Your personal AI fashion assistant
+</p>
+
+
+<div class="row mt-5">
+
+
+<div class="col-md-4">
+
+<div class="card p-4">
+
+<h4>
+Wardrobe
+</h4>
+
+<p>
+Manage your clothes collection
+</p>
+
+
+<a href="{% url 'wardrobe' %}"
+class="btn btn-primary">
+
+Open Wardrobe
+
+</a>
+
+
+</div>
+
+</div>
+
+
+
+
+<div class="col-md-4">
+
+<div class="card p-4">
+
+
+<h4>
+Upload Clothes
+</h4>
+
+
+<p>
+Add new items to your wardrobe
+</p>
+
+
+<a href="{% url 'upload' %}"
+class="btn btn-primary">
+
+Upload
+
+</a>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<div class="col-md-4">
+
+
+<div class="card p-4">
+
+
+<h4>
+AI Stylist
+</h4>
+
+
+<p>
+Get outfit recommendations
+</p>
+
+
+<a href="{% url 'stylist' %}"
+class="btn btn-primary">
+
+Try AI Stylist
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %} {% endcomment %}

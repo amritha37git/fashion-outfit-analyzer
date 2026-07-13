@@ -1,47 +1,521 @@
 {% extends 'base.html' %}
 
+
+{% block title %}
+Create Account | FashionAI
+{% endblock %}
+
+
+
 {% block content %}
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
 
-        <div class="card shadow">
 
-            <div class="card-header text-center">
-                <h3>Create Account</h3>
-            </div>
+<div class="auth-page">
 
-            <div class="card-body">
 
-                <form method="POST">
-                    {% csrf_token %}
+<div class="auth-card">
 
-                    <div class="mb-3">
-                        <label>Username</label>
-                        <input type="text" name="username" class="form-control" required>
-                    </div>
 
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
+<div class="auth-header">
 
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
 
-                    <button class="btn btn-success w-100">
-                        Register
-                    </button>
+<h2>
+Create Account
+</h2>
 
-                </form>
 
-            </div>
+<p>
+Start building your smart wardrobe
+</p>
 
-        </div>
 
-    </div>
 </div>
+
+
+
+
+<form method="POST" id="signupForm">
+
+
+{% csrf_token %}
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+Username
+</label>
+
+
+<input
+type="text"
+name="username"
+class="form-control"
+placeholder="Choose username"
+required>
+
+
+</div>
+
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+Email
+</label>
+
+
+<input
+type="email"
+name="email"
+class="form-control"
+placeholder="Enter email address"
+required>
+
+
+</div>
+
+
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+Password
+</label>
+
+
+
+<div class="password-wrapper">
+
+
+<input
+type="password"
+name="password"
+id="password"
+class="form-control"
+placeholder="Create password"
+required>
+
+
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('password','eye1')">
+
+
+<i id="eye1" class="fa-solid fa-eye"></i>
+
+
+</button>
+
+
+</div>
+
+
+
+
+<div class="password-box" id="passwordRules">
+
+
+<div class="rule invalid" id="length">
+
+Minimum 8 characters
+
+</div>
+
+
+<div class="rule invalid" id="upper">
+
+One uppercase letter
+
+</div>
+
+
+<div class="rule invalid" id="lower">
+
+One lowercase letter
+
+</div>
+
+
+<div class="rule invalid" id="number">
+
+One number
+
+</div>
+
+
+<div class="rule invalid" id="special">
+
+One special character
+
+</div>
+
+
+<div class="strength">
+
+<div class="strength-fill" id="strengthBar">
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="mb-4">
+
+
+<label class="form-label">
+
+Confirm Password
+
+</label>
+
+
+
+<div class="password-wrapper">
+
+
+<input
+type="password"
+name="confirm_password"
+id="confirmPassword"
+class="form-control"
+placeholder="Confirm password"
+required>
+
+
+
+<button
+type="button"
+class="password-toggle"
+onclick="togglePassword('confirmPassword','eye2')">
+
+
+<i id="eye2" class="fa-solid fa-eye"></i>
+
+
+</button>
+
+
+</div>
+
+
+
+<small id="matchText"></small>
+
+
+
+</div>
+
+
+
+
+
+
+
+<button class="auth-btn">
+
+Create Account
+
+</button>
+
+
+
+
+</form>
+
+
+
+
+
+<div class="auth-footer">
+
+
+Already have an account?
+
+
+<a href="{% url 'login' %}">
+
+Login
+
+</a>
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block extra_js %}
+
+
+
+<script>
+
+
+const password =
+document.getElementById("password");
+
+
+const rules =
+document.getElementById("passwordRules");
+
+
+const bar =
+document.getElementById("strengthBar");
+
+
+
+// Show rules only when typing
+
+password.addEventListener(
+"focus",
+()=>{
+
+rules.classList.add("active");
+
+}
+
+);
+
+
+
+
+
+password.addEventListener(
+"input",
+()=>{
+
+
+let value=password.value;
+
+
+let score=0;
+
+
+
+check(
+"length",
+value.length>=8
+);
+
+
+check(
+"upper",
+/[A-Z]/.test(value)
+);
+
+
+check(
+"lower",
+/[a-z]/.test(value)
+);
+
+
+check(
+"number",
+/[0-9]/.test(value)
+);
+
+
+check(
+"special",
+/[@$!%*?&#]/.test(value)
+);
+
+
+
+
+
+if(value.length>=8)
+score+=20;
+
+
+if(/[A-Z]/.test(value))
+score+=20;
+
+
+if(/[a-z]/.test(value))
+score+=20;
+
+
+if(/[0-9]/.test(value))
+score+=20;
+
+
+if(/[@$!%*?&#]/.test(value))
+score+=20;
+
+
+
+bar.style.width=score+"%";
+
+
+
+});
+
+
+
+
+
+
+
+function check(id,result){
+
+
+let item=document.getElementById(id);
+
+
+
+if(result){
+
+item.classList.remove("invalid");
+
+item.classList.add("valid");
+
+}
+
+else{
+
+item.classList.remove("valid");
+
+item.classList.add("invalid");
+
+}
+
+
+}
+
+
+
+
+
+
+
+const confirmPassword =
+document.getElementById("confirmPassword");
+
+
+
+confirmPassword.addEventListener(
+"input",
+()=>{
+
+
+let text=document.getElementById("matchText");
+
+
+
+if(confirmPassword.value===password.value){
+
+
+text.innerHTML="Passwords match";
+
+text.style.color="#16A34A";
+
+
+}
+
+else{
+
+
+text.innerHTML="Passwords do not match";
+
+text.style.color="#DC2626";
+
+
+}
+
+
+});
+
+
+
+
+
+
+function togglePassword(input,icon){
+
+
+let field=document.getElementById(input);
+
+let eye=document.getElementById(icon);
+
+
+
+if(field.type==="password"){
+
+
+field.type="text";
+
+
+eye.classList.replace(
+"fa-eye",
+"fa-eye-slash"
+);
+
+
+}
+
+else{
+
+
+field.type="password";
+
+
+eye.classList.replace(
+"fa-eye-slash",
+"fa-eye"
+);
+
+
+}
+
+
+
+}
+
+
+</script>
+
+
 
 {% endblock %}

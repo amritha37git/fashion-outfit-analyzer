@@ -1,42 +1,173 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Login | FashionAI
+{% endblock %}
+
+
 {% block content %}
 
-<div class="row justify-content-center">
-    <div class="col-md-5">
 
-        <div class="card shadow">
+<div class="auth-page">
 
-            <div class="card-header text-center">
-                <h3>Login</h3>
-            </div>
 
-            <div class="card-body">
+<div class="auth-card">
 
-                <form method="POST">
-                    {% csrf_token %}
 
-                    <div class="mb-3">
-                        <label>Username</label>
-                        <input type="text" name="username" class="form-control" required>
-                    </div>
+<div class="auth-header">
 
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
+<h2>
+Welcome Back
+</h2>
 
-                    <button class="btn btn-primary w-100">
-                        Login
-                    </button>
+<p>
+Login to continue your fashion journey
+</p>
 
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
 </div>
+
+
+
+<form method="POST">
+
+{% csrf_token %}
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+Username
+</label>
+
+
+<input
+type="text"
+name="username"
+class="form-control"
+placeholder="Enter username"
+required>
+
+
+</div>
+
+
+
+
+<div class="mb-4">
+
+<label class="form-label">
+Password
+</label>
+
+
+<div class="password-wrapper">
+
+
+<input
+type="password"
+name="password"
+id="loginPassword"
+class="form-control"
+placeholder="Enter password"
+required>
+
+
+
+<button
+type="button"
+class="password-toggle"
+onclick="showPassword()">
+
+
+<i id="loginEye" class="fa-solid fa-eye"></i>
+
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<button class="auth-btn">
+
+Login
+
+</button>
+
+
+
+</form>
+
+
+
+
+<div class="auth-footer">
+
+Don't have an account?
+
+<a href="{% url 'signup' %}">
+Create Account
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+<script>
+
+function showPassword(){
+
+let pass=document.getElementById("loginPassword");
+
+let icon=document.getElementById("loginEye");
+
+
+if(pass.type==="password"){
+
+pass.type="text";
+
+icon.classList.replace(
+"fa-eye",
+"fa-eye-slash"
+);
+
+}
+
+else{
+
+pass.type="password";
+
+icon.classList.replace(
+"fa-eye-slash",
+"fa-eye"
+);
+
+}
+
+
+}
+
+
+</script>
 
 {% endblock %}

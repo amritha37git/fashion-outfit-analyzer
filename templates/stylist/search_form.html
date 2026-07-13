@@ -1,97 +1,108 @@
-<div class="card shadow-sm border-0 mb-5">
+<form method="POST" class="card shadow-lg border-0 rounded-4 p-4 mb-5">
 
-    <div class="card-body p-4">
+    {% csrf_token %}
 
-        <form method="POST">
+    <div class="row g-4">
 
-            {% csrf_token %}
+        <div class="col-lg-3">
 
-            <div class="row g-4">
+            <label class="form-label fw-semibold">
+                Occasion
+            </label>
 
-                <div class="col-md-6">
+            <select
+                name="occasion"
+                class="form-select">
 
-                    <label class="form-label fw-semibold">
-                        Occasion
-                    </label>
+                <option value="College">College</option>
+                <option value="Office">Office</option>
+                <option value="Casual">Casual</option>
+                <option value="Party">Party</option>
+                <option value="Wedding">Wedding</option>
 
-                    <select name="occasion" class="form-select">
+            </select>
 
-                        <option value="College" {% if selected_occasion == "College" %}selected{% endif %}>College</option>
+        </div>
 
-                        <option value="Office" {% if selected_occasion == "Office" %}selected{% endif %}>Office</option>
+        <div class="col-lg-3">
 
-                        <option value="Party" {% if selected_occasion == "Party" %}selected{% endif %}>Party</option>
+            <label class="form-label fw-semibold">
+                Weather
+            </label>
 
-                        <option value="Wedding" {% if selected_occasion == "Wedding" %}selected{% endif %}>Wedding</option>
+            <select
+                name="weather"
+                class="form-select">
 
-                        <option value="Casual" {% if selected_occasion == "Casual" %}selected{% endif %}>Casual</option>
+                <option value="Sunny">Sunny</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Rainy">Rainy</option>
+                <option value="Cold">Cold</option>
 
-                    </select>
+            </select>
 
-                </div>
+        </div>
 
-                <div class="col-md-6">
+        <div class="col-lg-3">
 
-                    <label class="form-label fw-semibold">
-                        Weather
-                    </label>
+            <label class="form-label fw-semibold">
+                Preferred Style
+            </label>
 
-                    <select name="weather" class="form-select">
+            <select
+                name="style"
+                class="form-select">
 
-                        <option value="Sunny" {% if selected_weather == "Sunny" %}selected{% endif %}>Sunny</option>
+                <option value="">Any Style</option>
+                <option>Casual</option>
+                <option>Formal</option>
+                <option>Streetwear</option>
+                <option>Minimal</option>
+                <option>Traditional</option>
+                <option>Sport</option>
+                <option>Vintage</option>
 
-                        <option value="Cloudy" {% if selected_weather == "Cloudy" %}selected{% endif %}>Cloudy</option>
+            </select>
 
-                        <option value="Rainy" {% if selected_weather == "Rainy" %}selected{% endif %}>Rainy</option>
+        </div>
 
-                        <option value="Cold" {% if selected_weather == "Cold" %}selected{% endif %}>Cold</option>
+        <div class="col-lg-3">
 
-                    </select>
+            <label class="form-label fw-semibold">
+                Preferred Color
+            </label>
 
-                </div>
+            <select
+                name="color"
+                class="form-select">
 
-            </div>
+                <option value="">Any Color</option>
 
-            <div class="text-center mt-4">
+                <option>Black</option>
+                <option>White</option>
+                <option>Blue</option>
+                <option>Grey</option>
+                <option>Brown</option>
+                <option>Beige</option>
+                <option>Green</option>
+                <option>Pink</option>
+                <option>Purple</option>
+                <option>Red</option>
 
-                <button class="btn btn-dark btn-lg px-5">
+            </select>
 
-                    Generate Outfit
-
-                </button>
-
-            </div>
-
-        </form>
+        </div>
 
     </div>
 
-</div>
+    <div class="text-center mt-4">
 
-{% if selected_occasion and selected_weather %}
+        <button class="btn btn-dark btn-lg px-5 rounded-pill">
 
-<div class="alert alert-light border text-center mb-5">
+            Generate Outfit
 
-    <strong>Selected</strong>
+        </button>
 
-    {{ selected_occasion }}
+    </div>
 
-    •
-
-    {{ selected_weather }}
-
-</div>
-
-{% endif %}
-
-{% if error_title %}
-
-<div class="alert alert-danger">
-
-    <h5>{{ error_title }}</h5>
-
-    <p class="mb-0">{{ error_message }}</p>
-
-</div>
-
-{% endif %}
+</form>

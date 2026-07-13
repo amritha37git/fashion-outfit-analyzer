@@ -1,323 +1,187 @@
 import itertools
 
 from .filters import get_items
-
 from .selectors import (
     choose_best_bag,
     choose_best_accessory,
-    choose_best_shoes
+    choose_best_shoes,
 )
 
 from .scoring import score_outfit
-
 from .explanation import build_reason
-
 from .diversity import remove_duplicate_outfits
 
 
-
-def choose_best_outfits(items, occasion, weather):
+def choose_best_outfits(
+    items,
+    occasion,
+    weather,
+    style="",
+    color=""
+):
 
     items = list(items)
 
-
-    tops = get_items(
-        items,
-        "Top",
-        occasion
-    )
-
-
-    bottoms = get_items(
-        items,
-        "Bottom",
-        occasion
-    )
-
-
-    dresses = get_items(
-        items,
-        "Dress",
-        occasion
-    )
-
-
-    shoes = get_items(
-        items,
-        "Shoes",
-        occasion
-    )
-
-
-    bags = get_items(
-        items,
-        "Bag",
-        occasion
-    )
-
-
-    accessories = get_items(
-        items,
-        "Accessory",
-        occasion
-    )
-
-
+    tops = get_items(items, "Top", occasion)
+    bottoms = get_items(items, "Bottom", occasion)
+    dresses = get_items(items, "Dress", occasion)
+    shoes = get_items(items, "Shoes", occasion)
+    bags = get_items(items, "Bag", occasion)
+    accessories = get_items(items, "Accessory", occasion)
 
     outfits = []
 
-
-
-    # =============================
-    # DRESS OUTFITS
-    # =============================
+    # -----------------------------
+    # Dress Based Outfits
+    # -----------------------------
 
     for dress in dresses:
 
-
         shoe = choose_best_shoes(
             shoes,
             dress=dress,
-            occasion=occasion
+            occasion=occasion,
         )
-
 
         bag = choose_best_bag(
             bags,
             shoe,
-            occasion
+            occasion,
         )
-
 
         accessory = choose_best_accessory(
             accessories,
             bag,
-            occasion
+            occasion,
         )
-
-
 
         score, breakdown = score_outfit(
-
             dress=dress,
-
             shoes=shoe,
-
             bag=bag,
-
             accessory=accessory,
-
             occasion=occasion,
-
-            weather=weather
-
+            weather=weather,
+            style=style,
+            color=color,
         )
 
-
-
         outfits.append({
-
             "Dress": dress,
-
             "Shoes": shoe,
-
             "Bag": bag,
-
             "Accessory": accessory,
-
             "score": score,
-
-            "breakdown": breakdown
-
+            "breakdown": breakdown,
         })
 
+    # -----------------------------
+    # Top + Bottom Outfits
+    # -----------------------------
 
-
-
-
-    # =============================
-    # TOP + BOTTOM OUTFITS
-    # =============================
-
-
-    combinations = itertools.product(
-        tops,
-        bottoms
-    )
-
-
-
-    for top, bottom in combinations:
-
+    for top, bottom in itertools.product(tops, bottoms):
 
         shoe = choose_best_shoes(
-
             shoes,
-
             top=top,
-
             bottom=bottom,
-
-            occasion=occasion
-
+            occasion=occasion,
         )
-
 
         bag = choose_best_bag(
-
             bags,
-
             shoe,
-
-            occasion
-
+            occasion,
         )
-
 
         accessory = choose_best_accessory(
-
             accessories,
-
             bag,
-
-            occasion
-
+            occasion,
         )
-
-
 
         score, breakdown = score_outfit(
-
             top=top,
-
             bottom=bottom,
-
             shoes=shoe,
-
             bag=bag,
-
             accessory=accessory,
-
             occasion=occasion,
-
-            weather=weather
-
+            weather=weather,
+            style=style,
+            color=color,
         )
 
-
-
         outfits.append({
-
             "Top": top,
-
             "Bottom": bottom,
-
             "Shoes": shoe,
-
             "Bag": bag,
-
             "Accessory": accessory,
-
             "score": score,
-
-            "breakdown": breakdown
-
+            "breakdown": breakdown,
         })
 
-
-
-
-
-    # =============================
-    # SORT BEST MATCH FIRST
-    # =============================
-
-
+    # Highest score first
     outfits.sort(
-
         key=lambda x: x["score"],
-
-        reverse=True
-
+        reverse=True,
     )
 
-
-
-
-
-    # =============================
-    # REMOVE DUPLICATE OUTFITS
-    # KEEP TOP 3
-    # =============================
-
-
+    # Remove duplicate outfits
     outfits = remove_duplicate_outfits(
-
         outfits,
-
-        limit=3
-
+        limit=3,
     )
 
-
-
-
-
-    # =============================
-    # ADD AI EXPLANATION
-    # =============================
-
+    # ----------------------------------
+    # Generate explanation + shopping query
+    # ----------------------------------
 
     for outfit in outfits:
 
+        outfit["reason"] = build_reason(outfit)
 
-        outfit["reason"] = build_reason(
-
-            outfit
-
-        )
-
-
-
-
-        # =============================
-        # SHOPPING SEARCH QUERY
-        # =============================
-
-
-        search_items = []
-
+        search_parts = []
 
         for key, item in outfit.items():
-
 
             if key in [
                 "score",
                 "breakdown",
-                "reason"
+                "reason",
             ]:
-
                 continue
 
+            if not item:
+                continue
 
+            search_parts.append(item.name)
 
-            if item:
+        outfit["search_query"] = " ".join(search_parts)
 
-                search_items.append(
+        # -------- Better shopping suggestions --------
 
-                    item.name
+        keywords = []
 
-                )
+        if style:
+            keywords.append(style)
 
+        if color:
+            keywords.append(color)
 
+        if occasion:
+            keywords.append(occasion)
 
-        outfit["search_query"] = " ".join(
+        if outfit.get("Shoes"):
+            keywords.append("Shoes")
 
-            search_items
+        if outfit.get("Bag"):
+            keywords.append("Bag")
 
-        )
+        if outfit.get("Accessory"):
+            keywords.append("Watch")
 
-
-
+        outfit["shopping_query"] = " ".join(keywords)
 
     return outfits
