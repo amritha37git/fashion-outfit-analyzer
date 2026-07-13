@@ -1,0 +1,215 @@
+{% if recommendations %}
+
+<section class="mt-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Recommended Outfits</h2>
+        <p class="text-muted">
+            AI selected the best combinations from your wardrobe.
+        </p>
+    </div>
+
+    {% for outfit in recommendations %}
+
+    <div class="card shadow border-0 rounded-4 mb-5">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h3 class="fw-bold mb-1">
+                        {{ outfit.title }}
+                    </h3>
+
+                    <small class="text-muted">
+                        AI Confidence Score
+                    </small>
+
+                </div>
+
+                <span class="badge bg-success fs-6 px-3 py-2">
+                    {{ outfit.score }}/100
+                </span>
+
+            </div>
+
+            <div class="row g-4">
+
+                {% for category,item in outfit.items.items %}
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="card border-0 shadow-sm h-100 rounded-4">
+
+                        {% if item.image %}
+
+                        <img
+                            src="{{ item.image }}"
+                            class="card-img-top"
+                            style="height:260px;object-fit:cover;">
+
+                        {% else %}
+
+                        <div class="bg-light d-flex align-items-center justify-content-center"
+                             style="height:260px;">
+
+                            No Image
+
+                        </div>
+
+                        {% endif %}
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold mb-3">
+                                {{ category }}
+                            </h5>
+
+                            <p class="mb-2">
+                                <strong>Name</strong><br>
+                                {{ item.name }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Color</strong><br>
+                                {{ item.color }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Brand</strong><br>
+                                {{ item.brand }}
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Season</strong><br>
+                                {{ item.season }}
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Occasion</strong><br>
+                                {{ item.occasion }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            <hr class="my-5">
+
+            <div class="row">
+
+                <div class="col-lg-8">
+
+                    <h4 class="fw-bold mb-3">
+                        Why this outfit works
+                    </h4>
+
+                    <p class="text-muted">
+                        {{ outfit.reason }}
+                    </p>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div class="card bg-light border-0 rounded-4">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold mb-3">
+                                Match Analysis
+                            </h5>
+
+                            <div class="mb-3">
+
+                                <small>Color</small>
+
+                                <div class="progress">
+
+                                    <div class="progress-bar bg-primary"
+                                         style="width:{{ outfit.breakdown.color|default:0 }}%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <small>Occasion</small>
+
+                                <div class="progress">
+
+                                    <div class="progress-bar bg-success"
+                                         style="width:{{ outfit.breakdown.occasion|default:0 }}%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div>
+
+                                <small>Weather</small>
+
+                                <div class="progress">
+
+                                    <div class="progress-bar bg-warning"
+                                         style="width:{{ outfit.breakdown.season|default:0 }}%">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+
+                <h5 class="fw-bold mb-3">
+                    Complete Your Look
+                </h5>
+
+                <a href="#" class="btn btn-dark me-2">
+                    Amazon
+                </a>
+
+                <a href="#" class="btn btn-primary me-2">
+                    Flipkart
+                </a>
+
+                <a href="#" class="btn btn-danger me-2">
+                    Myntra
+                </a>
+
+                <a href="#" class="btn btn-warning">
+                    Meesho
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}

@@ -1,0 +1,91 @@
+<form method="POST" class="mb-5">
+    {% csrf_token %}
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <div class="row g-4">
+
+                <div class="col-md-5">
+
+                    <label class="form-label fw-semibold">
+                        Occasion
+                    </label>
+
+                    <select name="occasion" class="form-select form-select-lg">
+
+                        <option value="College"
+                        {% if selected_occasion == "College" %}selected{% endif %}>
+                            College
+                        </option>
+
+                        <option value="Office"
+                        {% if selected_occasion == "Office" %}selected{% endif %}>
+                            Office
+                        </option>
+
+                        <option value="Party"
+                        {% if selected_occasion == "Party" %}selected{% endif %}>
+                            Party
+                        </option>
+
+                        <option value="Wedding"
+                        {% if selected_occasion == "Wedding" %}selected{% endif %}>
+                            Wedding
+                        </option>
+
+                        <option value="Casual"
+                        {% if selected_occasion == "Casual" %}selected{% endif %}>
+                            Casual
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-5">
+
+                    <label class="form-label fw-semibold">
+                        Weather
+                    </label>
+
+                    <select name="weather" class="form-select form-select-lg">
+
+                        <option value="Sunny"
+                        {% if selected_weather == "Sunny" %}selected{% endif %}>
+                            Sunny
+                        </option>
+
+                        <option value="Cloudy"
+                        {% if selected_weather == "Cloudy" %}selected{% endif %}>
+                            Cloudy
+                        </option>
+
+                        <option value="Rainy"
+                        {% if selected_weather == "Rainy" %}selected{% endif %}>
+                            Rainy
+                        </option>
+
+                        <option value="Cold"
+                        {% if selected_weather == "Cold" %}selected{% endif %}>
+                            Cold
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2 d-grid align-self-end">
+
+                    <button class="btn btn-dark btn-lg">
+                        Generate
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</form>

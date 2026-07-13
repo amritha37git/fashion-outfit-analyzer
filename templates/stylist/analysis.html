@@ -1,0 +1,85 @@
+<div class="analysis-section mt-5">
+
+    <h4 class="section-title">
+        AI Match Analysis
+    </h4>
+
+    <div class="row g-4 mt-2">
+
+        <div class="col-md-4">
+
+            <div class="analysis-card">
+
+                <div class="analysis-icon">
+                    🎨
+                </div>
+
+                <h6>Color Match</h6>
+
+                <div class="progress mb-2">
+
+                    <div class="progress-bar bg-success"
+                         style="width:{{ outfit.breakdown.color|default:0|add:'0' }}%">
+                    </div>
+
+                </div>
+
+                <h4>{{ outfit.breakdown.color|default:0 }}/40</h4>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="analysis-card">
+
+                <div class="analysis-icon">
+                    📅
+                </div>
+
+                <h6>Occasion Match</h6>
+
+                <div class="progress mb-2">
+
+                    <div class="progress-bar bg-primary"
+                         style="width:{{ outfit.breakdown.occasion|default:0|add:'0' }}%">
+                    </div>
+
+                </div>
+
+                <h4>{{ outfit.breakdown.occasion|default:0 }}/30</h4>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="analysis-card">
+
+                <div class="analysis-icon">
+                    ☀️
+                </div>
+
+                <h6>Weather Match</h6>
+
+                <div class="progress mb-2">
+
+                    <div class="progress-bar bg-warning"
+                         style="width:{{ outfit.breakdown.season|default:0|add:'0' }}%">
+                    </div>
+
+                </div>
+
+                <h4>{{ outfit.breakdown.season|default:0 }}/20</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

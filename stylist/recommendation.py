@@ -1,9 +1,6 @@
 import itertools
 
-from .filters import (
-    get_items,
-    filter_by_occasion
-)
+from .filters import get_items
 
 from .selectors import (
     choose_best_bag,
@@ -71,9 +68,9 @@ def choose_best_outfits(items, occasion, weather):
 
 
 
-    # -----------------------------
+    # =============================
     # DRESS OUTFITS
-    # -----------------------------
+    # =============================
 
     for dress in dresses:
 
@@ -99,6 +96,7 @@ def choose_best_outfits(items, occasion, weather):
         )
 
 
+
         score, breakdown = score_outfit(
 
             dress=dress,
@@ -116,6 +114,7 @@ def choose_best_outfits(items, occasion, weather):
         )
 
 
+
         outfits.append({
 
             "Dress": dress,
@@ -128,23 +127,22 @@ def choose_best_outfits(items, occasion, weather):
 
             "score": score,
 
-            "breakdown": breakdown,
+            "breakdown": breakdown
 
         })
 
 
 
 
-    # -----------------------------
+
+    # =============================
     # TOP + BOTTOM OUTFITS
-    # -----------------------------
+    # =============================
+
 
     combinations = itertools.product(
-
         tops,
-
         bottoms
-
     )
 
 
@@ -222,20 +220,22 @@ def choose_best_outfits(items, occasion, weather):
 
             "score": score,
 
-            "breakdown": breakdown,
+            "breakdown": breakdown
 
         })
 
 
 
 
-    # -----------------------------
-    # SORT BY SCORE
-    # -----------------------------
+
+    # =============================
+    # SORT BEST MATCH FIRST
+    # =============================
+
 
     outfits.sort(
 
-        key=lambda x:x["score"],
+        key=lambda x: x["score"],
 
         reverse=True
 
@@ -243,9 +243,13 @@ def choose_best_outfits(items, occasion, weather):
 
 
 
-    # -----------------------------
-    # REMOVE DUPLICATES
-    # -----------------------------
+
+
+    # =============================
+    # REMOVE DUPLICATE OUTFITS
+    # KEEP TOP 3
+    # =============================
+
 
     outfits = remove_duplicate_outfits(
 
@@ -257,15 +261,62 @@ def choose_best_outfits(items, occasion, weather):
 
 
 
-    # -----------------------------
-    # ADD EXPLANATION
-    # -----------------------------
+
+
+    # =============================
+    # ADD AI EXPLANATION
+    # =============================
+
 
     for outfit in outfits:
 
+
         outfit["reason"] = build_reason(
+
             outfit
+
         )
+
+
+
+
+        # =============================
+        # SHOPPING SEARCH QUERY
+        # =============================
+
+
+        search_items = []
+
+
+        for key, item in outfit.items():
+
+
+            if key in [
+                "score",
+                "breakdown",
+                "reason"
+            ]:
+
+                continue
+
+
+
+            if item:
+
+                search_items.append(
+
+                    item.name
+
+                )
+
+
+
+        outfit["search_query"] = " ".join(
+
+            search_items
+
+        )
+
 
 
 
