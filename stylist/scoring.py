@@ -49,7 +49,7 @@ def score_outfit(
     color="",
 ):
     """
-    FashionAI Outfit Score
+    ALAMARAi Outfit Score
 
     Total = 100
 

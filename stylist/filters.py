@@ -1,5 +1,5 @@
 """
-Filtering helpers for FashionAI Stylist
+Filtering helpers for ALAMARAi Stylist
 """
 
 WEATHER_SEASON = {
