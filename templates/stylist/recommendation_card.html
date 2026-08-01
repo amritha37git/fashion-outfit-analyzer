@@ -1,185 +1,432 @@
 {% if recommendations %}
 
-<section class="mt-5">
+<section class="recommendations-container">
 
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">Recommended Outfits</h2>
-        <p class="text-muted">
-            Personalized looks selected from your wardrobe.
+    <div class="recommendations-header">
+        <span class="rec-badge">Curated Selection</span>
+        <h2 class="rec-title">Recommended Outfits</h2>
+        <p class="rec-subtitle">
+            Personalized style combinations selected from your wardrobe.
         </p>
     </div>
 
     {% for outfit in recommendations %}
 
-    <div class="card border-0 shadow-lg rounded-4 mb-5">
+    <div class="outfit-luxury-card">
 
-        <div class="card-body p-4">
-
-            <div class="d-flex justify-content-between align-items-center mb-4">
-
-                <div>
-                    <h3 class="fw-bold mb-1">
-                        {{ outfit.title }}
-                    </h3>
-
-                    <small class="text-muted">
-                        AI Selected Outfit
-                    </small>
-                </div>
-
-                <span class="badge bg-success fs-6 px-3 py-2">
-                    {{ outfit.score }}/100
-                </span>
-
+        <div class="outfit-card-top">
+            <div>
+                <span class="outfit-context-tag">Selected Ensemble</span>
+                <h3 class="outfit-heading">
+                    {{ outfit.title }}
+                </h3>
             </div>
 
-            <div class="row g-4">
+            <div class="outfit-score-badge">
+                <i class="fa-solid fa-shirt"></i>
+                <span>{{ outfit.score }}/100 Match</span>
+            </div>
+        </div>
 
-                {% for category,item in outfit.items.items %}
+        <!-- Styled Outfit Assembly Layout with Full Image Visibility -->
+        <div class="outfit-assembly-layout">
 
-                <div class="col-lg-3 col-md-6">
-
-                    <div class="card h-100 border-0 shadow-sm rounded-4">
-
-                        {% if item.image %}
-                        <img
-                            src="{{ item.image }}"
-                            class="card-img-top rounded-top-4"
-                            style="height:270px;object-fit:cover;">
-                        {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center"
-                             style="height:270px;">
-                            No Image
+            <!-- Left Stack: Top & Bottom paired vertically -->
+            <div class="outfit-vertical-stack">
+                {% for category, item in outfit.items.items %}
+                    {% if category|lower == 'top' or category|lower == 'shirt' or category|lower == 't-shirt' or category|lower == 'hoodie' or category|lower == 'jacket' %}
+                    <div class="outfit-piece-card primary-piece">
+                        <div class="piece-img-box">
+                            {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                            {% else %}
+                            <div class="piece-empty"><i class="fa-solid fa-shirt"></i></div>
+                            {% endif %}
+                            <span class="piece-badge">{{ category }}</span>
                         </div>
-                        {% endif %}
-
-                        <div class="card-body">
-
-                            <h5 class="fw-bold text-center mb-3">
-                                {{ category }}
-                            </h5>
-
-                            <table class="table table-sm">
-
-                                <tr>
-                                    <th>Name</th>
-                                    <td>{{ item.name }}</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Color</th>
-                                    <td>{{ item.color }}</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Brand</th>
-                                    <td>{{ item.brand }}</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Season</th>
-                                    <td>{{ item.season }}</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Occasion</th>
-                                    <td>{{ item.occasion }}</td>
-                                </tr>
-
-                            </table>
-
-                        </div>
-
                     </div>
-
-                </div>
-
+                    {% endif %}
                 {% endfor %}
 
+                {% for category, item in outfit.items.items %}
+                    {% if category|lower == 'bottom' or category|lower == 'pants' or category|lower == 'jeans' or category|lower == 'trousers' %}
+                    <div class="outfit-piece-card primary-piece">
+                        <div class="piece-img-box">
+                            {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                            {% else %}
+                            <div class="piece-empty"><i class="fa-solid fa-child-reaching"></i></div>
+                            {% endif %}
+                            <span class="piece-badge">{{ category }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
             </div>
 
-            <hr class="my-4">
-
-            <h5 class="fw-bold mb-2">
-                Why this outfit works
-            </h5>
-
-            <p class="text-muted">
-                {{ outfit.reason }}
-            </p>
-
-            <div class="row mt-4">
-
-                <div class="col-md-4 mb-3">
-
-                    <div class="card border-0 bg-light text-center">
-
-                        <div class="card-body">
-
-                            <h6 class="fw-bold">
-                                Color Match
-                            </h6>
-
-                            <h3 class="text-primary">
-                                {{ outfit.breakdown.color|default:0 }}/40
-                            </h3>
-
+            <!-- Right Side: Shoes & Accessories -->
+            <div class="outfit-side-grid">
+                {% for category, item in outfit.items.items %}
+                    {% if category|lower != 'top' and category|lower != 'shirt' and category|lower != 't-shirt' and category|lower != 'hoodie' and category|lower != 'jacket' and category|lower != 'bottom' and category|lower != 'pants' and category|lower != 'jeans' and category|lower != 'trousers' %}
+                    <div class="outfit-piece-card secondary-piece">
+                        <div class="piece-img-box">
+                            {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.name }}">
+                            {% else %}
+                            <div class="piece-empty"><i class="fa-solid fa-shoe-prints"></i></div>
+                            {% endif %}
+                            <span class="piece-badge">{{ category }}</span>
                         </div>
-
                     </div>
-
-                </div>
-
-                <div class="col-md-4 mb-3">
-
-                    <div class="card border-0 bg-light text-center">
-
-                        <div class="card-body">
-
-                            <h6 class="fw-bold">
-                                Occasion Match
-                            </h6>
-
-                            <h3 class="text-success">
-                                {{ outfit.breakdown.occasion|default:0 }}/30
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4 mb-3">
-
-                    <div class="card border-0 bg-light text-center">
-
-                        <div class="card-body">
-
-                            <h6 class="fw-bold">
-                                Weather Match
-                            </h6>
-
-                            <h3 class="text-warning">
-                                {{ outfit.breakdown.season|default:0 }}/20
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
+                    {% endif %}
+                {% endfor %}
             </div>
-
-            {% include 'stylist/shopping_section.html' %}
 
         </div>
+
+        <div class="outfit-rationale-box">
+            <div class="rationale-title">
+                <i class="fa-solid fa-quote-left"></i>
+                <span>Stylist Notes</span>
+            </div>
+            <p class="rationale-text">
+                {{ outfit.reason }}
+            </p>
+        </div>
+
+        <div class="outfit-breakdown-grid">
+
+            <div class="breakdown-metric-card">
+                <span class="metric-label">Color Harmony</span>
+                <div class="metric-value-row">
+                    <h3>{{ outfit.breakdown.color|default:0 }}</h3>
+                    <span>/ 40</span>
+                </div>
+                <div class="metric-bar-track">
+                    <div class="metric-bar-fill" style="width: calc(({{ outfit.breakdown.color|default:0 }} / 40) * 100%);"></div>
+                </div>
+            </div>
+
+            <div class="breakdown-metric-card">
+                <span class="metric-label">Occasion Fit</span>
+                <div class="metric-value-row">
+                    <h3>{{ outfit.breakdown.occasion|default:0 }}</h3>
+                    <span>/ 30</span>
+                </div>
+                <div class="metric-bar-track">
+                    <div class="metric-bar-fill" style="width: calc(({{ outfit.breakdown.occasion|default:0 }} / 30) * 100%);"></div>
+                </div>
+            </div>
+
+            <div class="breakdown-metric-card">
+                <span class="metric-label">Weather Sync</span>
+                <div class="metric-value-row">
+                    <h3>{{ outfit.breakdown.season|default:0 }}</h3>
+                    <span>/ 20</span>
+                </div>
+                <div class="metric-bar-track">
+                    <div class="metric-bar-fill" style="width: calc(({{ outfit.breakdown.season|default:0 }} / 20) * 100%);"></div>
+                </div>
+            </div>
+
+        </div>
+
+        {% include 'stylist/shopping_section.html' %}
 
     </div>
 
     {% endfor %}
 
 </section>
+
+<style>
+/* =====================================
+   RECOMMENDATION CARDS REFINEMENT CSS
+===================================== */
+.recommendations-container {
+    margin-top: 60px;
+}
+
+.recommendations-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.rec-badge {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.rec-title {
+    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.rec-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+/* Master Outfit Card */
+.outfit-luxury-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 50px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.outfit-luxury-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(200, 169, 106, 0.4);
+}
+
+.outfit-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 20px;
+}
+
+.outfit-context-tag {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.outfit-heading {
+    font-size: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.outfit-score-badge {
+    background: #171717;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: var(--radius-btn);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.outfit-score-badge i {
+    color: var(--gold);
+}
+
+/* Styled Assembly Layout (Top/Bottom Stack + Side Grid) */
+.outfit-assembly-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 35px;
+}
+
+.outfit-vertical-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.outfit-side-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-content: start;
+}
+
+.outfit-piece-card {
+    background: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.outfit-piece-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold);
+}
+
+.piece-img-box {
+    height: 240px; /* Increased height to prevent clipping */
+    position: relative;
+    background: #F4F7F9;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.outfit-vertical-stack .piece-img-box {
+    height: 240px; /* Ensures vertical stack items show full picture */
+}
+
+.piece-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Changed from cover to contain to display the full image without cropping */
+    background: #F8FAFC;
+    transition: transform 0.5s ease;
+}
+
+.outfit-piece-card:hover .piece-img-box img {
+    transform: scale(1.04);
+}
+
+.piece-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #CBD5E1;
+    font-size: 2rem;
+}
+
+.piece-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(23, 23, 23, 0.85);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    z-index: 2;
+}
+
+/* Rationale Box */
+.outfit-rationale-box {
+    background: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 25px 30px;
+    margin-bottom: 30px;
+}
+
+.rationale-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.rationale-title i {
+    color: var(--gold);
+}
+
+.rationale-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Breakdown Grid */
+.outfit-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.breakdown-metric-card {
+    background: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 22px 24px;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.metric-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.metric-value-row h3 {
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.metric-value-row span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.metric-bar-track {
+    width: 100%;
+    height: 6px;
+    background: #E5E9F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.metric-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
+}
+
+/* Responsive Queries */
+@media(max-width: 992px) {
+    .outfit-assembly-layout {
+        grid-template-columns: 1fr;
+    }
+    .outfit-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+    .outfit-luxury-card {
+        padding: 30px 20px;
+    }
+}
+</style>
 
 {% endif %}

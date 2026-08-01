@@ -1,108 +1,61 @@
-<form method="POST" class="card shadow-lg border-0 rounded-4 p-4 mb-5">
+<form method="POST">
 
     {% csrf_token %}
 
-    <div class="row g-4">
-
-        <div class="col-lg-3">
-
-            <label class="form-label fw-semibold">
-                Occasion
-            </label>
-
-            <select
-                name="occasion"
-                class="form-select">
-
-                <option value="College">College</option>
-                <option value="Office">Office</option>
-                <option value="Casual">Casual</option>
-                <option value="Party">Party</option>
-                <option value="Wedding">Wedding</option>
-
-            </select>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <label class="form-label fw-semibold">
-                Weather
-            </label>
-
-            <select
-                name="weather"
-                class="form-select">
-
-                <option value="Sunny">Sunny</option>
-                <option value="Cloudy">Cloudy</option>
-                <option value="Rainy">Rainy</option>
-                <option value="Cold">Cold</option>
-
-            </select>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <label class="form-label fw-semibold">
-                Preferred Style
-            </label>
-
-            <select
-                name="style"
-                class="form-select">
-
-                <option value="">Any Style</option>
-                <option>Casual</option>
-                <option>Formal</option>
-                <option>Streetwear</option>
-                <option>Minimal</option>
-                <option>Traditional</option>
-                <option>Sport</option>
-                <option>Vintage</option>
-
-            </select>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <label class="form-label fw-semibold">
-                Preferred Color
-            </label>
-
-            <select
-                name="color"
-                class="form-select">
-
-                <option value="">Any Color</option>
-
-                <option>Black</option>
-                <option>White</option>
-                <option>Blue</option>
-                <option>Grey</option>
-                <option>Brown</option>
-                <option>Beige</option>
-                <option>Green</option>
-                <option>Pink</option>
-                <option>Purple</option>
-                <option>Red</option>
-
-            </select>
-
-        </div>
-
+    <div>
+        <label>Occasion</label>
+        <select name="occasion">
+            <option value="College">College</option>
+            <option value="Office">Office</option>
+            <option value="Casual">Casual</option>
+            <option value="Party">Party</option>
+            <option value="Wedding">Wedding</option>
+        </select>
     </div>
 
-    <div class="text-center mt-4">
-
-        <button class="btn btn-dark btn-lg px-5 rounded-pill">
-
-            Generate Outfit
-
-        </button>
-
+    <div>
+        <label>Weather</label>
+        <select name="weather">
+            <option value="Sunny">Sunny</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Rainy">Rainy</option>
+            <option value="Cold">Cold</option>
+        </select>
     </div>
+
+    <div>
+        <label>Preferred Style</label>
+        <select name="style">
+            <option value="">Any Style</option>
+            <option value="Casual">Casual</option>
+            <option value="Formal">Formal</option>
+            <option value="Streetwear">Streetwear</option>
+            <option value="Minimal">Minimal</option>
+            <option value="Traditional">Traditional</option>
+            <option value="Sport">Sport</option>
+            <option value="Vintage">Vintage</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Preferred Color</label>
+        <select name="color">
+            <option value="">Any Color</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Blue">Blue</option>
+            <option value="Grey">Grey</option>
+            <option value="Brown">Brown</option>
+            <option value="Beige">Beige</option>
+            <option value="Green">Green</option>
+            <option value="Pink">Pink</option>
+            <option value="Purple">Purple</option>
+            <option value="Red">Red</option>
+        </select>
+    </div>
+
+    <button type="submit">
+        Generate Outfit
+    </button>
 
 </form>

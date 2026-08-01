@@ -2,37 +2,61 @@
 {% load static %}
 
 {% block title %}
-ALAMARAi | AI Stylist
+ALAMARAi | Intelligent Stylist Suite
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/stylist.css' %}">
 <style>
 /* =====================================
-   AI STYLIST PAGE - PROFESSIONAL DESIGN SYSTEM
+    STYLIST SUITE PROFESSIONAL REFINEMENT
 ===================================== */
-.stylist-page {
-    padding: 30px 0 100px;
+:root {
+    --bg-warm: #FAF8F4;
+    --card-pure: #FFFFFF;
+    --text-main: #171717;
+    --text-muted: #666666;
+    --gold: #C8A96A;
+    --gold-dark: #AA8748;
+    --border-subtle: #ECE7DE;
+    --shadow-soft: 0 20px 50px rgba(0,0,0,0.05);
+    --shadow-hover: 0 25px 60px rgba(200, 169, 106, 0.12);
+    --radius-btn: 50px;
+    --radius-card: 28px;
+    --radius-sec: 36px;
 }
 
-/* --- Hero Section (Editorial Split Banner) --- */
+body {
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+}
+
+.stylist-page {
+    padding: 40px 0 120px;
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* --- Hero Editorial Section --- */
 .stylist-hero-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 50px;
     align-items: center;
-    padding: 50px 60px;
-    margin-bottom: 40px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+    padding: 55px 65px;
+    margin-bottom: 35px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
     overflow: hidden;
 }
 
 .stylist-hero-text .badge-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 600;
@@ -41,20 +65,26 @@ ALAMARAi | AI Stylist
 }
 
 .stylist-hero-text h1 {
-    font-size: 3rem;
-    font-family: var(--font-heading);
-    color: var(--text-primary);
+    font-size: 3.2rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-main);
     line-height: 1.15;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     font-weight: 400;
 }
 
+.stylist-hero-text h1 span {
+    color: var(--gold-dark);
+    font-style: italic;
+}
+
 .stylist-hero-text p {
-    font-size: 1rem;
-    color: var(--text-secondary);
+    font-size: 1.05rem;
+    color: var(--text-muted);
     line-height: 1.7;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     font-weight: 300;
+    max-width: 550px;
 }
 
 .stylist-features-list {
@@ -64,118 +94,163 @@ ALAMARAi | AI Stylist
 }
 
 .stylist-feature-pill {
-    background: var(--background);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
+    background: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
     border-radius: 20px;
     font-size: 0.75rem;
-    color: var(--text-primary);
+    color: var(--text-main);
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    transition: all 0.3s ease;
+}
+
+.stylist-feature-pill:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
 }
 
 .stylist-hero-img-wrapper {
     position: relative;
-    border-radius: 12px;
+    border-radius: 20px;
     overflow: hidden;
-    height: 340px;
-    border: 1px solid var(--border);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    height: 360px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
 }
 
 .stylist-hero-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.6s ease;
 }
 
-/* --- Search Form Card --- */
+.stylist-hero-img-wrapper:hover img {
+    transform: scale(1.03);
+}
+
+/* --- Search Form Card (Executive Toolbar) --- */
 .stylist-form-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 30px 40px;
+    box-shadow: var(--shadow-soft);
     margin-bottom: 50px;
+    position: relative;
+}
+
+.form-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+}
+
+.form-section-header span {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+}
+
+.form-section-header h2 {
+    font-size: 1.25rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    margin: 0;
 }
 
 /* 
-  PROFESSIONAL GRID OVERRIDE:
-  Targeting standard Django form wrappers (.search_form.html contents)
-  to force them into a clean 5-column horizontal track.
+  ABSOLUTE HORIZONTAL ALIGNMENT ENGINE:
+  Forces Django's form output elements (whether wrapped in p, div, etc.) 
+  into a strict 5-column grid track side-by-side.
 */
 .stylist-form-card form {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) 200px !important;
-    gap: 20px !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr 180px !important;
+    gap: 16px !important;
     align-items: flex-end !important;
+    width: 100% !important;
 }
 
-/* Clear default paragraph/div layout constraints from Django form rendering */
 .stylist-form-card form p,
-.stylist-form-card form div.form-group,
-.stylist-form-card form > div {
+.stylist-form-card form div,
+.stylist-form-card form span {
     margin: 0 !important;
+    padding: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
+    grid-column: auto !important;
 }
 
-.stylist-form-card label,
-.stylist-form-card form label {
-    font-size: 0.7rem !important;
+.stylist-form-card label {
+    font-size: 0.65rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.15em !important;
-    color: var(--text-secondary) !important;
-    margin-bottom: 8px !important;
+    letter-spacing: 0.1em !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 6px !important;
     font-weight: 600 !important;
     display: block !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.stylist-form-card .form-control,
-.stylist-form-card .form-select,
 .stylist-form-card select,
-.stylist-form-card input {
-    background-color: var(--background) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 10px !important;
-    padding: 12px 16px !important;
-    font-size: 0.9rem !important;
-    color: var(--text-primary) !important;
+.stylist-form-card input[type="text"],
+.stylist-form-card input[type="number"],
+.stylist-form-card .form-control,
+.stylist-form-card .form-select {
+    background-color: var(--bg-warm) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    padding: 0 14px !important;
+    font-size: 0.85rem !important;
+    color: var(--text-main) !important;
     width: 100% !important;
-    height: 48px !important;
+    height: 46px !important;
     transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
 }
 
 .stylist-form-card select:focus,
 .stylist-form-card input:focus {
     border-color: var(--gold) !important;
-    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.15) !important;
-    background-color: var(--surface) !important;
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.12) !important;
+    background-color: var(--card-pure) !important;
     outline: none !important;
 }
 
 .stylist-form-card button,
 .stylist-form-card input[type="submit"],
 .stylist-form-card .primary-btn {
-    background-color: var(--text-primary) !important;
+    background-color: var(--text-main) !important;
     color: #fff !important;
     border: none !important;
-    border-radius: 10px !important;
-    padding: 0 20px !important;
-    font-size: 0.85rem !important;
-    font-weight: 500 !important;
-    height: 48px !important;
+    border-radius: var(--radius-btn) !important;
+    padding: 0 16px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    height: 46px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
-    transition: all 0.3s ease !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.1em !important;
     white-space: nowrap !important;
     width: 100% !important;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.06) !important;
+    box-sizing: border-box !important;
 }
 
 .stylist-form-card button:hover,
@@ -183,7 +258,7 @@ ALAMARAi | AI Stylist
     background-color: var(--gold) !important;
     color: #fff !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 20px rgba(200, 169, 106, 0.25) !important;
+    box-shadow: 0 10px 25px rgba(200, 169, 106, 0.25) !important;
 }
 
 /* --- Recommendation Results --- */
@@ -191,31 +266,47 @@ ALAMARAi | AI Stylist
     width: 100%;
 }
 
-/* --- Empty State --- */
+/* --- Refined Empty State --- */
 .empty-state-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 70px 30px;
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 70px 40px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    max-width: 800px;
+    box-shadow: var(--shadow-soft);
+    max-width: 850px;
     margin: 0 auto;
+}
+
+.empty-state-card .empty-icon-badge {
+    width: 70px;
+    height: 70px;
+    background: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--gold);
+    font-size: 1.5rem;
 }
 
 .empty-state-card h2 {
     font-size: 2rem;
-    font-family: var(--font-heading);
-    color: var(--text-primary);
-    margin-bottom: 12px;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-main);
+    margin-bottom: 10px;
     font-weight: 400;
 }
 
 .empty-state-card p {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-size: 0.95rem;
     font-weight: 300;
     line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 /* Responsive design breakpoints */
@@ -223,32 +314,11 @@ ALAMARAi | AI Stylist
     .stylist-form-card form {
         grid-template-columns: repeat(2, 1fr) !important;
     }
-    .stylist-form-card form button,
-    .stylist-form-card form input[type="submit"] {
-        grid-column: span 2 !important;
-    }
-}
-
-@media (max-width: 992px) {
-    .stylist-hero-card {
-        grid-template-columns: 1fr;
-        padding: 40px 30px;
-    }
-    .stylist-hero-text h1 {
-        font-size: 2.4rem;
-    }
-    .stylist-hero-img-wrapper {
-        height: 260px;
-    }
 }
 
 @media (max-width: 768px) {
     .stylist-form-card form {
         grid-template-columns: 1fr !important;
-    }
-    .stylist-form-card form button,
-    .stylist-form-card form input[type="submit"] {
-        grid-column: span 1 !important;
     }
 }
 </style>
@@ -260,15 +330,15 @@ ALAMARAi | AI Stylist
     <!-- Hero Section -->
     <div class="stylist-hero-card">
         <div class="stylist-hero-text">
-            <span class="badge-label">ALAMARAi Assistant</span>
-            <h1>Find Your Perfect Outfit</h1>
-            <p>Let AI analyze your digital wardrobe and curate sophisticated clothing combinations tailored to your occasion, weather conditions, and color harmony.</p>
+            <span class="badge-label">Intelligent Stylist Suite</span>
+            <h1>Curated <span>Aesthetic</span> Looks</h1>
+            <p>Harness advanced style logic and color harmony algorithms to assemble precise clothing compositions tailored to your unique wardrobe items, schedule, and environment.</p>
             
             <div class="stylist-features-list">
-                <span class="stylist-feature-pill">AI Recommendations</span>
-                <span class="stylist-feature-pill">Color Harmony</span>
-                <span class="stylist-feature-pill">Weather Styling</span>
-                <span class="stylist-feature-pill">Smart Pairing</span>
+                <span class="stylist-feature-pill">Smart Composition</span>
+                <span class="stylist-feature-pill">Color Coordination</span>
+                <span class="stylist-feature-pill">Weather Synchronization</span>
+                <span class="stylist-feature-pill">Occasion Matching</span>
             </div>
         </div>
 
@@ -277,8 +347,12 @@ ALAMARAi | AI Stylist
         </div>
     </div>
 
-    <!-- Search Form Card -->
+    <!-- Search Form Card with True Horizontal Layout -->
     <div class="stylist-form-card">
+        <div class="form-section-header">
+            <h2>Configure Your Look</h2>
+            <span>Styling Parameters</span>
+        </div>
         {% include 'stylist/search_form.html' %}
     </div>
 
@@ -289,7 +363,11 @@ ALAMARAi | AI Stylist
         </div>
     {% else %}
         <div class="empty-state-card">
-            {% include 'stylist/empty.html' %}
+            <div class="empty-icon-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <h2>Let Your AI Stylist Curate Your Day</h2>
+            <p>Select your criteria above to instantly discover bespoke outfit combinations perfectly balanced for your weather and schedule.</p>
         </div>
     {% endif %}
 

@@ -8,347 +8,725 @@ ALAMARAi | Dashboard
 {% block extra_css %}
 <style>
 /* =====================================
-   DASHBOARD PAGE STYLING
+   DASHBOARD LUXURY EDITORIAL REFINEMENT
 ===================================== */
-.dashboard-page {
-    padding: 20px 0 80px;
+/* 1. Light Theme (Default) */
+:root {
+    --bg-warm: #FAF8F4;
+    --card-pure: #FFFFFF;
+    --text-main: #171717;
+    --text-muted: #6B6B6B;
+    --gold: #C8A96A;
+    --gold-dark: #AA8748;
+    --border-subtle: #E8E3D8;
+    --shadow-soft: 0 12px 40px rgba(0,0,0,0.04);
+    --shadow-hover: 0 20px 50px rgba(0,0,0,0.08);
+    --radius-btn: 50px;
+    --radius-card: 24px;
+    --radius-img: 16px;
+    --radius-sec: 32px;
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Hero Section --- */
+/* 2. Dark Theme Sync */
+[data-theme="dark"] {
+    --bg-warm: #121212;
+    --card-pure: #1E1E1E;
+    --text-main: #F5F5F5;
+    --text-muted: #A3A3A3;
+    --border-subtle: #333333;
+    --shadow-soft: 0 12px 40px rgba(0,0,0,0.4);
+    --shadow-hover: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+body {
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.dashboard-page {
+    padding: 60px 20px 100px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- Animations --- */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* --- Section Titles --- */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 64px 0 32px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 16px;
+    transition: border-color 0.4s ease;
+}
+
+.section-title h2 {
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    margin: 0;
+    color: var(--text-main);
+    transition: color 0.4s ease;
+}
+
+.section-title a {
+    font-weight: 600;
+    color: var(--gold-dark);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.section-title a:hover { opacity: 0.7; }
+
+/* --- Buttons --- */
+.primary-btn, .secondary-btn {
+    border-radius: var(--radius-btn);
+    padding: 14px 32px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.primary-btn {
+    background-color: var(--text-main);
+    color: var(--bg-warm);
+    border: 1px solid var(--text-main);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.primary-btn:hover {
+    background-color: var(--gold-dark);
+    border-color: var(--gold-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(170, 135, 72, 0.2);
+    color: #fff;
+}
+
+.secondary-btn {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-subtle);
+}
+
+.secondary-btn:hover {
+    border-color: var(--text-main);
+    background-color: var(--text-main);
+    color: var(--bg-warm);
+    transform: translateY(-3px);
+}
+
+/* =====================================
+   1. WELCOME HERO
+===================================== */
 .dashboard-hero {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: 50px;
-    align-items: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 60px;
-    margin-bottom: 50px;
+    gap: 32px;
+    align-items: stretch;
+    margin-bottom: 48px;
+}
+
+.hero-text-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 64px 56px;
     box-shadow: var(--shadow-soft);
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.4s ease;
 }
 
 .dashboard-label {
-    font-size: 0.75rem;
-    letter-spacing: 3px;
+    font-size: 0.7rem;
+    letter-spacing: 3.5px;
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 600;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     display: block;
 }
 
-.hero-text h1 {
-    font-size: 3.5rem;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    color: var(--text-primary);
+.hero-text-card h1 {
+    font-size: 3.2rem;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    transition: color 0.4s ease;
 }
 
-.hero-text p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 35px;
-    max-width: 520px;
+.hero-text-card h1 span {
+    font-style: italic;
+    color: var(--gold-dark);
+    font-weight: 500;
 }
 
-.hero-buttons {
-    display: flex;
-    gap: 16px;
+.hero-text-card p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 480px;
+    font-weight: 300;
+    transition: color 0.4s ease;
 }
 
-.ai-preview {
-    background: linear-gradient(135deg, #FAF8F3 0%, #F4EFE6 100%);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    height: 320px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.hero-image-card {
+    border-radius: var(--radius-sec);
     overflow: hidden;
-}
-
-.match-card {
-    background: var(--surface);
-    padding: 24px 32px;
-    border-radius: 16px;
+    position: relative;
     box-shadow: var(--shadow-soft);
-    text-align: center;
-    border: 1px solid var(--border);
-    z-index: 2;
 }
 
-.circle-score {
-    width: 64px;
-    height: 64px;
-    background: var(--gold);
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 0 auto 12px;
+.hero-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.match-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 4px;
-}
-
-.match-card p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.fashion-icon {
-    position: absolute;
-    font-size: 10rem;
-    color: rgba(200, 169, 106, 0.08);
-    right: -20px;
-    bottom: -20px;
-    z-index: 1;
-}
-
-/* --- Stats Grid --- */
-.stats {
+/* =====================================
+   2. WARDROBE STATISTICS
+===================================== */
+.stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
-    margin-bottom: 60px;
 }
 
 .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 30px;
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 32px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-soft);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--gold);
 }
 
 .stat-card i {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--gold);
     margin-bottom: 16px;
 }
 
 .stat-card h2 {
     font-size: 2.5rem;
-    margin-bottom: 6px;
-    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
 }
 
 .stat-card p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+    font-size: 0.75rem;
+    color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* --- Section Title --- */
-.section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 30px;
-}
-
-.section-title h2 {
-    font-size: 2.2rem;
-}
-
-.section-title a {
+    letter-spacing: 1.2px;
     font-weight: 600;
-    color: var(--gold);
-    font-size: 0.95rem;
-    transition: opacity 0.3s;
+    margin: 0;
 }
 
-.section-title a:hover {
-    opacity: 0.8;
-}
-
-/* --- Wardrobe Grid --- */
-.wardrobe-grid {
+/* =====================================
+   3. WARDROBE CATEGORIES
+===================================== */
+.categories-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-bottom: 60px;
 }
 
-.clothing-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.clothing-card:hover {
-    transform: translateY(-4px);
+.category-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 24px;
     box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
 }
 
-.clothing-card img {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    border-radius: calc(var(--radius) - 8px);
-    margin-bottom: 16px;
-    background: #F4F7F9;
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--gold);
 }
 
-.empty-image {
+.cat-image {
     width: 100%;
-    height: 240px;
-    background: #F4F7F9;
-    border-radius: calc(var(--radius) - 8px);
+    height: 180px;
+    background: var(--bg-warm);
+    border-radius: var(--radius-img);
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    color: #CBD5E1;
-    margin-bottom: 16px;
+    font-size: 3rem;
+    color: var(--border-subtle);
+    transition: background-color 0.4s ease;
+    overflow: hidden; /* Added to keep image inside radius */
+    position: relative;
 }
 
-.clothing-card h4 {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    color: var(--text-primary);
+/* Added dynamically crop and fit category images */
+.cat-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
-.clothing-card p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.empty-box {
-    grid-column: 1 / -1;
-    background: var(--surface);
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 60px 20px;
-    text-align: center;
-}
-
-.empty-box h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.empty-box p {
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-}
-
-/* --- AI Insight --- */
-.ai-insight {
-    background: linear-gradient(135deg, #111111 1.1%, #2A2A2A 100%);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 50px 60px;
+.cat-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 60px;
+}
+
+.cat-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin: 0 0 4px 0;
+    font-weight: 400;
+    color: var(--text-main);
+}
+
+.cat-info p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.cat-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.category-card:hover .cat-btn {
+    background: var(--text-main);
+    color: var(--bg-warm);
+}
+
+/* =====================================
+   4. WARDROBE DISTRIBUTION
+===================================== */
+.distribution-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 40px;
     box-shadow: var(--shadow-soft);
+    transition: all 0.4s ease;
 }
 
-.ai-insight span {
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
+.dist-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.dist-row:last-child { margin-bottom: 0; }
+
+.dist-label {
+    width: 120px;
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 14px;
-    display: block;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.ai-insight h2 {
-    font-size: 2rem;
-    font-weight: 500;
-    font-style: italic;
-    line-height: 1.4;
-    margin-bottom: 16px;
-    max-width: 700px;
+.dist-bar-wrap {
+    flex-grow: 1;
+    height: 8px;
+    background: var(--bg-warm);
+    border-radius: 4px;
+    margin: 0 24px;
+    overflow: hidden;
 }
 
-.ai-insight p {
-    color: #B5B5B5;
-    font-size: 0.95rem;
+.dist-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 4px;
 }
 
-.ai-insight .magic {
-    font-size: 4rem;
-    color: var(--gold);
-    opacity: 0.8;
+.dist-count {
+    width: 40px;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-main);
 }
 
-/* --- Intelligence Features --- */
-.intelligence {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 50px 40px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,.03);
-}
-
-.intelligence > h2 {
-    font-size: 2.2rem;
-    margin-bottom: 40px;
-}
-
-.feature-row {
+/* =====================================
+   5. RECENTLY ADDED (Horizontal)
+===================================== */
+.recent-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.horizontal-card {
+    display: flex;
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-img);
+    padding: 16px;
+    box-shadow: var(--shadow-soft);
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.horizontal-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateX(4px);
+}
+
+.hc-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: var(--bg-warm);
+    margin-right: 20px;
+}
+
+.hc-details h4 {
+    font-size: 1.1rem;
+    font-family: 'Playfair Display', serif;
+    margin: 0 0 6px 0;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.hc-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hc-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* =====================================
+   6. WARDROBE INSIGHTS
+===================================== */
+.insights-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s ease;
+}
+
+.insight-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-.feature-row > div {
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px 20px;
+.insight-list li {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+}
+
+.insight-list li i {
+    color: var(--gold);
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+/* =====================================
+   7 & 8. WEATHER & RECENT ACTIVITY
+===================================== */
+.split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.weather-widget {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s ease;
+}
+
+.weather-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+.weather-main h2 {
+    font-size: 4rem;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text-main);
+}
+
+.weather-main p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin: 8px 0 0 0;
+}
+
+.weather-details {
+    display: flex;
+    gap: 32px;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 24px;
+}
+
+.w-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.w-detail span:first-child {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.w-detail span:last-child {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+/* Timeline */
+.activity-widget {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sec);
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s ease;
+}
+
+.timeline {
+    position: relative;
+    border-left: 2px solid var(--bg-warm);
+    margin-left: 10px;
+    padding-left: 24px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -31px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 2px solid var(--card-pure);
+}
+
+.timeline-item p {
+    margin: 0 0 4px 0;
     font-weight: 500;
     font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.timeline-item span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* =====================================
+   9. SMART STYLING BANNER
+===================================== */
+.styling-banner {
+    background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+    color: #FFFFFF;
+    border-radius: var(--radius-sec);
+    padding: 56px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-hover);
+    margin-top: 64px;
+}
+
+.banner-content h2 {
+    font-size: 2.2rem;
+    font-weight: 400;
+    font-family: 'Playfair Display', serif;
+    margin: 0 0 12px 0;
+    color: #FFFFFF;
+}
+
+.banner-content p {
+    color: #A3A3A3;
+    font-size: 1rem;
+    margin: 0 0 24px 0;
+    font-weight: 300;
+}
+
+.banner-btn {
+    background: var(--gold);
+    color: #171717;
+    border: none;
+    border-radius: var(--radius-btn);
+    padding: 14px 32px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    display: inline-block;
+}
+
+.banner-btn:hover {
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+/* =====================================
+   10. QUICK ACTIONS
+===================================== */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.action-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    color: var(--text-primary);
+    justify-content: center;
+    padding: 32px;
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: var(--text-main);
+    transition: var(--transition-smooth);
+    gap: 16px;
 }
 
-.feature-row i {
-    font-size: 1.5rem;
+.action-btn i {
+    font-size: 1.8rem;
     color: var(--gold);
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 1024px) {
-    .dashboard-hero { grid-template-columns: 1fr; padding: 40px; }
-    .stats, .wardrobe-grid, .feature-row { grid-template-columns: repeat(2, 1fr); }
+.action-btn span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
-@media (max-width: 768px) {
-    .stats, .wardrobe-grid, .feature-row { grid-template-columns: 1fr; }
-    .hero-text h1 { font-size: 2.5rem; }
-    .ai-insight { flex-direction: column; text-align: center; gap: 30px; padding: 40px 20px; }
-    .ai-insight h2 { font-size: 1.5rem; }
+.action-btn:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-soft);
+    transform: translateY(-4px);
+}
+
+/* Responsive */
+@media(max-width: 1024px){
+    .dashboard-hero, .split-grid { grid-template-columns: 1fr; }
+    .stats-grid, .quick-actions { grid-template-columns: repeat(2, 1fr); }
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .recent-grid { grid-template-columns: 1fr; }
+    .insight-list { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 768px){
+    .stats-grid, .categories-grid, .quick-actions { grid-template-columns: 1fr; }
+    .hero-text-card { padding: 40px 32px; }
+    .hero-image-card { height: 300px; }
+    .styling-banner { flex-direction: column; text-align: center; gap: 32px; padding: 40px 24px; }
 }
 </style>
 {% endblock %}
@@ -356,187 +734,335 @@ ALAMARAi | Dashboard
 {% block content %}
 <div class="container dashboard-page">
 
-<!-- ==========================
-   HERO
-========================== -->
-<section class="dashboard-hero">
-    <div class="hero-text">
-        <span class="dashboard-label">
-            DIGITAL WARDROBE
-        </span>
+<!-- 1. WELCOME HERO -->
+<section class="dashboard-hero animate-in">
+    <div class="hero-text-card">
+        <span class="dashboard-label">Intelligent Digital Wardrobe Suite</span>
         <h1>
-            Welcome back,
-            <br>
-            {{ user.username }}
+            {{ greeting|default:"Good Evening" }}, <br>
+            <span>{{ user.username|default:"Amritha" }}</span>
         </h1>
         <p>
-            Your personal fashion assistant that organizes
-            your wardrobe, style and helps you create perfect looks.
+            Your wardrobe summary is ready. You currently have <strong>{{ total_items|default:"0" }} items</strong> logged in your digital collection.
         </p>
-        <div class="hero-buttons">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
             <a href="{% url 'upload' %}" class="primary-btn">
-                <i class="fa-solid fa-plus" style="margin-right: 8px;"></i>
-                Add Clothing
+                <i class="fa-solid fa-plus" style="margin-right: 10px;"></i> Add Clothing
             </a>
-            <a href="{% url 'stylist' %}" class="secondary-btn">
-                <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 8px; color: var(--gold);"></i>
-                Stylist Assistant
+            <a href="{% url 'wardrobe' %}" class="secondary-btn">
+                Open Wardrobe
             </a>
         </div>
     </div>
-
-    <div class="ai-preview">
-        <div class="match-card">
-            <div class="circle-score">
-                98%
-            </div>
-            <h3>
-                Outfit Match
-            </h3>
-            <p>
-                Generated Look
-            </p>
-        </div>
-        <i class="fa-solid fa-shirt fashion-icon"></i>
+    <div class="hero-image-card">
+        <!-- Placeholder for a premium fashion/wardrobe aesthetic image -->
+        <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80" alt="Premium Wardrobe Display">
     </div>
 </section>
 
-<!-- ==========================
-   STATS
-========================== -->
-<section class="stats">
+<!-- 2. WARDROBE STATISTICS -->
+<section class="stats-grid animate-in delay-1">
     <div class="stat-card">
         <i class="fa-solid fa-shirt"></i>
-        <h2>
-            {{ total_clothes|default:"0" }}
-        </h2>
-        <p>
-            Wardrobe Items
-        </p>
+        <h2>{{ total_items|default:"0" }}</h2>
+        <p>Total Items</p>
     </div>
-
     <div class="stat-card">
         <i class="fa-solid fa-heart"></i>
-        <h2>
-            {{ favourites|default:"0" }}
-        </h2>
-        <p>
-            Favorites
-        </p>
+        <h2>{{ favourites|default:"0" }}</h2>
+        <p>Favorites</p>
     </div>
-
     <div class="stat-card">
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-        <h2>
-            12
-        </h2>
-        <p>
-            Saved Looks
-        </p>
+        <i class="fa-solid fa-layer-group"></i>
+        <h2>{{ total_categories|default:"6" }}</h2>
+        <p>Categories</p>
     </div>
-
     <div class="stat-card">
-        <i class="fa-solid fa-fire"></i>
-        <h2>
-            85%
-        </h2>
-        <p>
-            Style Score
-        </p>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <h2>{{ recent_activity|length|default:"0" }}</h2>
+        <p>Recently Added</p>
     </div>
 </section>
 
-<!-- ==========================
-   RECENT WARDROBE
-========================== -->
-<div class="section-title">
-    <h2>
-        Recently Added
-    </h2>
-    <a href="{% url 'wardrobe' %}">
-        View All →
-    </a>
+<!-- 3. WARDROBE CATEGORIES -->
+<div class="section-title animate-in delay-2">
+    <h2>Wardrobe Categories</h2>
 </div>
+<section class="categories-grid animate-in delay-2">
+    <!-- Category: Tops -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_top and latest_top.image %}
+                <img src="{{ latest_top.image.url }}" alt="Recent Top">
+            {% else %}
+                <i class="fa-solid fa-shirt"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Tops</h3>
+                <p>{{ count_tops|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=tops" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <!-- Category: Bottoms -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_bottom and latest_bottom.image %}
+                <img src="{{ latest_bottom.image.url }}" alt="Recent Bottom">
+            {% else %}
+                <i class="fa-solid fa-socks"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Bottoms</h3>
+                <p>{{ count_bottoms|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=bottoms" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <!-- Category: Dresses -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_dress and latest_dress.image %}
+                <img src="{{ latest_dress.image.url }}" alt="Recent Dress">
+            {% else %}
+                <i class="fa-solid fa-person-dress"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Dresses</h3>
+                <p>{{ count_dresses|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=dresses" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <!-- Category: Shoes -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_shoes and latest_shoes.image %}
+                <img src="{{ latest_shoes.image.url }}" alt="Recent Shoe">
+            {% else %}
+                <i class="fa-solid fa-shoe-prints"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Shoes</h3>
+                <p>{{ count_shoes|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=shoes" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <!-- Category: Bags -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_bag and latest_bag.image %}
+                <img src="{{ latest_bag.image.url }}" alt="Recent Bag">
+            {% else %}
+                <i class="fa-solid fa-suitcase"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Bags</h3>
+                <p>{{ count_bags|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=bags" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    
+    <!-- Category: Accessories -->
+    <div class="category-card">
+        <div class="cat-image">
+            {% if latest_accessory and latest_accessory.image %}
+                <img src="{{ latest_accessory.image.url }}" alt="Recent Accessory">
+            {% else %}
+                <i class="fa-solid fa-glasses"></i>
+            {% endif %}
+        </div>
+        <div class="cat-info">
+            <div>
+                <h3>Accessories</h3>
+                <p>{{ count_accessories|default:"0" }} Items</p>
+            </div>
+            <a href="{% url 'wardrobe' %}?category=accessories" class="cat-btn"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
 
-<div class="wardrobe-grid">
-    {% for item in recent_items %}
-    <div class="clothing-card">
+<!-- 4. WARDROBE DISTRIBUTION -->
+<div class="section-title animate-in delay-2">
+    <h2>Wardrobe Distribution</h2>
+</div>
+<section class="distribution-card animate-in delay-2">
+    <div class="dist-row">
+        <div class="dist-label">Tops</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_tops|default:'0' }}%;"></div></div>
+        <div class="dist-count">{{ count_tops|default:"0" }}</div>
+    </div>
+    <div class="dist-row">
+        <div class="dist-label">Bottoms</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_bottoms|default:'0' }}%;"></div></div>
+        <div class="dist-count">{{ count_bottoms|default:"0" }}</div>
+    </div>
+    <div class="dist-row">
+        <div class="dist-label">Shoes</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_shoes|default:'0' }}%;"></div></div>
+        <div class="dist-count">{{ count_shoes|default:"0" }}</div>
+    </div>
+    <div class="dist-row">
+        <div class="dist-label">Accessories</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_accessories|default:'0' }}%;"></div></div>
+        <div class="dist-count">{{ count_accessories|default:"0" }}</div>
+    </div>
+</section>
+
+<!-- 5. RECENTLY ADDED -->
+<div class="section-title animate-in delay-3">
+    <h2>Recently Added</h2>
+    <a href="{% url 'wardrobe' %}">View All &rarr;</a>
+</div>
+<section class="recent-grid animate-in delay-3">
+    {% for item in recent_activity %}
+    <div class="horizontal-card">
         {% if item.image %}
-        <img src="{{item.image.url}}" alt="{{item.name}}">
+        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="hc-image">
         {% else %}
-        <div class="empty-image">
-            <i class="fa-solid fa-shirt"></i>
+        <div class="hc-image" style="display:flex; align-items:center; justify-content:center; font-size: 1.5rem; color: #D6D1C4;">
+            <i class="fa-solid fa-image"></i>
         </div>
         {% endif %}
-
-        <h4>
-            {{item.name}}
-        </h4>
-        <p>
-            {{item.category}} • {{item.color}}
-        </p>
+        <div class="hc-details">
+            <h4>{{ item.name }}</h4>
+            <div class="hc-meta">
+                <span><i class="fa-solid fa-tag"></i> {{ item.category }}</span>
+                <span><i class="fa-solid fa-sun"></i> {{ item.season|default:"All Season" }}</span>
+                <span><i class="fa-solid fa-calendar"></i> {{ item.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
     </div>
     {% empty %}
-    <div class="empty-box">
-        <h3>
-            Your wardrobe is empty
-        </h3>
-        <p>
-            Start uploading clothes to build your digital wardrobe.
-        </p>
-        <a href="{% url 'upload' %}" class="primary-btn">
-            Upload First Item
-        </a>
+    <div class="horizontal-card" style="grid-column: 1 / -1; justify-content: center; padding: 40px;">
+        <p style="color: var(--text-muted); margin: 0;">No items added recently.</p>
     </div>
     {% endfor %}
-</div>
+</section>
 
-<!-- ==========================
-   INSIGHT BANNER
-========================== -->
-<section class="ai-insight">
-    <div>
-        <span>
-            DAILY STYLE TIP
-        </span>
-        <h2>
-            "Neutral outfits become premium with one statement accessory."
-        </h2>
-        <p>
-            Recommended: Gold accessories • White sneakers • Minimal bags
-        </p>
+<!-- 6. WARDROBE INSIGHTS -->
+<div class="section-title animate-in delay-3">
+    <h2>Wardrobe Insights</h2>
+</div>
+<section class="insights-card animate-in delay-3">
+    <ul class="insight-list">
+        {% for insight in insights %}
+            <li><i class="fa-solid fa-circle-info"></i> {{ insight }}</li>
+        {% empty %}
+            <li><i class="fa-solid fa-circle-info"></i> Start adding items to generate styling insights.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<!-- 7 & 8. WEATHER WIDGET & RECENT ACTIVITY -->
+<div class="section-title animate-in delay-3">
+    <h2>Dashboard Overview</h2>
+</div>
+<section class="split-grid animate-in delay-3">
+    
+    <!-- 7. Weather -->
+    <div class="weather-widget">
+        <div class="weather-header">
+            <span>Current Weather</span>
+            <span>📍 {{ weather.city|default:"Local Area" }}</span>
+        </div>
+        <div class="weather-main">
+            <div>
+                <h2>{{ weather.temperature|default:"28" }}°C</h2>
+                <p>{{ weather.condition|default:"Sunny" }}</p>
+            </div>
+            {% if weather.icon %}
+            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Weather" style="width: 100px;">
+            {% else %}
+            <i class="fa-solid fa-sun" style="font-size: 4.5rem; color: var(--gold);"></i>
+            {% endif %}
+        </div>
+        <div class="weather-details">
+            <div class="w-detail">
+                <span>Humidity</span>
+                <span>{{ weather.humidity|default:"65" }}%</span>
+            </div>
+            <div class="w-detail">
+                <span>Wind</span>
+                <span>{{ weather.wind|default:"9" }} km/h</span>
+            </div>
+        </div>
     </div>
-    <div class="magic">
+
+    <!-- 8. Recent Activity -->
+    <div class="activity-widget">
+        <div class="weather-header">
+            <span>Activity Log</span>
+            <span>Timeline</span>
+        </div>
+        <div class="timeline">
+            {% for activity in recent_activity %}
+                <div class="timeline-item">
+                    <p>Added {{ activity.color }} {{ activity.category }}</p>
+                    <span>{{ activity.created_at|date:"M d \a\t g:i A" }}</span>
+                </div>
+            {% empty %}
+                <div class="timeline-item">
+                    <p>No recent activity.</p>
+                    <span>Upload some clothes to see them here!</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+
+<!-- 9. SMART STYLING BANNER -->
+<section class="styling-banner animate-in delay-3">
+    <div class="banner-content">
+        <h2>Need outfit recommendations?</h2>
+        <p>Use Smart Styling to generate perfect combinations for any occasion based on your wardrobe.</p>
+        <a href="{% url 'stylist' %}" class="banner-btn">
+            Open Smart Styling
+        </a>
+    </div>
+    <div style="font-size: 5rem; color: var(--gold); opacity: 0.2;">
         <i class="fa-solid fa-wand-magic-sparkles"></i>
     </div>
 </section>
 
-<!-- ==========================
-   FEATURES
-========================== -->
-<section class="intelligence">
-    <h2>
-        ALAMARAi Capabilities
-    </h2>
-
-    <div class="feature-row">
-        <div>
-            <i class="fa-solid fa-eye"></i>
-            Clothing Recognition
-        </div>
-        <div>
-            <i class="fa-solid fa-palette"></i>
-            Color Analysis
-        </div>
-        <div>
-            <i class="fa-solid fa-cloud-sun"></i>
-            Weather Styling
-        </div>
-        <div>
-            <i class="fa-solid fa-person-dress"></i>
-            Personal Recommendations
-        </div>
-    </div>
+<!-- 10. QUICK ACTIONS -->
+<div class="section-title animate-in delay-3">
+    <h2>Quick Actions</h2>
+</div>
+<section class="quick-actions animate-in delay-3">
+    <a href="{% url 'upload' %}" class="action-btn">
+        <i class="fa-solid fa-plus-circle"></i>
+        <span>Add Clothing</span>
+    </a>
+    <a href="{% url 'wardrobe' %}" class="action-btn">
+        <i class="fa-solid fa-door-open"></i>
+        <span>View Wardrobe</span>
+    </a>
+    <a href="{% url 'stylist' %}" class="action-btn">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Smart Styling</span>
+    </a>
+    <a href="{% url 'profile' %}" class="action-btn">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+    </a>
 </section>
 
 </div>

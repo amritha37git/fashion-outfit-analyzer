@@ -1,73 +1,298 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+ALAMARAi | Edit Item
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* =====================================
+   LUXURY EDITORIAL EDIT FORM REFINEMENT
+===================================== */
+:root {
+    --bg-warm: #FAF8F4;
+    --card-pure: #FFFFFF;
+    --text-main: #171717;
+    --text-muted: #666666;
+    --gold: #C8A96A;
+    --gold-dark: #AA8748;
+    --border-subtle: #ECE7DE;
+    --shadow-soft: 0 20px 50px rgba(0,0,0,0.05);
+    --shadow-hover: 0 25px 60px rgba(200, 169, 106, 0.12);
+    --radius-btn: 50px;
+    --radius-card: 28px;
+    --radius-sec: 36px;
+}
+
+body {
+    background-color: var(--bg-warm);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+}
+
+.edit-page-container {
+    padding: 40px 0 100px;
+    max-width: 850px;
+    margin: 0 auto;
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edit-card {
+    background: var(--card-pure);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    padding: 50px 60px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+}
+
+.edit-header {
+    margin-bottom: 35px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 20px;
+}
+
+.edit-header span {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.edit-header h2 {
+    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.form-control {
+    background-color: var(--bg-warm);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: var(--gold);
+    outline: none;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(200, 169, 106, 0.12);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-subtle);
+    align-items: center;
+}
+
+.btn-update {
+    background-color: var(--text-main);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-btn);
+    padding: 14px 32px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.btn-update:hover {
+    background-color: var(--gold);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(200, 169, 106, 0.3);
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-btn);
+    padding: 14px 28px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    border-color: var(--text-main);
+    color: var(--text-main);
+}
+
+@media(max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+    .edit-card {
+        padding: 30px 20px;
+    }
+    .form-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    .btn-update, .btn-cancel {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="container edit-page-container">
 
-<div class="container">
-
-    <div class="card mx-auto" style="max-width:700px;">
-
-        <div class="card-body">
-
+    <div class="edit-card">
+        
+        <div class="edit-header">
+            <span>Catalog Management</span>
             <h2>Edit Clothing Item</h2>
+        </div>
 
-            <form method="POST">
+        <form method="POST">
+            {% csrf_token %}
 
-                {% csrf_token %}
+            <div class="form-grid">
+                
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input class="form-control"
+                           name="name"
+                           value="{{ item.name }}"
+                           required>
+                </div>
 
-                <label>Name</label>
-                <input class="form-control mb-3"
-                       name="name"
-                       value="{{ item.name }}">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <input class="form-control"
+                           name="category"
+                           value="{{ item.category }}"
+                           required>
+                </div>
 
-                <label>Category</label>
-                <input class="form-control mb-3"
-                       name="category"
-                       value="{{ item.category }}">
+                <div class="form-group">
+                    <label class="form-label">Brand</label>
+                    <input class="form-control"
+                           name="brand"
+                           value="{{ item.brand }}">
+                </div>
 
-                <label>Brand</label>
-                <input class="form-control mb-3"
-                       name="brand"
-                       value="{{ item.brand }}">
+                <div class="form-group">
+                    <label class="form-label">Color</label>
+                    <input class="form-control"
+                           name="color"
+                           value="{{ item.color }}">
+                </div>
 
-                <label>Color</label>
-                <input class="form-control mb-3"
-                       name="color"
-                       value="{{ item.color }}">
+                <div class="form-group">
+                    <label class="form-label">Season</label>
+                    <input class="form-control"
+                           name="season"
+                           value="{{ item.season }}">
+                </div>
 
-                <label>Season</label>
-                <input class="form-control mb-3"
-                       name="season"
-                       value="{{ item.season }}">
+                <div class="form-group">
+                    <label class="form-label">Occasion</label>
+                    <input class="form-control"
+                           name="occasion"
+                           value="{{ item.occasion }}">
+                </div>
 
-                <label>Occasion</label>
-                <input class="form-control mb-3"
-                       name="occasion"
-                       value="{{ item.occasion }}">
+                <div class="form-group full-width">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control"
+                              name="description">{{ item.description }}</textarea>
+                </div>
 
-                <label>Description</label>
+            </div>
 
-                <textarea
-                    class="form-control mb-3"
-                    rows="4"
-                    name="description">{{ item.description }}</textarea>
-
-                <button class="btn btn-success">
+            <div class="form-actions">
+                <button type="submit" class="btn-update">
                     💾 Update Item
                 </button>
 
-                <a href="{% url 'wardrobe' %}"
-                   class="btn btn-secondary">
-
+                <a href="{% url 'wardrobe' %}" class="btn-cancel">
                     Cancel
-
                 </a>
+            </div>
 
-            </form>
-
-        </div>
+        </form>
 
     </div>
 
 </div>
-
 {% endblock %}

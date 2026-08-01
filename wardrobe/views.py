@@ -6,6 +6,7 @@ from .models import ClothingItem
 from .forms import ClothingItemForm
 
 from ai.detector import analyze_image
+from django.db.models import Count
 
 
 
@@ -445,3 +446,86 @@ def delete_item(request,item_id):
     return redirect(
         "wardrobe"
     )
+
+@login_required
+def dashboard(request):
+    # 1. Fetch all items for the current logged-in user
+    items = ClothingItem.objects.filter(user=request.user)
+    total_items = items.count()
+
+    # 2. Wardrobe Distribution Logic
+    # Grouping shirt-types under "Tops" based on your CATEGORY_CHOICES
+    top_categories = ["Top", "Shirt", "T-shirt", "Hoodie", "Jacket"]
+    
+    count_tops = items.filter(category__in=top_categories).count()
+    count_bottoms = items.filter(category="Bottom").count()
+    count_shoes = items.filter(category="Shoes").count()
+    count_accessories = items.filter(category="Accessory").count()
+    count_dresses = items.filter(category="Dress").count()
+    count_bags = items.filter(category="Bag").count()
+
+    # Helper function to calculate CSS percentages safely
+    def calc_pct(count):
+        return int((count / total_items) * 100) if total_items > 0 else 0
+
+    # 3. Dynamic Wardrobe Insights Logic
+    insights = []
+    if total_items > 0:
+        # Insight 1: Most common color
+        top_color = items.values('color').annotate(color_count=Count('color')).order_by('-color_count').first()
+        if top_color and top_color['color'] != "Unknown":
+            insights.append(f"Your wardrobe predominantly features {top_color['color'].lower()} outfits.")
+        
+        # Insight 2: Season check
+        summer_count = items.filter(season="Summer").count()
+        summer_pct = calc_pct(summer_count)
+        if summer_pct > 0:
+            insights.append(f"Summer clothing makes up {summer_pct}% of your total collection.")
+        
+        # Insight 3: Missing items check
+        rainy_count = items.filter(season="Rainy").count()
+        if rainy_count == 0:
+            insights.append("Note: Your digital wardrobe currently has no rainwear logged.")
+        
+        # Insight 4: Style check
+        formal_count = items.filter(style="Formal").count()
+        if formal_count > 0:
+            insights.append(f"You currently own {formal_count} formal items.")
+        else:
+            insights.append("Consider adding more accessories or formal wear to expand styling options.")
+    else:
+        insights.append("Your wardrobe is empty. Start adding items to generate styling insights.")
+
+    # 4. Activity Log Logic (Latest 4 items)
+    recent_activity = items.order_by('-created_at')[:4]
+
+    context = {
+        'total_items': total_items,
+        
+        # Categories for the top cards & images
+        'latest_top': items.filter(category__in=top_categories).first(),
+        'latest_bottom': items.filter(category="Bottom").first(),
+        'latest_dress': items.filter(category="Dress").first(),
+        'latest_shoes': items.filter(category="Shoes").first(),
+        'latest_bag': items.filter(category="Bag").first(),
+        'latest_accessory': items.filter(category="Accessory").first(),
+        
+        'count_tops': count_tops,
+        'count_bottoms': count_bottoms,
+        'count_dresses': count_dresses,
+        'count_shoes': count_shoes,
+        'count_bags': count_bags,
+        'count_accessories': count_accessories,
+
+        # Distribution Percentages for the progress bars
+        'dist_tops': calc_pct(count_tops),
+        'dist_bottoms': calc_pct(count_bottoms),
+        'dist_shoes': calc_pct(count_shoes),
+        'dist_accessories': calc_pct(count_accessories),
+
+        # Insights & Activity Lists
+        'insights': insights,
+        'recent_activity': recent_activity,
+    }
+
+    return render(request, "home.html", context)

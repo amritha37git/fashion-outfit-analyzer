@@ -183,3 +183,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your_username_or_email'
 EMAIL_HOST_PASSWORD = 'your_provider_api_key_or_password'
 DEFAULT_FROM_EMAIL = 'support@alamarai.com'
+
+
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+CITY = os.getenv("CITY", "Thrissur")
