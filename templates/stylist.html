@@ -1,46 +1,299 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-{% block content %}
+{% block title %}
+ALAMARAi | AI Stylist
+{% endblock %}
 
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/stylist.css' %}">
+<style>
+/* =====================================
+   AI STYLIST PAGE - PROFESSIONAL DESIGN SYSTEM
+===================================== */
+.stylist-page {
+    padding: 30px 0 100px;
+}
 
+/* --- Hero Section (Editorial Split Banner) --- */
+.stylist-hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 50px 60px;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+    overflow: hidden;
+}
 
-<div class="container py-5">
+.stylist-hero-text .badge-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: block;
+}
 
+.stylist-hero-text h1 {
+    font-size: 3rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    font-weight: 400;
+}
+
+.stylist-hero-text p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-weight: 300;
+}
+
+.stylist-features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.stylist-feature-pill {
+    background: var(--background);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stylist-hero-img-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 340px;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+}
+
+.stylist-hero-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Search Form Card --- */
+.stylist-form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    margin-bottom: 50px;
+}
+
+/* 
+  PROFESSIONAL GRID OVERRIDE:
+  Targeting standard Django form wrappers (.search_form.html contents)
+  to force them into a clean 5-column horizontal track.
+*/
+.stylist-form-card form {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) 200px !important;
+    gap: 20px !important;
+    align-items: flex-end !important;
+}
+
+/* Clear default paragraph/div layout constraints from Django form rendering */
+.stylist-form-card form p,
+.stylist-form-card form div.form-group,
+.stylist-form-card form > div {
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.stylist-form-card label,
+.stylist-form-card form label {
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    color: var(--text-secondary) !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    display: block !important;
+}
+
+.stylist-form-card .form-control,
+.stylist-form-card .form-select,
+.stylist-form-card select,
+.stylist-form-card input {
+    background-color: var(--background) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    font-size: 0.9rem !important;
+    color: var(--text-primary) !important;
+    width: 100% !important;
+    height: 48px !important;
+    transition: all 0.3s ease !important;
+}
+
+.stylist-form-card select:focus,
+.stylist-form-card input:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.15) !important;
+    background-color: var(--surface) !important;
+    outline: none !important;
+}
+
+.stylist-form-card button,
+.stylist-form-card input[type="submit"],
+.stylist-form-card .primary-btn {
+    background-color: var(--text-primary) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0 20px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    height: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+}
+
+.stylist-form-card button:hover,
+.stylist-form-card input[type="submit"]:hover {
+    background-color: var(--gold) !important;
+    color: #fff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(200, 169, 106, 0.25) !important;
+}
+
+/* --- Recommendation Results --- */
+.recommendations-wrapper {
+    width: 100%;
+}
+
+/* --- Empty State --- */
+.empty-state-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 70px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.empty-state-card h2 {
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.empty-state-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* Responsive design breakpoints */
+@media (max-width: 1200px) {
+    .stylist-form-card form {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .stylist-form-card form button,
+    .stylist-form-card form input[type="submit"] {
+        grid-column: span 2 !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .stylist-hero-card {
+        grid-template-columns: 1fr;
+        padding: 40px 30px;
+    }
+    .stylist-hero-text h1 {
+        font-size: 2.4rem;
+    }
+    .stylist-hero-img-wrapper {
+        height: 260px;
+    }
+}
+
+@media (max-width: 768px) {
+    .stylist-form-card form {
+        grid-template-columns: 1fr !important;
+    }
+    .stylist-form-card form button,
+    .stylist-form-card form input[type="submit"] {
+        grid-column: span 1 !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container stylist-page">
 
     <!-- Hero Section -->
-    {% include 'stylist/hero.html' %}
+    <div class="stylist-hero-card">
+        <div class="stylist-hero-text">
+            <span class="badge-label">ALAMARAi Assistant</span>
+            <h1>Find Your Perfect Outfit</h1>
+            <p>Let AI analyze your digital wardrobe and curate sophisticated clothing combinations tailored to your occasion, weather conditions, and color harmony.</p>
+            
+            <div class="stylist-features-list">
+                <span class="stylist-feature-pill">AI Recommendations</span>
+                <span class="stylist-feature-pill">Color Harmony</span>
+                <span class="stylist-feature-pill">Weather Styling</span>
+                <span class="stylist-feature-pill">Smart Pairing</span>
+            </div>
+        </div>
 
+        <div class="stylist-hero-img-wrapper">
+            <img src="{% static 'images/6.jpeg' %}" alt="Curated luxury wardrobe aesthetic">
+        </div>
+    </div>
 
+    <!-- Search Form Card -->
+    <div class="stylist-form-card">
+        {% include 'stylist/search_form.html' %}
+    </div>
 
-    <!-- Search Form -->
-    {% include 'stylist/search_form.html' %}
-
-
-
+    <!-- Results Section -->
     {% if recommendations %}
-
-        <!-- Recommendation Results -->
-        {% include 'stylist/recommendation_card.html' %}
-
-
+        <div class="recommendations-wrapper">
+            {% include 'stylist/recommendation_card.html' %}
+        </div>
     {% else %}
-
-        <!-- Empty State -->
-        {% include 'stylist/empty.html' %}
-
-
+        <div class="empty-state-card">
+            {% include 'stylist/empty.html' %}
+        </div>
     {% endif %}
-
-
 
 </div>
 
-
-
 <script src="{% static 'js/stylist.js' %}"></script>
-
-
 {% endblock %}

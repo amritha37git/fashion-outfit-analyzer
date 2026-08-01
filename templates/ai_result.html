@@ -1,287 +1,287 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block title %}
+ALAMARAi | AI Analysis Result
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* =====================================
+   AI ANALYSIS RESULT PAGE STYLING
+===================================== */
+/* Flex layout on the page ensures the card centers perfectly without forcing a scroll */
+.analysis-page {
+    padding: 20px 0;
+    min-height: calc(100vh - 100px); /* Adjusts for standard navbar height */
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.analysis-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 40px; /* Reduced padding to save vertical space */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.analysis-title {
+    font-size: 2rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 24px; /* Tighter spacing */
+    font-weight: 400;
+}
+
+.analysis-title span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+/* Perfect Editorial Split Grid - adjusted for a compact view */
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 32px;
+    align-items: stretch;
+}
+
+/* Image preview section - Constrained height to eliminate scrolling */
+.analysis-image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #FAF8F3;
+    width: 100%;
+    height: 100%;
+    min-height: 380px; 
+    max-height: 420px; /* Prevents the image from pushing the page down */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.analysis-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+/* Details sub-card - compacted inner padding */
+.details-box {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.item-heading {
+    font-size: 1.8rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    margin-bottom: 0;
+    font-weight: 400;
+    text-transform: capitalize;
+}
+
+.details-divider {
+    width: 48px;
+    height: 2px;
+    background-color: var(--gold);
+    margin: 12px 0 20px 0;
+}
+
+/* Unified consistent structural grid */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px; /* Tighter gap to conserve height */
+    margin-bottom: 20px;
+}
+
+.detail-item label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+/* Unified clean typography */
+.detail-item span, 
+.detail-item p {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 400;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+/* Description box */
+.description-box {
+    grid-column: span 2;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+/* Description text - sentence case override */
+.description-box p {
+    text-transform: none;
+    line-height: 1.4;
+}
+
+/* Action button */
+.save-wardrobe-btn {
+    background-color: var(--text-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.save-wardrobe-btn:hover {
+    background-color: var(--gold);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(200, 169, 106, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .analysis-page {
+        min-height: auto;
+        align-items: flex-start;
+    }
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+    .analysis-image-wrapper {
+        height: 350px;
+    }
+    .analysis-card {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .description-box {
+        grid-column: span 1;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="container analysis-page">
+    <div class="analysis-card">
 
+        <h1 class="analysis-title">
+            AI Analysis <span>Result</span>
+        </h1>
 
-<div class="container py-5">
+        <div class="analysis-grid">
 
-
-    <div class="card shadow-lg border-0">
-
-
-        <div class="card-body p-5">
-
-
-
-            <h1 class="text-center fw-bold mb-5">
-
-                🤖 AI Analysis Result
-
-            </h1>
-
-
-
-
-            <div class="row">
-
-
-
-                <!-- IMAGE -->
-
-                <div class="col-md-5 text-center">
-
-
-                    <img src="{{ image_url }}"
-
-                         class="img-fluid rounded shadow"
-
-                         style="max-height:450px;">
-
-
+            <!-- IMAGE PREVIEW -->
+            <div>
+                <div class="analysis-image-wrapper">
+                    <img src="{{ image_url }}" alt="{{ name }}">
                 </div>
-
-
-
-
-
-                <!-- DETAILS -->
-
-
-                <div class="col-md-7">
-
-
-                    <div class="card shadow-sm">
-
-
-                        <div class="card-body">
-
-
-
-                            <h3 class="text-primary">
-
-                                {{ name }}
-
-                            </h3>
-
-
-
-                            <hr>
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    📂 Category
-                                </strong>
-
-                                <br>
-
-                                {{ category }}
-
-                            </p>
-
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    🏷 Brand
-                                </strong>
-
-                                <br>
-
-                                {{ brand }}
-
-                            </p>
-
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    🎨 Color
-                                </strong>
-
-                                <br>
-
-                                {{ color }}
-
-                            </p>
-
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    🌦 Season
-                                </strong>
-
-                                <br>
-
-
-                                <span class="badge bg-success">
-
-                                    {{ season }}
-
-                                </span>
-
-
-                            </p>
-
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    🎉 Occasion
-                                </strong>
-
-                                <br>
-
-
-                                <span class="badge bg-warning text-dark">
-
-                                    {{ occasion }}
-
-                                </span>
-
-
-                            </p>
-
-
-
-
-
-                            <p>
-
-                                <strong>
-                                    📝 Description
-                                </strong>
-
-                                <br>
-
-
-                                {{ description }}
-
-
-                            </p>
-
-
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-
             </div>
 
+            <!-- DETAILS PANEL -->
+            <div>
+                <div class="details-box">
+                    <div>
+                        <h3 class="item-heading">{{ name }}</h3>
+                        <div class="details-divider"></div>
 
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Category</label>
+                                <span>{{ category }}</span>
+                            </div>
 
+                            <div class="detail-item">
+                                <label>Brand</label>
+                                <span>{{ brand|default:"Unknown" }}</span>
+                            </div>
 
+                            <div class="detail-item">
+                                <label>Color</label>
+                                <span>{{ color }}</span>
+                            </div>
 
+                            <div class="detail-item">
+                                <label>Season</label>
+                                <span>{{ season }}</span>
+                            </div>
 
+                            <div class="detail-item">
+                                <label>Occasion</label>
+                                <span>{{ occasion }}</span>
+                            </div>
 
-            <!-- SAVE -->
+                            <div class="detail-item description-box">
+                                <label>AI Description</label>
+                                <p>{{ description }}</p>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- SAVE FORM -->
+                    <form method="POST" action="{% url 'save_ai_item' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="name" value="{{ name }}">
+                        <input type="hidden" name="category" value="{{ category }}">
+                        <input type="hidden" name="brand" value="{{ brand }}">
+                        <input type="hidden" name="color" value="{{ color }}">
+                        <input type="hidden" name="season" value="{{ season }}">
+                        <input type="hidden" name="occasion" value="{{ occasion }}">
+                        <input type="hidden" name="description" value="{{ description }}">
+                        <input type="hidden" name="image" value="{{ image }}">
 
-            <form method="POST"
-                  action="{% url 'save_ai_item' %}"
-                  class="mt-5">
+                        <button type="submit" class="save-wardrobe-btn">
+                            Save to Wardrobe
+                        </button>
+                    </form>
 
-
-                {% csrf_token %}
-
-
-
-                <input type="hidden"
-                       name="name"
-                       value="{{ name }}">
-
-
-
-                <input type="hidden"
-                       name="category"
-                       value="{{ category }}">
-
-
-
-                <input type="hidden"
-                       name="brand"
-                       value="{{ brand }}">
-
-
-
-                <input type="hidden"
-                       name="color"
-                       value="{{ color }}">
-
-
-
-                <input type="hidden"
-                       name="season"
-                       value="{{ season }}">
-
-
-
-                <input type="hidden"
-                       name="occasion"
-                       value="{{ occasion }}">
-
-
-
-                <input type="hidden"
-                       name="description"
-                       value="{{ description }}">
-
-
-
-                <input type="hidden"
-                       name="image"
-                       value="{{ image }}">
-
-
-
-
-
-                <button class="btn btn-success btn-lg w-100">
-
-
-                    💾 Save to Wardrobe
-
-
-                </button>
-
-
-
-            </form>
-
-
+                </div>
+            </div>
 
         </div>
 
-
     </div>
-
-
 </div>
-
-
-
 {% endblock %}

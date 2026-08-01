@@ -1,0 +1,233 @@
+/* =====================================
+   ALAMARAi COMPONENTS CSS
+===================================== */
+
+/* ===========================
+   NAVBAR & STACKED LOGO
+=========================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    z-index: 1000;
+    background: rgba(250, 248, 243, 0.95);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(200, 169, 106, 0.15);
+    display: flex;
+    align-items: center;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Stacked Brand Logo Matching Reference */
+.brand-logo, .brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logo-main, .brand-name {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+}
+
+.logo-main span, .brand-name span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.logo-sub, .brand-tagline {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    font-weight: 500;
+    display: block;
+}
+
+/* ===========================
+   NAVIGATION LINKS
+=========================== */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.nav-links a, .nav-link {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.nav-links a:hover, .nav-link:hover {
+    color: var(--gold);
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.nav-button, .primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    color: white !important;
+    padding: 12px 30px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}
+
+.nav-button:hover, .primary-btn:hover {
+    background: var(--gold-dark);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    background: transparent;
+    padding: 12px 30px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* ===========================
+   ALERTS & MESSAGES
+=========================== */
+
+.messages {
+    margin-top: 20px;
+}
+
+.alert {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 15px 20px;
+    color: var(--text-primary);
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+.footer {
+    background: #111;
+    color: white;
+    padding: 70px 0 20px;
+    margin-top: 80px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 50px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+.footer-brand, .footer-brand h3 {
+    font-family: var(--font-heading);
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.footer-brand span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.footer-text, .footer p {
+    color: #B5B5B5;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-column h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.footer-column a {
+    color: #B5B5B5;
+    transition: var(--transition);
+}
+
+.footer-column a:hover {
+    color: var(--gold);
+}
+
+.footer-bottom {
+    margin-top: 50px;
+    padding-top: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,.1);
+    color: #B5B5B5;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width: 900px) {
+    .nav-links { display: none; }
+    .footer-container { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 600px) {
+    .navbar-container {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    body { padding-top: 130px; }
+    .footer-container { text-align: center; }
+}

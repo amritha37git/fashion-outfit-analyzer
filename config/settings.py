@@ -163,7 +163,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 LOGIN_URL = "/accounts/login/"
 
-LOGIN_REDIRECT_URL = "/dashboard/"
+LOGIN_REDIRECT_URL = "/home/"
 
 LOGOUT_REDIRECT_URL = "/"
 
@@ -172,3 +172,14 @@ LOGOUT_REDIRECT_URL = "/"
 # -------------------------------------------------
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# settings.py
+
+# Output emails to the console for development
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yourprovider.com'       # e.g., smtp.sendgrid.net
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your_username_or_email'
+EMAIL_HOST_PASSWORD = 'your_provider_api_key_or_password'
+DEFAULT_FROM_EMAIL = 'support@alamarai.com'

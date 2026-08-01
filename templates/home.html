@@ -1,348 +1,543 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+ALAMARAi | Dashboard
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* =====================================
+   DASHBOARD PAGE STYLING
+===================================== */
+.dashboard-page {
+    padding: 20px 0 80px;
+}
+
+/* --- Hero Section --- */
+.dashboard-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 60px;
+    margin-bottom: 50px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-label {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 35px;
+    max-width: 520px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.ai-preview {
+    background: linear-gradient(135deg, #FAF8F3 0%, #F4EFE6 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.match-card {
+    background: var(--surface);
+    padding: 24px 32px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    border: 1px solid var(--border);
+    z-index: 2;
+}
+
+.circle-score {
+    width: 64px;
+    height: 64px;
+    background: var(--gold);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 auto 12px;
+}
+
+.match-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+}
+
+.match-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.fashion-icon {
+    position: absolute;
+    font-size: 10rem;
+    color: rgba(200, 169, 106, 0.08);
+    right: -20px;
+    bottom: -20px;
+    z-index: 1;
+}
+
+/* --- Stats Grid --- */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-card i {
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 16px;
+}
+
+.stat-card h2 {
+    font-size: 2.5rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.stat-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Section Title --- */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 2.2rem;
+}
+
+.section-title a {
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 0.95rem;
+    transition: opacity 0.3s;
+}
+
+.section-title a:hover {
+    opacity: 0.8;
+}
+
+/* --- Wardrobe Grid --- */
+.wardrobe-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.clothing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clothing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.clothing-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: calc(var(--radius) - 8px);
+    margin-bottom: 16px;
+    background: #F4F7F9;
+}
+
+.empty-image {
+    width: 100%;
+    height: 240px;
+    background: #F4F7F9;
+    border-radius: calc(var(--radius) - 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #CBD5E1;
+    margin-bottom: 16px;
+}
+
+.clothing-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.clothing-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.empty-box {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.empty-box p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+/* --- AI Insight --- */
+.ai-insight {
+    background: linear-gradient(135deg, #111111 1.1%, #2A2A2A 100%);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 50px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow-soft);
+}
+
+.ai-insight span {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.ai-insight h2 {
+    font-size: 2rem;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    max-width: 700px;
+}
+
+.ai-insight p {
+    color: #B5B5B5;
+    font-size: 0.95rem;
+}
+
+.ai-insight .magic {
+    font-size: 4rem;
+    color: var(--gold);
+    opacity: 0.8;
+}
+
+/* --- Intelligence Features --- */
+.intelligence {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.03);
+}
+
+.intelligence > h2 {
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+}
+
+.feature-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.feature-row > div {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 20px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+}
+
+.feature-row i {
+    font-size: 1.5rem;
+    color: var(--gold);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+    .dashboard-hero { grid-template-columns: 1fr; padding: 40px; }
+    .stats, .wardrobe-grid, .feature-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .stats, .wardrobe-grid, .feature-row { grid-template-columns: 1fr; }
+    .hero-text h1 { font-size: 2.5rem; }
+    .ai-insight { flex-direction: column; text-align: center; gap: 30px; padding: 40px 20px; }
+    .ai-insight h2 { font-size: 1.5rem; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="container dashboard-page">
 
-<!-- Importing a premium font for a professional look -->
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-    body {
-        background-color: #F8F9FA;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #1A1D20;
-    }
-
-    /* Premium Hero Section */
-    .hero-section {
-        background: #111827;
-        color: #ffffff;
-        border-radius: 24px;
-        padding: 5rem 3rem;
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 3rem;
-        box-shadow: 0 20px 40px rgba(17, 24, 39, 0.1);
-    }
-
-    .hero-bg-pattern {
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(17,24,39,0) 70%);
-        border-radius: 50%;
-        z-index: 0;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .hero-title {
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        font-size: 3rem;
-        line-height: 1.1;
-    }
-
-    .hero-subtitle {
-        font-weight: 400;
-        font-size: 1.15rem;
-        opacity: 0.85;
-        max-width: 500px;
-    }
-
-    /* Buttons */
-    .btn-premium {
-        background: #ffffff;
-        color: #111827;
-        font-weight: 600;
-        padding: 0.8rem 1.8rem;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        border: none;
-    }
-    
-    .btn-premium:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(255,255,255,0.2);
-        background: #f3f4f6;
-    }
-
-    .btn-premium-outline {
-        background: transparent;
-        color: #ffffff;
-        font-weight: 600;
-        padding: 0.8rem 1.8rem;
-        border-radius: 50px;
-        border: 1px solid rgba(255,255,255,0.3);
-        transition: all 0.3s ease;
-    }
-
-    .btn-premium-outline:hover {
-        background: rgba(255,255,255,0.1);
-        border-color: #ffffff;
-    }
-
-    /* Section Headers */
-    .section-header {
-        font-weight: 700;
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        letter-spacing: -0.02em;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    /* Minimalist Cards */
-    .glass-card {
-        background: #ffffff;
-        border-radius: 20px;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-    }
-
-    .glass-card:hover {
-        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-        transform: translateY(-4px);
-    }
-
-    /* Stat Icons */
-    .icon-box {
-        width: 54px;
-        height: 54px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
-    }
-    .icon-box.dark { background: #111827; color: white; }
-    .icon-box.indigo { background: #EEF2FF; color: #4F46E5; }
-    .icon-box.rose { background: #FFF1F2; color: #E11D48; }
-    .icon-box.emerald { background: #ECFDF5; color: #059669; }
-
-    /* Clothing Image Containers */
-    .clothing-frame {
-        aspect-ratio: 3/4;
-        width: 100%;
-        object-fit: cover;
-        border-radius: 12px;
-        background-color: #f3f4f6;
-    }
-
-    /* Analytics Circle Icons */
-    .stat-circle {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: #f8fafc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 15px auto;
-        font-size: 1.5rem;
-        color: #64748b;
-        transition: all 0.3s ease;
-    }
-    
-    .stat-circle:hover {
-        background-color: #EEF2FF;
-        color: #4F46E5;
-        transform: scale(1.1);
-    }
-</style>
-
-<div class="container py-4">
-
-    <!-- HERO SECTION -->
-    <div class="hero-section">
-        <div class="hero-bg-pattern"></div>
-        <div class="row align-items-center hero-content">
-            <div class="col-lg-7">
-                <h1 class="hero-title mb-3">Elevate your everyday style, {{ user.username|default:"Stylist" }}.</h1>
-                <p class="hero-subtitle mb-4">Your intelligent digital wardrobe. Let AI curate your perfect look based on your personal collection, weather, and occasion.</p>
-                
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="{% url 'upload' %}" class="btn btn-premium text-decoration-none">
-                        <i class="fa-solid fa-plus me-2"></i> Add Item
-                    </a>
-                    <a href="{% url 'stylist' %}" class="btn btn-premium-outline text-decoration-none">
-                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Open AI Stylist
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-5 d-none d-lg-block text-end">
-                <i class="fa-solid fa-shirt text-white" style="font-size: 140px; opacity: 0.1; transform: rotate(15deg);"></i>
-            </div>
+<!-- ==========================
+   HERO
+========================== -->
+<section class="dashboard-hero">
+    <div class="hero-text">
+        <span class="dashboard-label">
+            DIGITAL WARDROBE
+        </span>
+        <h1>
+            Welcome back,
+            <br>
+            {{ user.username }}
+        </h1>
+        <p>
+            Your personal fashion assistant that organizes
+            your wardrobe, style and helps you create perfect looks.
+        </p>
+        <div class="hero-buttons">
+            <a href="{% url 'upload' %}" class="primary-btn">
+                <i class="fa-solid fa-plus" style="margin-right: 8px;"></i>
+                Add Clothing
+            </a>
+            <a href="{% url 'stylist' %}" class="secondary-btn">
+                <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 8px; color: var(--gold);"></i>
+                Stylist Assistant
+            </a>
         </div>
     </div>
 
-    <!-- WARDROBE DASHBOARD OVERVIEW -->
-    <div class="row g-4 mb-5">
-        <div class="col-6 col-lg-3">
-            <div class="glass-card p-4 h-100">
-                <div class="icon-box dark"><i class="fa-solid fa-layer-group"></i></div>
-                <h2 class="fw-bold mb-0">{{ total_clothes|default:"0" }}</h2>
-                <p class="text-muted mb-0 fw-medium">Total Items</p>
+    <div class="ai-preview">
+        <div class="match-card">
+            <div class="circle-score">
+                98%
             </div>
+            <h3>
+                Outfit Match
+            </h3>
+            <p>
+                Generated Look
+            </p>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="glass-card p-4 h-100">
-                <div class="icon-box rose"><i class="fa-solid fa-heart"></i></div>
-                <h2 class="fw-bold mb-0">{{ favourites|default:"0" }}</h2>
-                <p class="text-muted mb-0 fw-medium">Favorites</p>
-            </div>
-        </div>
-        <div class="col-6 col-lg-3">
-            <div class="glass-card p-4 h-100">
-                <div class="icon-box indigo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                <h2 class="fw-bold mb-0">0</h2>
-                <p class="text-muted mb-0 fw-medium">AI Matches</p>
-            </div>
-        </div>
-        <div class="col-6 col-lg-3">
-            <div class="glass-card p-4 h-100 opacity-75">
-                <div class="icon-box emerald"><i class="fa-solid fa-bag-shopping"></i></div>
-                <h2 class="fw-bold mb-0">0</h2>
-                <p class="text-muted mb-0 fw-medium">Shopping Picks</p>
-            </div>
-        </div>
+        <i class="fa-solid fa-shirt fashion-icon"></i>
+    </div>
+</section>
+
+<!-- ==========================
+   STATS
+========================== -->
+<section class="stats">
+    <div class="stat-card">
+        <i class="fa-solid fa-shirt"></i>
+        <h2>
+            {{ total_clothes|default:"0" }}
+        </h2>
+        <p>
+            Wardrobe Items
+        </p>
     </div>
 
-    <!-- FULL WIDTH STYLE STATISTICS -->
-    <h3 class="section-header"><i class="fa-solid fa-chart-pie text-primary"></i> Style Statistics</h3>
-    <div class="glass-card p-4 p-lg-5 mb-5 bg-white">
-        <div class="text-center mb-4">
-            <p class="text-muted fw-medium text-uppercase tracking-wider" style="letter-spacing: 1.5px; font-size: 0.85rem;">Your Wardrobe Composition</p>
-        </div>
-        
-        <div class="row justify-content-center text-center g-4">
-            <!-- Tops -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-shirt"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">8</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Tops</span>
-            </div>
-            <!-- Bottoms -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-socks"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">5</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Bottoms</span>
-            </div>
-            <!-- Dresses -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-person-dress"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">4</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Dresses</span>
-            </div>
-            <!-- Shoes -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-shoe-prints"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">3</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Shoes</span>
-            </div>
-            <!-- Bags -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">2</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Bags</span>
-            </div>
-            <!-- Accessories -->
-            <div class="col-4 col-md-4 col-lg-2">
-                <div class="stat-circle shadow-sm">
-                    <i class="fa-solid fa-ring"></i>
-                </div>
-                <h2 class="fw-bolder mb-0 text-dark">6</h2>
-                <span class="text-muted fw-bold text-uppercase small" style="letter-spacing: 1px;">Accessories</span>
-            </div>
-        </div>
+    <div class="stat-card">
+        <i class="fa-solid fa-heart"></i>
+        <h2>
+            {{ favourites|default:"0" }}
+        </h2>
+        <p>
+            Favorites
+        </p>
     </div>
 
-    <!-- FULL WIDTH FASHION TIP -->
-    <h3 class="section-header"><i class="fa-regular fa-lightbulb text-warning"></i> Today's Fashion Tip</h3>
-    <div class="glass-card p-4 p-lg-5 mb-5" style="background: linear-gradient(135deg, #111827, #1f2937); color: white;">
-        <div class="row align-items-center">
-            <div class="col-lg-8 border-end-lg border-secondary border-opacity-25 pe-lg-5 mb-4 mb-lg-0">
-                <h3 class="fw-bold mb-4 lh-base" style="color: #f8fafc;">
-                    "Neutral-colored outfits can be easily elevated and enhanced with a single bold accessory."
-                </h3>
-                
-                <div>
-                    <h6 class="fw-bold text-uppercase mb-3" style="letter-spacing: 1.5px; font-size: 0.8rem; color: #818cf8;">
-                        <i class="fa-solid fa-check-circle me-2"></i> Our Top Recommendations
-                    </h6>
-                    <div class="d-flex gap-3 flex-wrap">
-                        <span class="badge rounded-pill py-2 px-3 fs-6" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-weight: 500;">
-                            ✨ Gold Accessories
-                        </span>
-                        <span class="badge rounded-pill py-2 px-3 fs-6" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-weight: 500;">
-                            👟 White Sneakers
-                        </span>
-                        <span class="badge rounded-pill py-2 px-3 fs-6" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-weight: 500;">
-                            👜 Minimal Handbags
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 text-center ps-lg-5">
-                <i class="fa-solid fa-wand-magic-sparkles text-warning opacity-75 mb-3" style="font-size: 5rem;"></i>
-                <p class="text-white-50 fw-medium mb-0">Check back tomorrow for more styling insights based on your digital closet.</p>
-            </div>
-        </div>
+    <div class="stat-card">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <h2>
+            12
+        </h2>
+        <p>
+            Saved Looks
+        </p>
     </div>
 
-    <!-- RECENTLY ADDED WARDROBE -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="section-header mb-0"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Recently Added</h3>
-        <a href="{% url 'wardrobe' %}" class="text-decoration-none fw-bold text-primary">View All <i class="fa-solid fa-arrow-right ms-1"></i></a>
+    <div class="stat-card">
+        <i class="fa-solid fa-fire"></i>
+        <h2>
+            85%
+        </h2>
+        <p>
+            Style Score
+        </p>
     </div>
-    
-    <div class="row g-3 mb-5">
-        {% for item in recent_items %}
-        <div class="col-6 col-md-3 col-lg-2">
-            <div class="glass-card h-100 p-2">
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" class="clothing-frame mb-2" alt="{{ item.name }}">
-                {% else %}
-                    <div class="clothing-frame d-flex align-items-center justify-content-center mb-2">
-                        <i class="fa-solid fa-image text-black-50 fa-2x"></i>
-                    </div>
-                {% endif %}
-                <div class="text-center pb-2">
-                    <h6 class="text-truncate mb-0 fw-bold fs-6" title="{{ item.name }}">{{ item.name }}</h6>
-                    <small class="text-muted">{{ item.color }}</small>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="glass-card text-center p-5 border-dashed">
-                <div class="icon-box dark mx-auto mb-3"><i class="fa-solid fa-box-open"></i></div>
-                <h5 class="fw-bold">Your wardrobe is empty</h5>
-                <p class="text-muted mb-4">Start digitizing your closet to view your styling insights.</p>
-                <a href="{% url 'upload' %}" class="btn btn-dark rounded-pill px-4 text-decoration-none">Upload First Item</a>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+</section>
 
+<!-- ==========================
+   RECENT WARDROBE
+========================== -->
+<div class="section-title">
+    <h2>
+        Recently Added
+    </h2>
+    <a href="{% url 'wardrobe' %}">
+        View All →
+    </a>
 </div>
 
+<div class="wardrobe-grid">
+    {% for item in recent_items %}
+    <div class="clothing-card">
+        {% if item.image %}
+        <img src="{{item.image.url}}" alt="{{item.name}}">
+        {% else %}
+        <div class="empty-image">
+            <i class="fa-solid fa-shirt"></i>
+        </div>
+        {% endif %}
+
+        <h4>
+            {{item.name}}
+        </h4>
+        <p>
+            {{item.category}} • {{item.color}}
+        </p>
+    </div>
+    {% empty %}
+    <div class="empty-box">
+        <h3>
+            Your wardrobe is empty
+        </h3>
+        <p>
+            Start uploading clothes to build your digital wardrobe.
+        </p>
+        <a href="{% url 'upload' %}" class="primary-btn">
+            Upload First Item
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ==========================
+   INSIGHT BANNER
+========================== -->
+<section class="ai-insight">
+    <div>
+        <span>
+            DAILY STYLE TIP
+        </span>
+        <h2>
+            "Neutral outfits become premium with one statement accessory."
+        </h2>
+        <p>
+            Recommended: Gold accessories • White sneakers • Minimal bags
+        </p>
+    </div>
+    <div class="magic">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+</section>
+
+<!-- ==========================
+   FEATURES
+========================== -->
+<section class="intelligence">
+    <h2>
+        ALAMARAi Capabilities
+    </h2>
+
+    <div class="feature-row">
+        <div>
+            <i class="fa-solid fa-eye"></i>
+            Clothing Recognition
+        </div>
+        <div>
+            <i class="fa-solid fa-palette"></i>
+            Color Analysis
+        </div>
+        <div>
+            <i class="fa-solid fa-cloud-sun"></i>
+            Weather Styling
+        </div>
+        <div>
+            <i class="fa-solid fa-person-dress"></i>
+            Personal Recommendations
+        </div>
+    </div>
+</section>
+
+</div>
 {% endblock %}

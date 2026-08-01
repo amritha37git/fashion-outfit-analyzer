@@ -1,521 +1,657 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}
 Create Account | ALAMARAi
 {% endblock %}
 
-
-
-{% block content %}
-
-
-
-<div class="auth-page">
-
-
-<div class="auth-card">
-
-
-<div class="auth-header">
-
-
-<h2>
-Create Account
-</h2>
-
-
-<p>
-Start building your smart wardrobe
-</p>
-
-
-</div>
-
-
-
-
-<form method="POST" id="signupForm">
-
-
-{% csrf_token %}
-
-
-
-
-<div class="mb-3">
-
-
-<label class="form-label">
-Username
-</label>
-
-
-<input
-type="text"
-name="username"
-class="form-control"
-placeholder="Choose username"
-required>
-
-
-</div>
-
-
-
-
-
-<div class="mb-3">
-
-
-<label class="form-label">
-Email
-</label>
-
-
-<input
-type="email"
-name="email"
-class="form-control"
-placeholder="Enter email address"
-required>
-
-
-</div>
-
-
-
-
-
-
-<div class="mb-3">
-
-
-<label class="form-label">
-Password
-</label>
-
-
-
-<div class="password-wrapper">
-
-
-<input
-type="password"
-name="password"
-id="password"
-class="form-control"
-placeholder="Create password"
-required>
-
-
-
-<button
-type="button"
-class="password-toggle"
-onclick="togglePassword('password','eye1')">
-
-
-<i id="eye1" class="fa-solid fa-eye"></i>
-
-
-</button>
-
-
-</div>
-
-
-
-
-<div class="password-box" id="passwordRules">
-
-
-<div class="rule invalid" id="length">
-
-Minimum 8 characters
-
-</div>
-
-
-<div class="rule invalid" id="upper">
-
-One uppercase letter
-
-</div>
-
-
-<div class="rule invalid" id="lower">
-
-One lowercase letter
-
-</div>
-
-
-<div class="rule invalid" id="number">
-
-One number
-
-</div>
-
-
-<div class="rule invalid" id="special">
-
-One special character
-
-</div>
-
-
-<div class="strength">
-
-<div class="strength-fill" id="strengthBar">
-
-</div>
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="mb-4">
-
-
-<label class="form-label">
-
-Confirm Password
-
-</label>
-
-
-
-<div class="password-wrapper">
-
-
-<input
-type="password"
-name="confirm_password"
-id="confirmPassword"
-class="form-control"
-placeholder="Confirm password"
-required>
-
-
-
-<button
-type="button"
-class="password-toggle"
-onclick="togglePassword('confirmPassword','eye2')">
-
-
-<i id="eye2" class="fa-solid fa-eye"></i>
-
-
-</button>
-
-
-</div>
-
-
-
-<small id="matchText"></small>
-
-
-
-</div>
-
-
-
-
-
-
-
-<button class="auth-btn">
-
-Create Account
-
-</button>
-
-
-
-
-</form>
-
-
-
-
-
-<div class="auth-footer">
-
-
-Already have an account?
-
-
-<a href="{% url 'login' %}">
-
-Login
-
-</a>
-
-
-</div>
-
-
-
-
-</div>
-
-
-</div>
-
-
-
-
+{% block extra_css %}
+<!-- Fonts and Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* =====================================
+   HIDE GLOBAL ELEMENTS & LOCK VIEWPORT
+===================================== */
+.navbar, footer, .footer { 
+    display: none !important; 
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background);
+}
+
+/* =====================================
+   SPLIT SCREEN ARCHITECTURE
+===================================== */
+.split-layout {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* --- Left Side: Editorial Image --- */
+.image-panel {
+    flex: 1.1; 
+    position: relative;
+    height: 100vh;
+    background-image: url('{% static "images/8.jpg" %}'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 65%);
+    display: flex;
+    align-items: flex-end;
+    padding: 3.5rem;
+}
+
+.image-overlay h2 {
+    font-family: var(--font-heading);
+    color: #fff;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    animation: fadeUp 1s ease forwards;
+}
+
+.image-overlay h2 span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+/* --- Right Side: Form Panel --- */
+.form-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.form-panel::-webkit-scrollbar {
+    width: 6px;
+}
+.form-panel::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 10px;
+}
+
+/* =====================================
+   HEADER ROW
+===================================== */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.brand-logo {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s ease;
+}
+
+.brand-logo:hover {
+    opacity: 0.8;
+}
+
+.logo-main {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    letter-spacing: 0.5px;
+}
+
+.logo-main span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.logo-sub {
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.nav-btn:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* =====================================
+   ELEVATED FORM CONTAINER
+===================================== */
+.form-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2.5rem 2rem 2.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 440px; 
+    background: #ffffff;
+    padding: 2rem 2.2rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.03);
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.1s;
+    opacity: 0;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.15rem 0;
+    letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+/* =====================================
+   PRECISION INPUT FIELDS
+===================================== */
+.form-group {
+    margin-bottom: 0.85rem;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    margin-left: 2px;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%); 
+    color: #94A3B8;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.form-control {
+    width: 100%;
+    height: 42px; 
+    background: #F4F7F9; 
+    border: 1px solid transparent;
+    padding: 0 16px 0 42px; 
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.1);
+}
+
+.form-control:focus + .input-icon, 
+.input-wrapper:focus-within .input-icon {
+    color: var(--gold);
+}
+
+.form-control::placeholder {
+    color: #CBD5E1;
+    font-weight: 400;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%); 
+    background: none;
+    border: none;
+    color: #94A3B8;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+    padding: 0;
+}
+
+.password-toggle:hover {
+    color: var(--gold);
+}
+
+/* =====================================
+   LIVE FEEDBACK TEXT STYLING
+===================================== */
+.feedback-text {
+    font-size: 0.7rem;
+    margin-top: 3px;
+    margin-left: 2px;
+    display: block;
+    font-weight: 500;
+}
+
+.password-box {
+    display: none;
+    margin-top: 8px;
+    width: 100%;
+    font-size: 0.75rem;
+    background: #F8FAFC;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    box-sizing: border-box;
+}
+
+.password-box.active {
+    display: block;
+}
+
+.rule {
+    color: #94A3B8;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rule.valid { color: #10B981; }
+.rule.invalid { color: #EF4444; }
+
+.strength {
+    height: 3px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: 0.3s ease;
+    background: #EF4444;
+}
+
+/* =====================================
+   BUTTON & FOOTER
+===================================== */
+.auth-submit-btn {
+    width: 100%;
+    height: 44px;
+    background: var(--text-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.auth-submit-btn:hover {
+    background: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(200, 169, 106, 0.25);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.auth-footer a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: color 0.3s ease;
+}
+
+.auth-footer a:hover {
+    color: var(--gold);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 900px) {
+    .image-panel { display: none; }
+    html, body { overflow-y: auto; height: auto; }
+}
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="split-layout">
+    
+    <!-- Left Side: Editorial Image -->
+    <div class="image-panel">
+        <div class="image-overlay">
+            <h2>Start Your<br><span>Journey.</span></h2>
+        </div>
+    </div>
 
+    <!-- Right Side: Application Interface -->
+    <div class="form-panel">
+        
+        <!-- Header Row -->
+        <div class="panel-header">
+            <a href="{% url 'landing' %}" class="brand-logo">
+                <div class="logo-main">ALAMARA<span>i</span></div>
+                <div class="logo-sub">INTELLIGENT DIGITAL WARDROBE</div>
+            </a>
+            
+            <div class="header-actions">
+                <a href="{% url 'landing' %}" class="nav-btn">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="{% url 'login' %}" class="nav-btn">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+                </a>
+            </div>
+        </div>
 
+        <!-- Elevated Form UI -->
+        <div class="form-container">
+            <div class="form-wrapper">
+                <h2 class="auth-title">Create Account.</h2>
+                <p class="auth-subtitle">Start building your intelligent smart wardrobe.</p>
 
+                <form method="POST" id="signupForm">
+                    {% csrf_token %}
+
+                    <!-- Username Field with Live Availability Check -->
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="username" id="usernameInput" class="form-control" placeholder="Choose a username" required>
+                            <i class="fa-regular fa-user input-icon"></i>
+                        </div>
+                        <small id="usernameFeedback" class="feedback-text"></small>
+                    </div>
+
+                    <!-- Email Field with Live Format Validation -->
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <div class="input-wrapper">
+                            <input type="email" name="email" id="emailInput" class="form-control" placeholder="Enter your email address" required>
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                        </div>
+                        <small id="emailFeedback" class="feedback-text"></small>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Create a password" required>
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password','eye1')">
+                                <i id="eye1" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- Password Rule Box -->
+                        <div class="password-box" id="passwordRules">
+                            <div class="rule invalid" id="length"><i class="fa-solid fa-circle-xmark"></i> Minimum 8 characters</div>
+                            <div class="rule invalid" id="upper"><i class="fa-solid fa-circle-xmark"></i> One uppercase letter</div>
+                            <div class="rule invalid" id="lower"><i class="fa-solid fa-circle-xmark"></i> One lowercase letter</div>
+                            <div class="rule invalid" id="number"><i class="fa-solid fa-circle-xmark"></i> One number</div>
+                            <div class="rule invalid" id="special"><i class="fa-solid fa-circle-xmark"></i> One special character</div>
+                            <div class="strength">
+                                <div class="strength-fill" id="strengthBar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" name="confirm_password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword','eye2')">
+                                <i id="eye2" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <small id="matchText" class="feedback-text"></small>
+                    </div>
+
+                    <button class="auth-submit-btn" id="submitBtn">Create Account</button>
+                </form>
+
+                <div class="auth-footer">
+                    Already have an account? 
+                    <a href="{% url 'login' %}">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
 
 {% block extra_js %}
-
-
-
 <script>
+/* =====================================
+   REAL-TIME EMAIL VALIDATION
+===================================== */
+const emailInput = document.getElementById("emailInput");
+const emailFeedback = document.getElementById("emailFeedback");
 
+emailInput.addEventListener("input", () => {
+    let emailVal = emailInput.value.trim();
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const password =
-document.getElementById("password");
-
-
-const rules =
-document.getElementById("passwordRules");
-
-
-const bar =
-document.getElementById("strengthBar");
-
-
-
-// Show rules only when typing
-
-password.addEventListener(
-"focus",
-()=>{
-
-rules.classList.add("active");
-
-}
-
-);
-
-
-
-
-
-password.addEventListener(
-"input",
-()=>{
-
-
-let value=password.value;
-
-
-let score=0;
-
-
-
-check(
-"length",
-value.length>=8
-);
-
-
-check(
-"upper",
-/[A-Z]/.test(value)
-);
-
-
-check(
-"lower",
-/[a-z]/.test(value)
-);
-
-
-check(
-"number",
-/[0-9]/.test(value)
-);
-
-
-check(
-"special",
-/[@$!%*?&#]/.test(value)
-);
-
-
-
-
-
-if(value.length>=8)
-score+=20;
-
-
-if(/[A-Z]/.test(value))
-score+=20;
-
-
-if(/[a-z]/.test(value))
-score+=20;
-
-
-if(/[0-9]/.test(value))
-score+=20;
-
-
-if(/[@$!%*?&#]/.test(value))
-score+=20;
-
-
-
-bar.style.width=score+"%";
-
-
-
+    if (emailVal === "") {
+        emailFeedback.innerHTML = "";
+    } else if (emailRegex.test(emailVal)) {
+        emailFeedback.innerHTML = "✓ Valid email address";
+        emailFeedback.style.color = "#10B981";
+    } else {
+        emailFeedback.innerHTML = "✕ Please enter a valid email address";
+        emailFeedback.style.color = "#EF4444";
+    }
 });
 
+/* =====================================
+   REAL-TIME USERNAME AVAILABILITY CHECK
+===================================== */
+const usernameInput = document.getElementById("usernameInput");
+const usernameFeedback = document.getElementById("usernameFeedback");
+let typingTimer;
 
+usernameInput.addEventListener("input", () => {
+    clearTimeout(typingTimer);
+    let usernameVal = usernameInput.value.trim();
 
+    if (usernameVal === "") {
+        usernameFeedback.innerHTML = "";
+        return;
+    }
 
-
-
-
-function check(id,result){
-
-
-let item=document.getElementById(id);
-
-
-
-if(result){
-
-item.classList.remove("invalid");
-
-item.classList.add("valid");
-
-}
-
-else{
-
-item.classList.remove("valid");
-
-item.classList.add("invalid");
-
-}
-
-
-}
-
-
-
-
-
-
-
-const confirmPassword =
-document.getElementById("confirmPassword");
-
-
-
-confirmPassword.addEventListener(
-"input",
-()=>{
-
-
-let text=document.getElementById("matchText");
-
-
-
-if(confirmPassword.value===password.value){
-
-
-text.innerHTML="Passwords match";
-
-text.style.color="#16A34A";
-
-
-}
-
-else{
-
-
-text.innerHTML="Passwords do not match";
-
-text.style.color="#DC2626";
-
-
-}
-
-
+    typingTimer = setTimeout(() => {
+        fetch(`?username=${encodeURIComponent(usernameVal)}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                usernameFeedback.innerHTML = "✕ Username already exists";
+                usernameFeedback.style.color = "#EF4444";
+            } else {
+                usernameFeedback.innerHTML = "✓ Username is available";
+                usernameFeedback.style.color = "#10B981";
+            }
+        })
+        .catch(() => {
+            usernameFeedback.innerHTML = "";
+        });
+    }, 300);
 });
 
+/* =====================================
+   PASSWORD STRENGTH & RULES
+===================================== */
+const password = document.getElementById("password");
+const rules = document.getElementById("passwordRules");
+const bar = document.getElementById("strengthBar");
 
+password.addEventListener("focus", () => {
+    rules.classList.add("active");
+});
 
+password.addEventListener("input", () => {
+    let value = password.value;
+    let score = 0;
 
+    checkRule("length", value.length >= 8);
+    checkRule("upper", /[A-Z]/.test(value));
+    checkRule("lower", /[a-z]/.test(value));
+    checkRule("number", /[0-9]/.test(value));
+    checkRule("special", /[@$!%*?&#]/.test(value));
 
+    if (value.length >= 8) score += 20;
+    if (/[A-Z]/.test(value)) score += 20;
+    if (/[a-z]/.test(value)) score += 20;
+    if (/[0-9]/.test(value)) score += 20;
+    if ((/[@$!%*?&#]/).test(value)) score += 20;
 
-function togglePassword(input,icon){
+    bar.style.width = score + "%";
+    
+    if (score <= 40) bar.style.background = "#EF4444";
+    else if (score <= 80) bar.style.background = "#F59E0B";
+    else bar.style.background = "#10B981";
+});
 
-
-let field=document.getElementById(input);
-
-let eye=document.getElementById(icon);
-
-
-
-if(field.type==="password"){
-
-
-field.type="text";
-
-
-eye.classList.replace(
-"fa-eye",
-"fa-eye-slash"
-);
-
-
+function checkRule(id, result) {
+    let item = document.getElementById(id);
+    let icon = item.querySelector("i");
+    if (result) {
+        item.classList.remove("invalid");
+        item.classList.add("valid");
+        icon.className = "fa-solid fa-circle-check";
+    } else {
+        item.classList.remove("valid");
+        item.classList.add("invalid");
+        icon.className = "fa-solid fa-circle-xmark";
+    }
 }
 
-else{
+/* =====================================
+   PASSWORD MATCH VALIDATION
+===================================== */
+const confirmPassword = document.getElementById("confirmPassword");
 
+confirmPassword.addEventListener("input", () => {
+    let text = document.getElementById("matchText");
+    if (confirmPassword.value === password.value && password.value !== "") {
+        text.innerHTML = "✓ Passwords match";
+        text.style.color = "#10B981";
+    } else {
+        text.innerHTML = "✕ Passwords do not match";
+        text.style.color = "#EF4444";
+    }
+});
 
-field.type="password";
+/* =====================================
+   SHOW / HIDE PASSWORD TOGGLE
+===================================== */
+function togglePassword(input, icon) {
+    let field = document.getElementById(input);
+    let eye = document.getElementById(icon);
 
-
-eye.classList.replace(
-"fa-eye-slash",
-"fa-eye"
-);
-
-
+    if (field.type === "password") {
+        field.type = "text";
+        eye.classList.replace("fa-eye", "fa-eye-slash");
+        eye.style.color = "var(--gold)";
+    } else {
+        field.type = "password";
+        eye.classList.replace("fa-eye-slash", "fa-eye");
+        eye.style.color = "#94A3B8";
+    }
 }
-
-
-
-}
-
-
 </script>
-
-
-
 {% endblock %}

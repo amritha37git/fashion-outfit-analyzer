@@ -1,196 +1,475 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+ALAMARAi | My Wardrobe
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* =====================================
+   WARDROBE PAGE - LUXURY DESIGN SYSTEM
+===================================== */
+.wardrobe-page {
+    padding: 40px 0 100px;
+}
+
+/* --- Refined Editorial Header --- */
+.wardrobe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+}
+
+.wardrobe-header-content span {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.wardrobe-header h2 {
+    font-size: 2.8rem;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.wardrobe-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 300;
+}
+
+/* Counter Badge */
+.wardrobe-count-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-secondary);
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.wardrobe-count-badge span {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+/* --- Precision Filter Panel --- */
+.filter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.filter-card .form-control,
+.filter-card .form-select {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 48px;
+    width: 100%;
+}
+
+.filter-card .form-control:focus,
+.filter-card .form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.15);
+    background-color: var(--surface);
+    outline: none;
+}
+
+.search-btn {
+    background-color: var(--text-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0 28px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background-color: var(--gold);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(200, 169, 106, 0.25);
+}
+
+/* --- Clothing Grid Layout --- */
+.wardrobe-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.clothing-item-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.clothing-item-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.07);
+    border-color: var(--gold);
+}
+
+.card-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: #FAF8F3;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clothing-item-card:hover .card-img-wrapper img {
+    transform: scale(1.04);
+}
+
+.item-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(17, 17, 17, 0.85);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    z-index: 2;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.clothing-body {
+    padding: 28px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.clothing-body h4 {
+    font-size: 1.4rem;
+    font-family: var(--font-heading);
+    margin-bottom: 14px;
+    color: var(--text-primary);
+    font-weight: 400;
+}
+
+/* --- Clean Typography Meta Tags --- */
+.meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.meta-tag {
+    background: var(--background);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.clothing-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-top: auto;
+    font-weight: 300;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.clothing-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- Modern Action Buttons --- */
+.btn-edit {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 20px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+}
+
+.btn-edit:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(200, 169, 106, 0.03);
+}
+
+.btn-delete {
+    background: transparent;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    padding: 8px 20px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.25);
+}
+
+/* --- Empty State --- */
+.empty-wardrobe {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 90px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.empty-wardrobe h2 {
+    font-size: 2.2rem;
+    font-family: var(--font-heading);
+    margin-bottom: 12px;
+    font-weight: 400;
+    color: var(--text-primary);
+}
+
+.empty-wardrobe p {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    .wardrobe-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .filter-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .filter-grid .search-btn {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .wardrobe-grid-layout {
+        grid-template-columns: 1fr;
+    }
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+    .filter-grid .search-btn {
+        grid-column: span 1;
+    }
+    .wardrobe-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="container wardrobe-page">
 
-<div class="container">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <div>
-            <h2 class="fw-bold">👗 My Wardrobe</h2>
-            <p class="text-muted">
-                Manage all your AI analyzed clothing items.
-            </p>
+    <!-- Header Section -->
+    <div class="wardrobe-header">
+        <div class="wardrobe-header-content">
+            <span>Digital Archive</span>
+            <h2>My Wardrobe</h2>
+            <p>Manage, categorize, and organize your curated clothing collection.</p>
         </div>
 
-        <a href="{% url 'ai_upload' %}" class="btn btn-success">
-            <i class="fas fa-plus"></i> AI Upload
-        </a>
-
+        {% if items %}
+        <div class="wardrobe-count-badge">
+            Total Pieces: <span>{{ items|length }}</span>
+        </div>
+        {% endif %}
     </div>
 
-    <!-- Search & Filter Card -->
-
-    <div class="card mb-4">
-
-        <div class="card-body">
-
-            <form method="GET">
-
-                <div class="row g-3">
-
-                    <div class="col-md-3">
-
-                        <input
-                            type="text"
-                            name="search"
-                            class="form-control"
-                            placeholder="🔍 Search clothing..."
-                            value="{{ request.GET.search }}">
-
-                    </div>
-
-                    <div class="col-md-2">
-
-                        <select name="category" class="form-select">
-
-                            <option value="All">All Categories</option>
-                            <option value="Top">Top</option>
-                            <option value="Bottom">Bottom</option>
-                            <option value="Dress">Dress</option>
-                            <option value="Shoes">Shoes</option>
-                            <option value="Bag">Bag</option>
-                            <option value="Accessory">Accessory</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2">
-
-                        <input
-                            type="text"
-                            name="color"
-                            class="form-control"
-                            placeholder="Color">
-
-                    </div>
-
-                    <div class="col-md-2">
-
-                        <select name="season" class="form-select">
-
-                            <option value="All">All Seasons</option>
-                            <option value="Summer">Summer</option>
-                            <option value="Winter">Winter</option>
-                            <option value="Rainy">Rainy</option>
-                            <option value="All Season">All Season</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2">
-
-                        <select name="occasion" class="form-select">
-
-                            <option value="All">All Occasions</option>
-                            <option value="Casual">Casual</option>
-                            <option value="College">College</option>
-                            <option value="Office">Office</option>
-                            <option value="Party">Party</option>
-                            <option value="Wedding">Wedding</option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-1">
-
-                        <button class="btn btn-primary w-100">
-                            Search
-                        </button>
-
-                    </div>
-
+    <!-- Search & Filter Bar -->
+    <div class="filter-card">
+        <form method="GET">
+            <div class="filter-grid">
+                <div>
+                    <input type="text" name="search" class="form-control" placeholder="Search by name or brand..." value="{{ request.GET.search }}">
                 </div>
 
-            </form>
+                <div>
+                    <select name="category" class="form-select">
+                        <option value="All">All Categories</option>
+                        <option value="Top" {% if request.GET.category == 'Top' %}selected{% endif %}>Top</option>
+                        <option value="Bottom" {% if request.GET.category == 'Bottom' %}selected{% endif %}>Bottom</option>
+                        <option value="Dress" {% if request.GET.category == 'Dress' %}selected{% endif %}>Dress</option>
+                        <option value="Shoes" {% if request.GET.category == 'Shoes' %}selected{% endif %}>Shoes</option>
+                        <option value="Bag" {% if request.GET.category == 'Bag' %}selected{% endif %}>Bag</option>
+                        <option value="Accessory" {% if request.GET.category == 'Accessory' %}selected{% endif %}>Accessory</option>
+                    </select>
+                </div>
 
-        </div>
+                <div>
+                    <input type="text" name="color" class="form-control" placeholder="Color" value="{{ request.GET.color }}">
+                </div>
 
+                <div>
+                    <select name="season" class="form-select">
+                        <option value="All">All Seasons</option>
+                        <option value="Summer" {% if request.GET.season == 'Summer' %}selected{% endif %}>Summer</option>
+                        <option value="Winter" {% if request.GET.season == 'Winter' %}selected{% endif %}>Winter</option>
+                        <option value="Rainy" {% if request.GET.season == 'Rainy' %}selected{% endif %}>Rainy</option>
+                        <option value="All Season" {% if request.GET.season == 'All Season' %}selected{% endif %}>All Season</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select name="occasion" class="form-select">
+                        <option value="All">All Occasions</option>
+                        <option value="Casual" {% if request.GET.occasion == 'Casual' %}selected{% endif %}>Casual</option>
+                        <option value="College" {% if request.GET.occasion == 'College' %}selected{% endif %}>College</option>
+                        <option value="Office" {% if request.GET.occasion == 'Office' %}selected{% endif %}>Office</option>
+                        <option value="Party" {% if request.GET.occasion == 'Party' %}selected{% endif %}>Party</option>
+                        <option value="Wedding" {% if request.GET.occasion == 'Wedding' %}selected{% endif %}>Wedding</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit" class="search-btn w-100">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 
+    <!-- Wardrobe Items Grid -->
     {% if items %}
-
-    <div class="row">
-
+    <div class="wardrobe-grid-layout">
         {% for item in items %}
-
-        <div class="col-lg-4 col-md-6 mb-4">
-
-            <div class="card h-100 shadow">
-
+        <div class="clothing-item-card">
+            
+            <div class="card-img-wrapper">
                 {% if item.image %}
-                <img src="{{ item.image.url }}"
-                     class="card-img-top"
-                     style="height:320px; object-fit:cover;">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
                 {% endif %}
+                <span class="item-badge">{{ item.category }}</span>
+            </div>
 
-                <div class="card-body">
-
-                    <h4 class="fw-bold">{{ item.name }}</h4>
-
-                    <hr>
-
-                    <p><strong>📂 Category:</strong> {{ item.category }}</p>
-
-                    <p><strong>🏷 Brand:</strong> {{ item.brand }}</p>
-
-                    <p><strong>🎨 Color:</strong> {{ item.color }}</p>
-
-                    <p><strong>☀️ Season:</strong> {{ item.season }}</p>
-
-                    <p><strong>🎉 Occasion:</strong> {{ item.occasion }}</p>
-
-                    <p>
-                        <strong>📝 Description:</strong><br>
-                        {{ item.description }}
-                    </p>
-
+            <div class="clothing-body">
+                <h4>{{ item.name }}</h4>
+                
+                <div class="meta-tags">
+                    {% if item.brand %}<span class="meta-tag">{{ item.brand }}</span>{% endif %}
+                    {% if item.color %}<span class="meta-tag">{{ item.color }}</span>{% endif %}
+                    {% if item.season %}<span class="meta-tag">{{ item.season }}</span>{% endif %}
+                    {% if item.occasion %}<span class="meta-tag">{{ item.occasion }}</span>{% endif %}
                 </div>
 
-                <div class="card-footer bg-white d-flex justify-content-between">
+                {% if item.description %}
+                <p class="clothing-desc">{{ item.description }}</p>
+                {% endif %}
+            </div>
 
-                    <a href="{% url 'edit_item' item.id %}"
-   class="btn btn-outline-primary btn-sm">
-    ✏ Edit
-</a>
-
-<a href="{% url 'delete_item' item.id %}"
-   class="btn btn-outline-danger btn-sm"
-   onclick="return confirm('Delete this clothing item?');">
-    🗑 Delete
-</a>
-
-                </div>
-
+            <div class="clothing-footer">
+                <a href="{% url 'edit_item' item.id %}" class="btn-edit">
+                    Edit
+                </a>
+                <a href="{% url 'delete_item' item.id %}" class="btn-delete" onclick="return confirm('Delete this clothing item?');">
+                    Delete
+                </a>
             </div>
 
         </div>
-
         {% endfor %}
-
     </div>
 
     {% else %}
-
-    <div class="card text-center p-5">
-
-        <h2>👕 Your wardrobe is empty</h2>
-
-        <p class="text-muted">
-            Upload your first clothing item using AI.
-        </p>
-
-        <a href="{% url 'ai_upload' %}" class="btn btn-success">
-            Upload Clothing
-        </a>
-
+    <!-- Empty State -->
+    <div class="empty-wardrobe">
+        <h2>Your wardrobe is empty</h2>
+        <p>Start organizing your style by exploring your curated collection.</p>
     </div>
-
     {% endif %}
 
 </div>
-
 {% endblock %}
