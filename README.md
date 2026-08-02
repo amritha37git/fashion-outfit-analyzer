@@ -30,8 +30,6 @@ Computer Vision based clothing analysis
 
 ## Installation
 
-git clone repository-url
-
 cd fashion-outfit-analyzer
 
 python -m venv venv
@@ -40,4 +38,8 @@ venv\Scripts\activate
 
 pip install -r requirements.txt
 
+python manage.py makemigrations
+python manage.py migrate
+
 python manage.py runserver
+
