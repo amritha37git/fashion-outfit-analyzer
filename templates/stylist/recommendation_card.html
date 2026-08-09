@@ -28,13 +28,15 @@
             </div>
         </div>
 
-        <!-- Styled Outfit Assembly Layout with Full Image Visibility -->
+        <!-- Styled Outfit Assembly Layout -->
         <div class="outfit-assembly-layout">
 
-            <!-- Left Stack: Top & Bottom paired vertically -->
+            <!-- Left Stack: Tops, Bottoms, and Full-Body Dresses -->
             <div class="outfit-vertical-stack">
+                
+                <!-- Check for Tops & Dresses -->
                 {% for category, item in outfit.items.items %}
-                    {% if category|lower == 'top' or category|lower == 'shirt' or category|lower == 't-shirt' or category|lower == 'hoodie' or category|lower == 'jacket' %}
+                    {% if category|lower == 'top' or category|lower == 'shirt' or category|lower == 't-shirt' or category|lower == 'hoodie' or category|lower == 'jacket' or category|lower == 'dress' or category|lower == 'gown' or category|lower == 'jumpsuit' %}
                     <div class="outfit-piece-card primary-piece">
                         <div class="piece-img-box">
                             {% if item.image %}
@@ -48,8 +50,9 @@
                     {% endif %}
                 {% endfor %}
 
+                <!-- Check for Bottoms -->
                 {% for category, item in outfit.items.items %}
-                    {% if category|lower == 'bottom' or category|lower == 'pants' or category|lower == 'jeans' or category|lower == 'trousers' %}
+                    {% if category|lower == 'bottom' or category|lower == 'pants' or category|lower == 'jeans' or category|lower == 'trousers' or category|lower == 'skirt' or category|lower == 'shorts' %}
                     <div class="outfit-piece-card primary-piece">
                         <div class="piece-img-box">
                             {% if item.image %}
@@ -67,7 +70,8 @@
             <!-- Right Side: Shoes & Accessories -->
             <div class="outfit-side-grid">
                 {% for category, item in outfit.items.items %}
-                    {% if category|lower != 'top' and category|lower != 'shirt' and category|lower != 't-shirt' and category|lower != 'hoodie' and category|lower != 'jacket' and category|lower != 'bottom' and category|lower != 'pants' and category|lower != 'jeans' and category|lower != 'trousers' %}
+                    <!-- Exclude all primary items from the accessories grid -->
+                    {% if category|lower != 'top' and category|lower != 'shirt' and category|lower != 't-shirt' and category|lower != 'hoodie' and category|lower != 'jacket' and category|lower != 'dress' and category|lower != 'gown' and category|lower != 'jumpsuit' and category|lower != 'bottom' and category|lower != 'pants' and category|lower != 'jeans' and category|lower != 'trousers' and category|lower != 'skirt' and category|lower != 'shorts' %}
                     <div class="outfit-piece-card secondary-piece">
                         <div class="piece-img-box">
                             {% if item.image %}
@@ -130,8 +134,6 @@
             </div>
 
         </div>
-
-        {% include 'stylist/shopping_section.html' %}
 
     </div>
 
@@ -237,27 +239,24 @@
     color: var(--gold);
 }
 
-/* Styled Assembly Layout (Top/Bottom Stack + Side Grid) */
+/* Styled Assembly Layout */
 .outfit-assembly-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-bottom: 35px;
+    align-items: start;
 }
 
+/* The Vertical Stack for Tops/Bottoms/Dresses */
 .outfit-vertical-stack {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: 576px; /* EXACT HEIGHT of (280px + 280px + 16px gap). Forces the dress to take identical space as Top+Bottom */
 }
 
-.outfit-side-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    align-content: start;
-}
-
+/* Base Card Styling */
 .outfit-piece-card {
     background: var(--bg-warm);
     border: 1px solid var(--border-subtle);
@@ -272,24 +271,56 @@
     border-color: var(--gold);
 }
 
-.piece-img-box {
-    height: 240px; /* Increased height to prevent clipping */
-    position: relative;
+/* PRIMARY PIECE (Left side: Top, Bottom, Dress) */
+.outfit-piece-card.primary-piece {
+    flex: 1; /* Automatically splits height 50/50 for top/bottom, or takes 100% for a dress */
+    display: flex;
+    flex-direction: column;
+}
+
+.outfit-piece-card.primary-piece .piece-img-box {
+    flex: 1; 
     background: #F4F7F9;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-.outfit-vertical-stack .piece-img-box {
-    height: 240px; /* Ensures vertical stack items show full picture */
-}
-
-.piece-img-box img {
+.outfit-piece-card.primary-piece .piece-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Changed from cover to contain to display the full image without cropping */
+    max-height: 320px; /* Crucial restriction: prevents dress image from blowing up, while container still fills the 576px height */
+    object-fit: contain;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background: #F8FAFC;
+    transition: transform 0.5s ease;
+}
+
+/* SECONDARY PIECE (Right side: Shoes, Bags, Accessories) */
+.outfit-side-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-content: start;
+}
+
+.outfit-piece-card.secondary-piece .piece-img-box {
+    height: 240px; /* Fixed neat height for right grid items */
+    background: #F4F7F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.outfit-piece-card.secondary-piece .piece-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1.5rem;
+    box-sizing: border-box;
     background: #F8FAFC;
     transition: transform 0.5s ease;
 }
@@ -422,6 +453,12 @@
     }
     .outfit-breakdown-grid {
         grid-template-columns: 1fr;
+    }
+    .outfit-vertical-stack {
+        height: auto;
+    }
+    .outfit-piece-card.primary-piece .piece-img-box {
+        min-height: 280px;
     }
     .outfit-luxury-card {
         padding: 30px 20px;

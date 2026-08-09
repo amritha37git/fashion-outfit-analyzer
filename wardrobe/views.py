@@ -75,75 +75,59 @@ def upload_item(request):
 
 @login_required
 def wardrobe(request):
-
-
     items = ClothingItem.objects.filter(
         user=request.user
     )
 
-
-
-    search=request.GET.get(
-        "search"
-    )
-
-
-    category=request.GET.get(
-        "category"
-    )
-
-
-    color=request.GET.get(
-        "color"
-    )
-
-
-    season=request.GET.get(
-        "season"
-    )
-
-
-    occasion=request.GET.get(
-        "occasion"
-    )
-
-
+    search = request.GET.get("search")
+    category = request.GET.get("category")
+    color = request.GET.get("color")
+    season = request.GET.get("season")
+    occasion = request.GET.get("occasion")
 
     if search:
-
-        items=items.filter(
+        items = items.filter(
             name__icontains=search
         )
 
+    # Robust category mapping for both singular (DB format) and plural (Dashboard links)
+    if category and category != "All":
+        cat_lower = category.lower()
+        
+        if cat_lower in ["top", "tops", "shirt", "t-shirt", "hoodie", "jacket"]:
+            top_categories = ["Top", "Shirt", "T-shirt", "Hoodie", "Jacket"]
+            items = items.filter(category__in=top_categories)
+        elif cat_lower in ["bottom", "bottoms"]:
+            items = items.filter(category__iexact="Bottom")
+        elif cat_lower in ["dress", "dresses"]:
+            items = items.filter(category__iexact="Dress")
+        elif cat_lower in ["shoe", "shoes"]:
+            items = items.filter(category__iexact="Shoes")
+        elif cat_lower in ["bag", "bags"]:
+            items = items.filter(category__iexact="Bag")
+        elif cat_lower in ["accessory", "accessories"]:
+            items = items.filter(category__iexact="Accessory")
+        else:
+            items = items.filter(category__iexact=category)
 
-
-    if category and category!="All":
-
-        items=items.filter(
-            category=category
-        )
-
-
-
-    if color and color!="All":
-
-        items=items.filter(
+    if color and color != "All":
+        items = items.filter(
             color__iexact=color
         )
 
 
 
-    if season and season!="All":
+    if season and season != "All":
 
-        items=items.filter(
+        items = items.filter(
             season=season
         )
 
 
 
-    if occasion and occasion!="All":
+    if occasion and occasion != "All":
 
-        items=items.filter(
+        items = items.filter(
             occasion=occasion
         )
 
@@ -156,7 +140,8 @@ def wardrobe(request):
         "wardrobe.html",
 
         {
-            "items":items
+            "items": items,
+            "selected_category": category,
         }
 
     )
@@ -310,7 +295,10 @@ def save_ai_item(request):
                 "Casual"
             ),
 
-
+            style=request.POST.get(
+                 "style",
+                 "Casual"
+            ),
 
             description=request.POST.get(
                 "description",
@@ -387,6 +375,10 @@ def edit_item(request,item_id):
 
         item.occasion=request.POST.get(
             "occasion"
+        )
+
+        item.style = request.POST.get(
+            "style"
         )
 
 
@@ -520,7 +512,9 @@ def dashboard(request):
         # Distribution Percentages for the progress bars
         'dist_tops': calc_pct(count_tops),
         'dist_bottoms': calc_pct(count_bottoms),
+        'dist_dresses': calc_pct(count_dresses),
         'dist_shoes': calc_pct(count_shoes),
+        'dist_bags': calc_pct(count_bags),
         'dist_accessories': calc_pct(count_accessories),
 
         # Insights & Activity Lists

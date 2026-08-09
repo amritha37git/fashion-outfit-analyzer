@@ -1,104 +1,192 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        ALAMARAi
+        {% endblock %}
+    </title>
 
-<meta charset="UTF-8">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
 
-<title>
+    <style>
+        /* =====================================
+           GLOBAL NAVBAR AVATAR STYLING
+        ===================================== */
+        .nav-avatar-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<link 
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        .nav-avatar-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--gold, #C8A96A);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-{% block title %}
-ALAMARAi
-{% endblock %}
+        .nav-avatar-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(200, 169, 106, 0.2);
+        }
 
-</title>
+        .nav-avatar-initial {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--gold, #C8A96A);
+            color: var(--gold, #C8A96A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
 
+        .nav-avatar-link:hover .nav-avatar-initial {
+            background-color: var(--gold, #C8A96A);
+            color: #ffffff;
+        }
 
-<!-- Fonts -->
+        /* =====================================
+           TOAST NOTIFICATIONS
+        ===================================== */
+        .toast-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+        .toast-message {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--card-pure, #ffffff);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border-left: 4px solid transparent;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main, #171717);
+            min-width: 300px;
+            animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        .toast-success { border-left-color: #10B981; }
+        .toast-success i { color: #10B981; font-size: 1.2rem; }
+        
+        .toast-error { border-left-color: #EF4444; }
+        .toast-error i { color: #EF4444; font-size: 1.2rem; }
 
+        .toast-info { border-left-color: #3B82F6; }
+        .toast-info i { color: #3B82F6; font-size: 1.2rem; }
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-muted, #666666);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
 
+        .toast-close:hover { color: var(--text-main, #171717); }
 
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
 
-<!-- CSS -->
-
-<link rel="stylesheet" href="{% static 'css/variables.css' %}">
-
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-
-<link rel="stylesheet" href="{% static 'css/components.css' %}">
-
-
-{% block extra_css %}
-
-{% endblock %}
-
-
+    {% block extra_css %}
+    {% endblock %}
 </head>
-
-
 <body>
 
+    {% include "includes/navbar.html" %}
 
-{% include "includes/navbar.html" %}
+    <!-- Elegant Toast Notifications -->
+    {% if messages %}
+    <div class="toast-container" id="toast-container">
+        {% for message in messages %}
+        <div class="toast-message toast-{{ message.tags }}">
+            {% if message.tags == 'success' %}
+                <i class="fa-solid fa-circle-check"></i>
+            {% elif message.tags == 'error' %}
+                <i class="fa-solid fa-circle-exclamation"></i>
+            {% else %}
+                <i class="fa-solid fa-circle-info"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
+    {% include "includes/footer.html" %}
 
-{% if messages %}
+    <!-- Auto-dismiss Toast script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toasts = document.querySelectorAll('.toast-message');
+            if (toasts.length > 0) {
+                setTimeout(function() {
+                    toasts.forEach(function(toast) {
+                        toast.style.transition = "all 0.4s ease";
+                        toast.style.opacity = "0";
+                        toast.style.transform = "translateX(100%)";
+                        
+                        setTimeout(function() {
+                            toast.remove();
+                            const container = document.getElementById('toast-container');
+                            if (container && container.innerHTML.trim() === '') {
+                                container.remove();
+                            }
+                        }, 400);
+                    });
+                }, 4000); // 4 seconds delay before dismissing
+            }
+        });
+    </script>
 
-<div class="container messages">
-
-{% for message in messages %}
-
-<div class="alert">
-
-{{ message }}
-
-</div>
-
-{% endfor %}
-
-</div>
-
-{% endif %}
-
-
-
-<main>
-
-{% block content %}
-
-{% endblock %}
-
-</main>
-
-
-
-
-{% include "includes/footer.html" %}
-
-
-
-{% block extra_js %}
-
-{% endblock %}
-
-
+    {% block extra_js %}
+    {% endblock %}
 
 </body>
-
 </html>

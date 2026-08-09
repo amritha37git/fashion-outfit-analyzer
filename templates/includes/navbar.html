@@ -1,5 +1,96 @@
 {% load static %}
 
+<style>
+    /* =====================================
+       AUTHENTICATED UTILITY ZONE (Profile & Logout)
+    ===================================== */
+    .nav-user-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .nav-divider {
+        width: 1px;
+        height: 24px;
+        background-color: var(--border-subtle, #E5E7EB);
+    }
+
+    .nav-logout-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted, #666666);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .nav-logout-link:hover {
+        color: #DC2626;
+        transform: translateX(2px);
+    }
+
+    .nav-logout-link i {
+        font-size: 1.1rem;
+    }
+
+    /* =====================================
+       UNAUTHENTICATED UTILITY ZONE (Sign In & Get Started)
+    ===================================== */
+    .nav-auth-signin {
+        color: var(--text-main, #171717);
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        position: relative;
+        transition: color 0.3s ease;
+    }
+
+    /* Subtle sliding underline effect on hover */
+    .nav-auth-signin::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--gold, #C8A96A);
+        transition: width 0.3s ease;
+    }
+
+    .nav-auth-signin:hover::after {
+        width: 100%;
+    }
+
+    /* Eye-catching Soft Gold Pill Button */
+    .nav-auth-getstarted {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 24px;
+        background: linear-gradient(135deg, #C8A96A 0%, #AA8748 100%);
+        color: #ffffff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-decoration: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(200, 169, 106, 0.25);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-auth-getstarted:hover {
+        background: var(--text-main, #171717);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
 <nav class="navbar">
     <div class="container navbar-container">
         
@@ -28,26 +119,35 @@
                 </a>
             </div>
 
-            <!-- 3. UTILITY ZONE (Right) -->
+            <!-- 3. UTILITY ZONE (Right) - AUTHENTICATED -->
             <div class="nav-user-actions">
-                <a href="{% url 'profile' %}" class="nav-profile-link" title="Profile Settings">
-                    <div class="nav-avatar-fallback">
-                        {{ user.username|make_list|first|upper }}
-                    </div>
+                
+                <!-- Avatar -->
+                <a href="{% url 'profile' %}" class="nav-avatar-link" title="Profile Settings">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="Profile" class="nav-avatar-img">
+                    {% else %}
+                        <div class="nav-avatar-initial">
+                            {{ user.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
                 </a>
-                <a href="{% url 'logout' %}" class="nav-button">
-                    Logout
+
+                <!-- Elegant Vertical Divider -->
+                <span class="nav-divider"></span>
+                
+                <!-- Sleek Logout Link -->
+                <a href="{% url 'logout' %}" class="nav-logout-link" title="Sign Out">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Logout</span>
                 </a>
+
             </div>
         {% else %}
-            <!-- Unauthenticated State -->
-            {% comment %} <div class="nav-main-links">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#features" class="nav-link">Features</a>
-            </div> {% endcomment %}
+            <!-- 3. UTILITY ZONE (Right) - UNAUTHENTICATED -->
             <div class="nav-user-actions">
-                <a href="{% url 'login' %}" class="nav-link">Sign In</a>
-                <a href="{% url 'signup' %}" class="nav-button">Get Started</a>
+                <a href="{% url 'login' %}" class="nav-auth-signin">Sign In</a>
+                <a href="{% url 'signup' %}" class="nav-auth-getstarted">Get Started</a>
             </div>
         {% endif %}
 

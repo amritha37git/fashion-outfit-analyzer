@@ -8,7 +8,7 @@ ALAMARAi | Dashboard
 {% block extra_css %}
 <style>
 /* =====================================
-   DASHBOARD LUXURY EDITORIAL REFINEMENT
+    DASHBOARD LUXURY EDITORIAL REFINEMENT
 ===================================== */
 /* 1. Light Theme (Default) */
 :root {
@@ -301,11 +301,10 @@ body {
     font-size: 3rem;
     color: var(--border-subtle);
     transition: background-color 0.4s ease;
-    overflow: hidden; /* Added to keep image inside radius */
+    overflow: hidden;
     position: relative;
 }
 
-/* Added dynamically crop and fit category images */
 .cat-image img {
     width: 100%;
     height: 100%;
@@ -371,7 +370,7 @@ body {
 .dist-row:last-child { margin-bottom: 0; }
 
 .dist-label {
-    width: 120px;
+    width: 130px;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-main);
@@ -512,6 +511,8 @@ body {
     padding: 40px;
     box-shadow: var(--shadow-soft);
     transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .weather-header {
@@ -571,6 +572,40 @@ body {
     font-size: 1.1rem;
     font-weight: 500;
     color: var(--text-main);
+}
+
+/* Weather-Based Styling Suggestion Box */
+.weather-suggestion-box {
+    margin-top: 24px;
+    background: var(--bg-warm);
+    border: 1px dashed var(--gold);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.weather-suggestion-box i {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.weather-suggestion-content h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.weather-suggestion-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
 }
 
 /* Timeline */
@@ -755,7 +790,6 @@ body {
         </div>
     </div>
     <div class="hero-image-card">
-        <!-- Placeholder for a premium fashion/wardrobe aesthetic image -->
         <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80" alt="Premium Wardrobe Display">
     </div>
 </section>
@@ -813,7 +847,7 @@ body {
             {% if latest_bottom and latest_bottom.image %}
                 <img src="{{ latest_bottom.image.url }}" alt="Recent Bottom">
             {% else %}
-                <i class="fa-solid fa-socks"></i>
+                <i class="fa-solid fa-person-half-dress"></i>
             {% endif %}
         </div>
         <div class="cat-info">
@@ -885,7 +919,7 @@ body {
             {% if latest_accessory and latest_accessory.image %}
                 <img src="{{ latest_accessory.image.url }}" alt="Recent Accessory">
             {% else %}
-                <i class="fa-solid fa-glasses"></i>
+                <i class="fa-solid fa-gem"></i>
             {% endif %}
         </div>
         <div class="cat-info">
@@ -898,29 +932,39 @@ body {
     </div>
 </section>
 
-<!-- 4. WARDROBE DISTRIBUTION -->
+<!-- 4. WARDROBE DISTRIBUTION (Using CSS max() to guarantee visibility for low counts like 1 or 3) -->
 <div class="section-title animate-in delay-2">
     <h2>Wardrobe Distribution</h2>
 </div>
 <section class="distribution-card animate-in delay-2">
     <div class="dist-row">
         <div class="dist-label">Tops</div>
-        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_tops|default:'0' }}%;"></div></div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_tops|default:'0' }}%, 6%);"></div></div>
         <div class="dist-count">{{ count_tops|default:"0" }}</div>
     </div>
     <div class="dist-row">
         <div class="dist-label">Bottoms</div>
-        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_bottoms|default:'0' }}%;"></div></div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_bottoms|default:'0' }}%, 6%);"></div></div>
         <div class="dist-count">{{ count_bottoms|default:"0" }}</div>
     </div>
     <div class="dist-row">
+        <div class="dist-label">Dresses</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_dresses|default:'0' }}%, 6%);"></div></div>
+        <div class="dist-count">{{ count_dresses|default:"0" }}</div>
+    </div>
+    <div class="dist-row">
         <div class="dist-label">Shoes</div>
-        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_shoes|default:'0' }}%;"></div></div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_shoes|default:'0' }}%, 6%);"></div></div>
         <div class="dist-count">{{ count_shoes|default:"0" }}</div>
     </div>
     <div class="dist-row">
+        <div class="dist-label">Bags</div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_bags|default:'0' }}%, 6%);"></div></div>
+        <div class="dist-count">{{ count_bags|default:"0" }}</div>
+    </div>
+    <div class="dist-row">
         <div class="dist-label">Accessories</div>
-        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: {{ dist_accessories|default:'0' }}%;"></div></div>
+        <div class="dist-bar-wrap"><div class="dist-bar-fill" style="width: max({{ dist_accessories|default:'0' }}%, 6%);"></div></div>
         <div class="dist-count">{{ count_accessories|default:"0" }}</div>
     </div>
 </section>
@@ -976,7 +1020,7 @@ body {
 </div>
 <section class="split-grid animate-in delay-3">
     
-    <!-- 7. Weather -->
+    <!-- 7. Weather with Current Weather Suggestion Sub-Widget -->
     <div class="weather-widget">
         <div class="weather-header">
             <span>Current Weather</span>
@@ -1001,6 +1045,23 @@ body {
             <div class="w-detail">
                 <span>Wind</span>
                 <span>{{ weather.wind|default:"9" }} km/h</span>
+            </div>
+        </div>
+
+        <!-- Weather-Based Styling Suggestion Sub-Widget -->
+        <div class="weather-suggestion-box">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <div class="weather-suggestion-content">
+                <h4>Weather Styling Tip</h4>
+                <p>
+                    {% if weather.temperature > 30 %}
+                        It's quite warm out! Opt for lightweight, breathable fabrics like cotton or linen tops and comfortable sandals.
+                    {% elif weather.temperature < 20 %}
+                        Brisk conditions today. Consider layering with a light jacket or pairing your favorite trousers with closed shoes.
+                    {% else %}
+                        Pleasant weather ahead. A versatile midi dress or classic top-and-bottom combo will keep you stylish and comfortable.
+                    {% endif %}
+                </p>
             </div>
         </div>
     </div>

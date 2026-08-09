@@ -2,15 +2,11 @@ import os
 import json
 
 from dotenv import load_dotenv
-
 from google import genai
-
 from PIL import Image
 
 
-
 load_dotenv()
-
 
 
 client = genai.Client(
@@ -18,99 +14,49 @@ client = genai.Client(
 )
 
 
-
-
-
 def detect_season(data):
 
-
     text = (
-
-        data.get("description","")
-
+        data.get("description", "")
         +
-
-        data.get("fabric","")
-
+        data.get("fabric", "")
         +
-
-        data.get("style","")
-
+        data.get("style", "")
     ).lower()
 
-
-
     if any(word in text for word in [
-
         "wool",
-
         "sweater",
-
         "jacket",
-
         "coat",
-
         "thick",
-
         "thermal"
-
     ]):
-
         return "Winter"
 
-
-
-
     if any(word in text for word in [
-
         "raincoat",
-
         "waterproof",
-
         "windbreaker"
-
     ]):
-
         return "Rainy"
 
-
-
-
     if any(word in text for word in [
-
         "cotton",
-
         "linen",
-
         "short",
-
         "sleeveless",
-
         "light",
-
         "chiffon"
-
     ]):
-
         return "Summer"
-
-
-
 
     return "All Season"
 
 
-
-
-
-
-
 def analyze_image(image_path):
 
-
     image = Image.open(image_path)
-
-
 
     prompt = """
 
@@ -118,7 +64,7 @@ You are an AI fashion expert.
 
 Analyze this clothing image.
 
-Return ONLY JSON.
+Return ONLY valid JSON.
 
 Format:
 
@@ -134,13 +80,9 @@ Format:
 "description":""
 }
 
-
-
 Rules:
 
-
-
-category must be one:
+Category must be exactly one of:
 
 Top
 Bottom
@@ -153,24 +95,19 @@ Shoes
 Bag
 Accessory
 
+Brand:
 
-
-brand:
-
-If no logo:
+If no visible logo or brand name,
+return:
 Unknown
 
+Color:
 
+Return only the dominant color.
 
-color:
+Occasion:
 
-Only dominant color.
-
-
-
-occasion:
-
-Choose:
+Choose ONLY ONE:
 
 Casual
 College
@@ -178,165 +115,121 @@ Office
 Party
 Wedding
 
+Fabric:
 
+Estimate the fabric if possible.
 
-fabric:
+Sleeves:
 
-Estimate fabric.
-
-
-
-sleeves:
+Choose ONLY ONE:
 
 Short
 Long
 Sleeveless
 
+Style:
 
+Choose ONLY ONE from the following values:
 
-style:
+Casual
+Formal
+Business Casual
+Party
+Traditional
+Streetwear
+Sporty
+Minimalist
+Elegant
+Vintage
+Bohemian
 
-Describe style briefly.
+Return exactly one value.
 
+Description:
 
+Write one short sentence describing the clothing item.
 
-description:
-
-One sentence.
-
-
-
-Do not add markdown.
+Return ONLY the JSON object.
+Do NOT use markdown.
+Do NOT add explanations.
 
 """
 
-
-
     try:
 
-
         response = client.models.generate_content(
-
             model="gemini-2.5-flash-lite",
-
             contents=[
-
                 prompt,
-
                 image
-
             ]
-
         )
 
+        text = response.text.strip()
 
-
-        text=response.text.strip()
-
-
-
-        text=(
-
-            text.replace(
-                "```json",
-                ""
-            )
-
-            .replace(
-                "```",
-                ""
-            )
-
+        text = (
+            text.replace("```json", "")
+            .replace("```", "")
             .strip()
-
         )
 
-
-
-        result=json.loads(text)
-
-
+        result = json.loads(text)
 
         result.setdefault(
             "name",
             "Unknown Item"
         )
 
-
         result.setdefault(
             "brand",
             "Unknown"
         )
-
 
         result.setdefault(
             "color",
             "Unknown"
         )
 
-
         result.setdefault(
             "occasion",
             "Casual"
         )
 
+        result.setdefault(
+            "style",
+            "Casual"
+        )
 
         result.setdefault(
             "description",
             ""
         )
 
-
-
-        # ADD SEASON AUTOMATICALLY
-
+        # Detect season automatically
         result["season"] = detect_season(result)
-
-
 
         return result
 
-
-
     except Exception as e:
 
-
-
-        print(
-            "Gemini Error:",
-            e
-        )
-
-
+        print("Gemini Error:", e)
 
         return {
 
+            "name": "Unknown Item",
 
-            "name":
-            "Unknown Item",
+            "category": "Top",
 
+            "brand": "Unknown",
 
-            "category":
-            "Top",
+            "color": "Unknown",
 
+            "season": "All Season",
 
-            "brand":
-            "Unknown",
+            "occasion": "Casual",
 
+            "style": "Casual",
 
-            "color":
-            "Unknown",
-
-
-            "season":
-            "All Season",
-
-
-            "occasion":
-            "Casual",
-
-
-            "description":
-            "AI unavailable"
+            "description": "AI unavailable"
 
         }

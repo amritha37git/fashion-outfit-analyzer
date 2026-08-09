@@ -220,65 +220,79 @@ ALAMARAi | AI Analysis Result
                 </div>
             </div>
 
-            <!-- DETAILS PANEL -->
-            <div>
-                <div class="details-box">
-                    <div>
-                        <h3 class="item-heading">{{ name }}</h3>
-                        <div class="details-divider"></div>
+           <!-- DETAILS PANEL -->
+<div>
+    <div class="details-box">
+        <div>
+            <h3 class="item-heading">{{ name }}</h3>
+            <div class="details-divider"></div>
 
-                        <div class="detail-grid">
-                            <div class="detail-item">
-                                <label>Category</label>
-                                <span>{{ category }}</span>
-                            </div>
+            <div class="detail-grid">
 
-                            <div class="detail-item">
-                                <label>Brand</label>
-                                <span>{{ brand|default:"Unknown" }}</span>
-                            </div>
-
-                            <div class="detail-item">
-                                <label>Color</label>
-                                <span>{{ color }}</span>
-                            </div>
-
-                            <div class="detail-item">
-                                <label>Season</label>
-                                <span>{{ season }}</span>
-                            </div>
-
-                            <div class="detail-item">
-                                <label>Occasion</label>
-                                <span>{{ occasion }}</span>
-                            </div>
-
-                            <div class="detail-item description-box">
-                                <label>AI Description</label>
-                                <p>{{ description }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SAVE FORM -->
-                    <form method="POST" action="{% url 'save_ai_item' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="name" value="{{ name }}">
-                        <input type="hidden" name="category" value="{{ category }}">
-                        <input type="hidden" name="brand" value="{{ brand }}">
-                        <input type="hidden" name="color" value="{{ color }}">
-                        <input type="hidden" name="season" value="{{ season }}">
-                        <input type="hidden" name="occasion" value="{{ occasion }}">
-                        <input type="hidden" name="description" value="{{ description }}">
-                        <input type="hidden" name="image" value="{{ image }}">
-
-                        <button type="submit" class="save-wardrobe-btn">
-                            Save to Wardrobe
-                        </button>
-                    </form>
-
+                <div class="detail-item">
+                    <label>Category</label>
+                    <span>{{ category }}</span>
                 </div>
+
+                <div class="detail-item">
+                    <label>Brand</label>
+                    <span>{{ brand|default:"Unknown" }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Color</label>
+                    <span>{{ color }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Season</label>
+                    <span>{{ season }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <label>Occasion</label>
+                    <span>{{ occasion }}</span>
+                </div>
+
+                <!-- NEW STYLE FIELD -->
+                <div class="detail-item">
+                    <label>Style</label>
+                    <span>{{ style }}</span>
+                </div>
+
+                <div class="detail-item description-box">
+                    <label>AI Description</label>
+                    <p>{{ description }}</p>
+                </div>
+
             </div>
+        </div>
+
+        <!-- SAVE FORM -->
+        <form method="POST" action="{% url 'save_ai_item' %}">
+            {% csrf_token %}
+
+            <input type="hidden" name="name" value="{{ name }}">
+            <input type="hidden" name="category" value="{{ category }}">
+            <input type="hidden" name="brand" value="{{ brand }}">
+            <input type="hidden" name="color" value="{{ color }}">
+            <input type="hidden" name="season" value="{{ season }}">
+            <input type="hidden" name="occasion" value="{{ occasion }}">
+
+            <!-- NEW -->
+            <input type="hidden" name="style" value="{{ style }}">
+
+            <input type="hidden" name="description" value="{{ description }}">
+            <input type="hidden" name="image" value="{{ image }}">
+
+            <button type="submit" class="save-wardrobe-btn">
+                Save to Wardrobe
+            </button>
+
+        </form>
+
+    </div>
+</div>
 
         </div>
 

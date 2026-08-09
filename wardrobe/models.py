@@ -33,14 +33,18 @@ class ClothingItem(models.Model):
     ]
 
     STYLE_CHOICES = [
-        ("Casual", "Casual"),
-        ("Formal", "Formal"),
-        ("Streetwear", "Streetwear"),
-        ("Sport", "Sport"),
-        ("Traditional", "Traditional"),
-        ("Ethnic", "Ethnic"),
-        ("Minimal", "Minimal"),
-        ("Vintage", "Vintage"),
+    ("Casual", "Casual"),
+    ("Formal", "Formal"),
+    ("Business Casual", "Business Casual"),
+    ("Party", "Party"),
+    ("Streetwear", "Streetwear"),
+    ("Sporty", "Sporty"),
+    ("Traditional", "Traditional"),
+    ("Ethnic", "Ethnic"),
+    ("Minimalist", "Minimalist"),
+    ("Vintage", "Vintage"),
+    ("Elegant", "Elegant"),
+    ("Bohemian", "Bohemian"),
     ]
 
     user = models.ForeignKey(
