@@ -378,7 +378,8 @@ def edit_item(request,item_id):
         )
 
         item.style = request.POST.get(
-            "style"
+            "style",
+            item.style or "Casual"
         )
 
 

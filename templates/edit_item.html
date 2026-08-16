@@ -271,6 +271,23 @@ textarea.form-control {
                            name="occasion"
                            value="{{ item.occasion }}">
                 </div>
+                <div class="form-group">
+    <label class="form-label">Style</label>
+    <select class="form-control" name="style" required>
+        <option value="Casual" {% if item.style == "Casual" %}selected{% endif %}>Casual</option>
+        <option value="Formal" {% if item.style == "Formal" %}selected{% endif %}>Formal</option>
+        <option value="Business Casual" {% if item.style == "Business Casual" %}selected{% endif %}>Business Casual</option>
+        <option value="Party" {% if item.style == "Party" %}selected{% endif %}>Party</option>
+        <option value="Streetwear" {% if item.style == "Streetwear" %}selected{% endif %}>Streetwear</option>
+        <option value="Sporty" {% if item.style == "Sporty" %}selected{% endif %}>Sporty</option>
+        <option value="Traditional" {% if item.style == "Traditional" %}selected{% endif %}>Traditional</option>
+        <option value="Ethnic" {% if item.style == "Ethnic" %}selected{% endif %}>Ethnic</option>
+        <option value="Minimalist" {% if item.style == "Minimalist" %}selected{% endif %}>Minimalist</option>
+        <option value="Vintage" {% if item.style == "Vintage" %}selected{% endif %}>Vintage</option>
+        <option value="Elegant" {% if item.style == "Elegant" %}selected{% endif %}>Elegant</option>
+        <option value="Bohemian" {% if item.style == "Bohemian" %}selected{% endif %}>Bohemian</option>
+    </select>
+</div>
 
                 <div class="form-group full-width">
                     <label class="form-label">Description</label>

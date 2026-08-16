@@ -143,48 +143,48 @@
 
 <style>
 /* =====================================
-   RECOMMENDATION CARDS REFINEMENT CSS
+   RECOMMENDATION CARDS REFINEMENT CSS (COMPACT FIT)
 ===================================== */
 .recommendations-container {
-    margin-top: 60px;
+    margin-top: 30px;
 }
 
 .recommendations-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 .rec-badge {
-    font-size: 0.75rem;
-    letter-spacing: 3px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     display: block;
 }
 
 .rec-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-family: 'Playfair Display', serif;
     font-weight: 400;
     color: var(--text-main);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .rec-subtitle {
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 300;
 }
 
-/* Master Outfit Card */
+/* Master Outfit Card - Compact Padding */
 .outfit-luxury-card {
     background: var(--card-pure);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sec);
-    padding: 50px;
-    margin-bottom: 40px;
+    padding: 30px 40px;
+    margin-bottom: 30px;
     box-shadow: var(--shadow-soft);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -198,23 +198,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     border-bottom: 1px solid var(--border-subtle);
-    padding-bottom: 20px;
+    padding-bottom: 15px;
 }
 
 .outfit-context-tag {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 600;
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .outfit-heading {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-family: 'Playfair Display', serif;
     font-weight: 400;
     color: var(--text-main);
@@ -224,15 +224,15 @@
 .outfit-score-badge {
     background: #171717;
     color: #fff;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: var(--radius-btn);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
+    gap: 6px;
+    font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: 0.05em;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .outfit-score-badge i {
@@ -243,37 +243,37 @@
 .outfit-assembly-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 35px;
+    gap: 16px;
+    margin-bottom: 20px;
     align-items: start;
 }
 
-/* The Vertical Stack for Tops/Bottoms/Dresses */
+/* The Vertical Stack for Tops/Bottoms/Dresses - Reduced height */
 .outfit-vertical-stack {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    height: 576px; /* EXACT HEIGHT of (280px + 280px + 16px gap). Forces the dress to take identical space as Top+Bottom */
+    gap: 12px;
+    height: 384px; /* Scaled down to match smaller image boxes (186px + 186px + 12px gap) */
 }
 
 /* Base Card Styling */
 .outfit-piece-card {
     background: var(--bg-warm);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
     position: relative;
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .outfit-piece-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     border-color: var(--gold);
 }
 
-/* PRIMARY PIECE (Left side: Top, Bottom, Dress) */
+/* PRIMARY PIECE (Left side) */
 .outfit-piece-card.primary-piece {
-    flex: 1; /* Automatically splits height 50/50 for top/bottom, or takes 100% for a dress */
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
@@ -290,24 +290,24 @@
 .outfit-piece-card.primary-piece .piece-img-box img {
     width: 100%;
     height: 100%;
-    max-height: 320px; /* Crucial restriction: prevents dress image from blowing up, while container still fills the 576px height */
+    max-height: 200px; /* Kept compact so images fit completely inside */
     object-fit: contain;
-    padding: 1.5rem;
+    padding: 1rem;
     box-sizing: border-box;
     background: #F8FAFC;
     transition: transform 0.5s ease;
 }
 
-/* SECONDARY PIECE (Right side: Shoes, Bags, Accessories) */
+/* SECONDARY PIECE (Right side grid) */
 .outfit-side-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
     align-content: start;
 }
 
 .outfit-piece-card.secondary-piece .piece-img-box {
-    height: 240px; /* Fixed neat height for right grid items */
+    height: 186px; /* Compact height matching the left side items */
     background: #F4F7F9;
     display: flex;
     align-items: center;
@@ -319,14 +319,14 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    padding: 1.5rem;
+    padding: 1rem;
     box-sizing: border-box;
     background: #F8FAFC;
     transition: transform 0.5s ease;
 }
 
 .outfit-piece-card:hover .piece-img-box img {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
 .piece-empty {
@@ -336,43 +336,43 @@
     align-items: center;
     justify-content: center;
     color: #CBD5E1;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .piece-badge {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 8px;
+    left: 8px;
     background: rgba(23, 23, 23, 0.85);
     backdrop-filter: blur(8px);
     color: #fff;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 3px 8px;
+    border-radius: 12px;
     font-weight: 500;
     z-index: 2;
 }
 
-/* Rationale Box */
+/* Rationale Box - Compact */
 .outfit-rationale-box {
     background: var(--bg-warm);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
-    padding: 25px 30px;
-    margin-bottom: 30px;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
 }
 
 .rationale-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.1rem;
+    gap: 8px;
+    font-size: 0.95rem;
     font-family: 'Playfair Display', serif;
     font-weight: 500;
     color: var(--text-main);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .rationale-title i {
@@ -381,45 +381,45 @@
 
 .rationale-text {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 300;
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
 }
 
-/* Breakdown Grid */
+/* Breakdown Grid - Compact */
 .outfit-breakdown-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
 }
 
 .breakdown-metric-card {
     background: var(--bg-warm);
     border: 1px solid var(--border-subtle);
-    border-radius: 20px;
-    padding: 22px 24px;
+    border-radius: 16px;
+    padding: 16px 18px;
 }
 
 .metric-label {
-    font-size: 0.75rem;
-    letter-spacing: 1.5px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--text-muted);
     font-weight: 600;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .metric-value-row {
     display: flex;
     align-items: baseline;
     gap: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .metric-value-row h3 {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-family: 'Playfair Display', serif;
     font-weight: 400;
     color: var(--text-main);
@@ -427,13 +427,13 @@
 }
 
 .metric-value-row span {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
 .metric-bar-track {
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: #E5E9F0;
     border-radius: 10px;
     overflow: hidden;
@@ -458,10 +458,10 @@
         height: auto;
     }
     .outfit-piece-card.primary-piece .piece-img-box {
-        min-height: 280px;
+        min-height: 200px;
     }
     .outfit-luxury-card {
-        padding: 30px 20px;
+        padding: 20px;
     }
 }
 </style>

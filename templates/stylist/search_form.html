@@ -2,57 +2,269 @@
 
     {% csrf_token %}
 
+    <!-- =========================================
+         OCCASION
+    ========================================== -->
+
     <div>
-        <label>Occasion</label>
-        <select name="occasion">
-            <option value="College">College</option>
-            <option value="Office">Office</option>
-            <option value="Casual">Casual</option>
-            <option value="Party">Party</option>
-            <option value="Wedding">Wedding</option>
+        <label for="occasion">Occasion</label>
+
+        <select
+            name="occasion"
+            id="occasion"
+        >
+
+            <option
+                value="College"
+                {% if selected_occasion == "College" %}selected{% endif %}
+            >
+                College
+            </option>
+
+            <option
+                value="Office"
+                {% if selected_occasion == "Office" %}selected{% endif %}
+            >
+                Office
+            </option>
+
+            <option
+                value="Casual"
+                {% if selected_occasion == "Casual" %}selected{% endif %}
+            >
+                Casual
+            </option>
+
+            <option
+                value="Party"
+                {% if selected_occasion == "Party" %}selected{% endif %}
+            >
+                Party
+            </option>
+
+            <option
+                value="Wedding"
+                {% if selected_occasion == "Wedding" %}selected{% endif %}
+            >
+                Wedding
+            </option>
+
         </select>
     </div>
 
+
+    <!-- =========================================
+         WEATHER
+    ========================================== -->
+
     <div>
-        <label>Weather</label>
-        <select name="weather">
-            <option value="Sunny">Sunny</option>
-            <option value="Cloudy">Cloudy</option>
-            <option value="Rainy">Rainy</option>
-            <option value="Cold">Cold</option>
+        <label for="weather">Weather</label>
+
+        <select
+            name="weather"
+            id="weather"
+        >
+
+            <option
+                value="Sunny"
+                {% if selected_weather == "Sunny" %}selected{% endif %}
+            >
+                Sunny
+            </option>
+
+            <option
+                value="Cloudy"
+                {% if selected_weather == "Cloudy" %}selected{% endif %}
+            >
+                Cloudy
+            </option>
+
+            <option
+                value="Rainy"
+                {% if selected_weather == "Rainy" %}selected{% endif %}
+            >
+                Rainy
+            </option>
+
+            <option
+                value="Cold"
+                {% if selected_weather == "Cold" %}selected{% endif %}
+            >
+                Cold
+            </option>
+
         </select>
     </div>
 
+
+    <!-- =========================================
+         PREFERRED STYLE
+    ========================================== -->
+
     <div>
-        <label>Preferred Style</label>
-        <select name="style">
-            <option value="">Any Style</option>
-            <option value="Casual">Casual</option>
-            <option value="Formal">Formal</option>
-            <option value="Streetwear">Streetwear</option>
-            <option value="Minimal">Minimal</option>
-            <option value="Traditional">Traditional</option>
-            <option value="Sport">Sport</option>
-            <option value="Vintage">Vintage</option>
+        <label for="style">Preferred Style</label>
+
+        <select
+            name="style"
+            id="style"
+        >
+
+            <option
+                value=""
+                {% if not selected_style %}selected{% endif %}
+            >
+                Any Style
+            </option>
+
+            <option
+                value="Casual"
+                {% if selected_style == "Casual" %}selected{% endif %}
+            >
+                Casual
+            </option>
+
+            <option
+                value="Formal"
+                {% if selected_style == "Formal" %}selected{% endif %}
+            >
+                Formal
+            </option>
+
+            <option
+                value="Streetwear"
+                {% if selected_style == "Streetwear" %}selected{% endif %}
+            >
+                Streetwear
+            </option>
+
+            <option
+                value="Minimal"
+                {% if selected_style == "Minimal" %}selected{% endif %}
+            >
+                Minimal
+            </option>
+
+            <option
+                value="Traditional"
+                {% if selected_style == "Traditional" %}selected{% endif %}
+            >
+                Traditional
+            </option>
+
+            <option
+                value="Sport"
+                {% if selected_style == "Sport" %}selected{% endif %}
+            >
+                Sport
+            </option>
+
+            <option
+                value="Vintage"
+                {% if selected_style == "Vintage" %}selected{% endif %}
+            >
+                Vintage
+            </option>
+
         </select>
     </div>
 
+
+    <!-- =========================================
+         PREFERRED COLOR
+    ========================================== -->
+
     <div>
-        <label>Preferred Color</label>
-        <select name="color">
-            <option value="">Any Color</option>
-            <option value="Black">Black</option>
-            <option value="White">White</option>
-            <option value="Blue">Blue</option>
-            <option value="Grey">Grey</option>
-            <option value="Brown">Brown</option>
-            <option value="Beige">Beige</option>
-            <option value="Green">Green</option>
-            <option value="Pink">Pink</option>
-            <option value="Purple">Purple</option>
-            <option value="Red">Red</option>
+        <label for="color">Preferred Color</label>
+
+        <select
+            name="color"
+            id="color"
+        >
+
+            <option
+                value=""
+                {% if not selected_color %}selected{% endif %}
+            >
+                Any Color
+            </option>
+
+            <option
+                value="Black"
+                {% if selected_color == "Black" %}selected{% endif %}
+            >
+                Black
+            </option>
+
+            <option
+                value="White"
+                {% if selected_color == "White" %}selected{% endif %}
+            >
+                White
+            </option>
+
+            <option
+                value="Blue"
+                {% if selected_color == "Blue" %}selected{% endif %}
+            >
+                Blue
+            </option>
+
+            <option
+                value="Grey"
+                {% if selected_color == "Grey" %}selected{% endif %}
+            >
+                Grey
+            </option>
+
+            <option
+                value="Brown"
+                {% if selected_color == "Brown" %}selected{% endif %}
+            >
+                Brown
+            </option>
+
+            <option
+                value="Beige"
+                {% if selected_color == "Beige" %}selected{% endif %}
+            >
+                Beige
+            </option>
+
+            <option
+                value="Green"
+                {% if selected_color == "Green" %}selected{% endif %}
+            >
+                Green
+            </option>
+
+            <option
+                value="Pink"
+                {% if selected_color == "Pink" %}selected{% endif %}
+            >
+                Pink
+            </option>
+
+            <option
+                value="Purple"
+                {% if selected_color == "Purple" %}selected{% endif %}
+            >
+                Purple
+            </option>
+
+            <option
+                value="Red"
+                {% if selected_color == "Red" %}selected{% endif %}
+            >
+                Red
+            </option>
+
         </select>
     </div>
+
+
+    <!-- =========================================
+         GENERATE BUTTON
+    ========================================== -->
 
     <button type="submit">
         Generate Outfit

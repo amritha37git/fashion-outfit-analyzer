@@ -216,11 +216,11 @@ body {
 }
 
 /* =====================================
-   2. WARDROBE STATISTICS
+   2. WARDROBE STATISTICS (Updated to 3 columns to balance layout)
 ===================================== */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
@@ -801,11 +801,16 @@ body {
         <h2>{{ total_items|default:"0" }}</h2>
         <p>Total Items</p>
     </div>
+    
+    <!-- FAVORITES SECTION HIDDEN FOR NOW -->
+    <!--
     <div class="stat-card">
         <i class="fa-solid fa-heart"></i>
         <h2>{{ favourites|default:"0" }}</h2>
         <p>Favorites</p>
     </div>
+    -->
+
     <div class="stat-card">
         <i class="fa-solid fa-layer-group"></i>
         <h2>{{ total_categories|default:"6" }}</h2>
@@ -1048,18 +1053,60 @@ body {
             </div>
         </div>
 
-        <!-- Weather-Based Styling Suggestion Sub-Widget -->
         <div class="weather-suggestion-box">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
             <div class="weather-suggestion-content">
                 <h4>Weather Styling Tip</h4>
                 <p>
+                    {% now "j" as current_day %}
                     {% if weather.temperature > 30 %}
-                        It's quite warm out! Opt for lightweight, breathable fabrics like cotton or linen tops and comfortable sandals.
+                        {% if current_day|divisibleby:"2" %}
+                            It is currently {{ weather.temperature }}°C and {{ weather.condition|lower }}, making it a very hot day. Stick to lightweight, breathable fabrics like cotton or linen.
+                            {% if latest_top %}
+                                Consider wearing your <strong>{{ latest_top.color|default:'' }} {{ latest_top.name }}</strong> to stay comfortable.
+                            {% else %}
+                                A loose-fitting top paired with breathable footwear is perfect for today.
+                            {% endif %}
+                        {% else %}
+                            With temperatures hitting {{ weather.temperature }}°C, the heat is intense today. Loose silhouettes and light colors will help reflect the sun.
+                            {% if latest_bottom %}
+                                Your <strong>{{ latest_bottom.color|default:'' }} {{ latest_bottom.name }}</strong> would be an excellent, effortless choice.
+                            {% else %}
+                                Opt for shorts or relaxed-fit bottoms to beat the heat.
+                            {% endif %}
+                        {% endif %}
                     {% elif weather.temperature < 20 %}
-                        Brisk conditions today. Consider layering with a light jacket or pairing your favorite trousers with closed shoes.
+                        {% if current_day|divisibleby:"2" %}
+                            It's a chilly {{ weather.temperature }}°C outside with {{ weather.condition|lower }}. Layering is key to staying warm today.
+                            {% if latest_top and latest_bottom %}
+                                Start with a solid base like your <strong>{{ latest_top.color|default:'' }} {{ latest_top.name }}</strong> and pair it with your <strong>{{ latest_bottom.color|default:'' }} {{ latest_bottom.name }}</strong>.
+                            {% else %}
+                                Start with a cozy long-sleeve base and pair it with warm, thick trousers.
+                            {% endif %}
+                        {% else %}
+                            The weather is quite brisk at {{ weather.temperature }}°C. Insulating materials and good coverage will serve you best.
+                            {% if latest_shoes and latest_bottom %}
+                                Keep your feet warm in your <strong>{{ latest_shoes.color|default:'' }} {{ latest_shoes.name }}</strong> and style them with your <strong>{{ latest_bottom.name }}</strong>.
+                            {% else %}
+                                Keep your feet warm in sturdy closed shoes and style them with heavier pants.
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                        Pleasant weather ahead. A versatile midi dress or classic top-and-bottom combo will keep you stylish and comfortable.
+                        {% if current_day|divisibleby:"2" %}
+                            Today brings a comfortable {{ weather.temperature }}°C with {{ weather.condition|lower }}. It's the perfect weather for classic, versatile outfits without heavy layers.
+                            {% if latest_top and latest_bottom %}
+                                Why not put together your <strong>{{ latest_top.color|default:'' }} {{ latest_top.name }}</strong> and <strong>{{ latest_bottom.name }}</strong>?
+                            {% else %}
+                                A classic casual top and your favorite comfortable bottoms will work perfectly.
+                            {% endif %}
+                        {% else %}
+                            At {{ weather.temperature }}°C, it's beautifully mild outside. Transition pieces and light layering work wonderfully right now.
+                            {% if latest_top %}
+                                A lightweight jacket or overshirt worn over your <strong>{{ latest_top.color|default:'' }} {{ latest_top.name }}</strong> would make a balanced look.
+                            {% else %}
+                                A light jacket over a comfortable base layer gives you the flexibility you need today.
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                 </p>
             </div>
