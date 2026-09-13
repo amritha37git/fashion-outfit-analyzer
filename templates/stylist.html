@@ -7,10 +7,13 @@ ALAMARAi | Intelligent Stylist Suite
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/stylist.css' %}">
+
 <style>
+
 /* =====================================
     STYLIST SUITE PROFESSIONAL REFINEMENT
 ===================================== */
+
 :root {
     --bg-warm: #FAF8F4;
     --card-pure: #FFFFFF;
@@ -26,11 +29,13 @@ ALAMARAi | Intelligent Stylist Suite
     --radius-sec: 36px;
 }
 
+
 body {
     background-color: var(--bg-warm);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
 }
+
 
 .stylist-page {
     padding: 40px 0 120px;
@@ -38,7 +43,9 @@ body {
     margin: 0 auto;
 }
 
+
 /* --- Hero Editorial Section --- */
+
 .stylist-hero-card {
     background: var(--card-pure);
     border: 1px solid var(--border-subtle);
@@ -54,6 +61,7 @@ body {
     overflow: hidden;
 }
 
+
 .stylist-hero-text .badge-label {
     font-size: 0.75rem;
     letter-spacing: 3px;
@@ -64,6 +72,7 @@ body {
     display: block;
 }
 
+
 .stylist-hero-text h1 {
     font-size: 3.2rem;
     font-family: 'Playfair Display', serif;
@@ -73,10 +82,12 @@ body {
     font-weight: 400;
 }
 
+
 .stylist-hero-text h1 span {
     color: var(--gold-dark);
     font-style: italic;
 }
+
 
 .stylist-hero-text p {
     font-size: 1.05rem;
@@ -87,11 +98,13 @@ body {
     max-width: 550px;
 }
 
+
 .stylist-features-list {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
+
 
 .stylist-feature-pill {
     background: var(--bg-warm);
@@ -106,10 +119,12 @@ body {
     transition: all 0.3s ease;
 }
 
+
 .stylist-feature-pill:hover {
     border-color: var(--gold);
     transform: translateY(-2px);
 }
+
 
 .stylist-hero-img-wrapper {
     position: relative;
@@ -120,6 +135,7 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,0.06);
 }
 
+
 .stylist-hero-img-wrapper img {
     width: 100%;
     height: 100%;
@@ -127,11 +143,14 @@ body {
     transition: transform 0.6s ease;
 }
 
+
 .stylist-hero-img-wrapper:hover img {
     transform: scale(1.03);
 }
 
-/* --- Search Form Card (Executive Toolbar) --- */
+
+/* --- Search Form Card --- */
+
 .stylist-form-card {
     background: var(--card-pure);
     border: 1px solid var(--border-subtle);
@@ -142,6 +161,7 @@ body {
     position: relative;
 }
 
+
 .form-section-header {
     display: flex;
     justify-content: space-between;
@@ -151,6 +171,7 @@ body {
     padding-bottom: 12px;
 }
 
+
 .form-section-header span {
     font-size: 0.65rem;
     letter-spacing: 2px;
@@ -158,6 +179,7 @@ body {
     color: var(--gold);
     font-weight: 600;
 }
+
 
 .form-section-header h2 {
     font-size: 1.25rem;
@@ -167,11 +189,11 @@ body {
     margin: 0;
 }
 
-/* 
-  ABSOLUTE HORIZONTAL ALIGNMENT ENGINE:
-  Forces Django's form output elements (whether wrapped in p, div, etc.) 
-  into a strict 5-column grid track side-by-side.
+
+/*
+    ABSOLUTE HORIZONTAL ALIGNMENT ENGINE
 */
+
 .stylist-form-card form {
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr 1fr 180px !important;
@@ -179,6 +201,7 @@ body {
     align-items: flex-end !important;
     width: 100% !important;
 }
+
 
 .stylist-form-card form p,
 .stylist-form-card form div,
@@ -190,6 +213,7 @@ body {
     width: 100% !important;
     grid-column: auto !important;
 }
+
 
 .stylist-form-card label {
     font-size: 0.65rem !important;
@@ -203,6 +227,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 
 .stylist-form-card select,
 .stylist-form-card input[type="text"],
@@ -221,6 +246,7 @@ body {
     box-sizing: border-box !important;
 }
 
+
 .stylist-form-card select:focus,
 .stylist-form-card input:focus {
     border-color: var(--gold) !important;
@@ -228,6 +254,7 @@ body {
     background-color: var(--card-pure) !important;
     outline: none !important;
 }
+
 
 .stylist-form-card button,
 .stylist-form-card input[type="submit"],
@@ -253,6 +280,7 @@ body {
     box-sizing: border-box !important;
 }
 
+
 .stylist-form-card button:hover,
 .stylist-form-card input[type="submit"]:hover {
     background-color: var(--gold) !important;
@@ -261,12 +289,51 @@ body {
     box-shadow: 0 10px 25px rgba(200, 169, 106, 0.25) !important;
 }
 
-/* --- Recommendation Results --- */
+
+/* =====================================
+    RECOMMENDATION RESULTS
+===================================== */
+
 .recommendations-wrapper {
     width: 100%;
 }
 
+
+/* --- Recommendation Result Message --- */
+
+.stylist-result-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: var(--card-pure);
+
+    border: 1px solid var(--border-subtle);
+
+    border-radius: 18px;
+
+    padding: 15px 20px;
+
+    margin-bottom: 24px;
+
+    box-shadow: var(--shadow-soft);
+
+    color: var(--text-main);
+
+    font-size: 0.9rem;
+
+    font-weight: 500;
+}
+
+
+.stylist-result-message i {
+    color: var(--gold-dark);
+    font-size: 1rem;
+}
+
+
 /* --- Refined Empty State --- */
+
 .empty-state-card {
     background: var(--card-pure);
     border: 1px solid var(--border-subtle);
@@ -276,7 +343,9 @@ body {
     box-shadow: var(--shadow-soft);
     max-width: 850px;
     margin: 0 auto;
+    animation: fadeInState 0.35s ease;
 }
+
 
 .empty-state-card .empty-icon-badge {
     width: 70px;
@@ -292,6 +361,7 @@ body {
     font-size: 1.5rem;
 }
 
+
 .empty-state-card h2 {
     font-size: 2rem;
     font-family: 'Playfair Display', serif;
@@ -300,78 +370,251 @@ body {
     font-weight: 400;
 }
 
+
 .empty-state-card p {
     color: var(--text-muted);
     font-size: 0.95rem;
     font-weight: 300;
     line-height: 1.6;
-    max-width: 500px;
+    max-width: 550px;
     margin: 0 auto;
 }
 
-/* Responsive design breakpoints */
+
+/* --- Simple Result Animation --- */
+
+@keyframes fadeInState {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* --- Responsive Design --- */
+
 @media (max-width: 1200px) {
+
     .stylist-form-card form {
         grid-template-columns: repeat(2, 1fr) !important;
     }
+
 }
 
+
 @media (max-width: 768px) {
+
+    .stylist-page {
+        padding: 25px 15px 80px;
+    }
+
+    .stylist-hero-card {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 35px 25px;
+    }
+
+    .stylist-hero-text h1 {
+        font-size: 2.4rem;
+    }
+
+    .stylist-hero-img-wrapper {
+        height: 280px;
+    }
+
+    .stylist-form-card {
+        padding: 25px 20px;
+    }
+
     .stylist-form-card form {
         grid-template-columns: 1fr !important;
     }
+
 }
+
+
+/* =====================================
+    CONTENT
+===================================== */
+
 </style>
+
 {% endblock %}
 
+
 {% block content %}
+
 <div class="container stylist-page">
 
-    <!-- Hero Section -->
+
+    <!-- =====================================
+        HERO SECTION
+    ===================================== -->
+
     <div class="stylist-hero-card">
+
         <div class="stylist-hero-text">
-            <span class="badge-label">Intelligent Stylist Suite</span>
-            <h1>Curated <span>Aesthetic</span> Looks</h1>
-            <p>Harness advanced style logic and color harmony algorithms to assemble precise clothing compositions tailored to your unique wardrobe items, schedule, and environment.</p>
-            
+
+            <span class="badge-label">
+                Intelligent Stylist Suite
+            </span>
+
+            <h1>
+                Curated <span>Aesthetic</span> Looks
+            </h1>
+
+            <p>
+                Harness advanced style logic and color harmony
+                algorithms to assemble precise clothing
+                compositions tailored to your unique wardrobe,
+                schedule, and environment.
+            </p>
+
             <div class="stylist-features-list">
-                <span class="stylist-feature-pill">Smart Composition</span>
-                <span class="stylist-feature-pill">Color Coordination</span>
-                <span class="stylist-feature-pill">Weather Synchronization</span>
-                <span class="stylist-feature-pill">Occasion Matching</span>
+
+                <span class="stylist-feature-pill">
+                    Smart Composition
+                </span>
+
+                <span class="stylist-feature-pill">
+                    Color Coordination
+                </span>
+
+                <span class="stylist-feature-pill">
+                    Weather Synchronization
+                </span>
+
+                <span class="stylist-feature-pill">
+                    Occasion Matching
+                </span>
+
             </div>
+
         </div>
+
 
         <div class="stylist-hero-img-wrapper">
-            <img src="{% static 'images/6.jpeg' %}" alt="Curated luxury wardrobe aesthetic">
+
+            <img
+                src="{% static 'images/6.jpeg' %}"
+                alt="Curated luxury wardrobe aesthetic"
+            >
+
         </div>
+
     </div>
 
-    <!-- Search Form Card with True Horizontal Layout -->
+
+
+    <!-- =====================================
+        SEARCH / FILTER FORM
+    ===================================== -->
+
     <div class="stylist-form-card">
+
         <div class="form-section-header">
-            <h2>Configure Your Look</h2>
-            <span>Styling Parameters</span>
+
+            <h2>
+                Configure Your Look
+            </h2>
+
+            <span>
+                Styling Parameters
+            </span>
+
         </div>
+
         {% include 'stylist/search_form.html' %}
+
     </div>
 
-    <!-- Results Section -->
+
+
+    <!-- =====================================
+        RESULTS SECTION
+    ===================================== -->
+
     {% if recommendations %}
+
         <div class="recommendations-wrapper">
+
+            {% if result_message %}
+
+                <div class="stylist-result-message">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <span>
+                        {{ result_message }}
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
             {% include 'stylist/recommendation_card.html' %}
+
         </div>
-    {% else %}
+
+
+    {% elif error_message %}
+
         <div class="empty-state-card">
+
             <div class="empty-icon-badge">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                <i class="fa-solid fa-shirt"></i>
+
             </div>
-            <h2>Let Our Smart Engine Curate Your Day</h2>
-            <p>Select your criteria above to let our recommendation logic instantly assemble bespoke outfit combinations perfectly balanced for your weather and schedule.</p>
+
+            <h2>
+                {{ error_title }}
+            </h2>
+
+            <p>
+                {{ error_message }}
+            </p>
+
         </div>
+
+
+    {% else %}
+
+        <div class="empty-state-card">
+
+            <div class="empty-icon-badge">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+            </div>
+
+            <h2>
+                Let Our Smart Engine Curate Your Day
+            </h2>
+
+            <p>
+                Select your criteria above to let our
+                recommendation logic assemble outfit
+                combinations based on your wardrobe,
+                weather, occasion and preferred style.
+            </p>
+
+        </div>
+
     {% endif %}
+
 
 </div>
 
+
 <script src="{% static 'js/stylist.js' %}"></script>
+
 {% endblock %}
