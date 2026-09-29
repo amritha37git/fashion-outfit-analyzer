@@ -408,31 +408,7 @@ def update_profile(request):
 
 
 
-        profile.location = request.POST.get(
-
-            "location",
-
-            ""
-
-        )
-
-
-        profile.phone = request.POST.get(
-
-            "phone",
-
-            ""
-
-        )
-
-
-        profile.bio = request.POST.get(
-
-            "bio",
-
-            ""
-
-        )
+        
 
 
 
