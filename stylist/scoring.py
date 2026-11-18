@@ -137,6 +137,8 @@ def calculate_core_color_score(
                 dress.color,
                 shoes.color
             )
+        else:
+            points += 18
 
         return min(
             30,
@@ -308,10 +310,10 @@ def calculate_occasion_score(
         top,
         bottom,
         dress,
-        shoes,
     ]
 
     supporting_items = [
+        shoes,
         bag,
         accessory,
     ]
@@ -341,7 +343,8 @@ def calculate_occasion_score(
 
         if is_occasion_compatible(
             item,
-            occasion
+            occasion,
+            is_supporting=True,
         ):
             points += int(
                 occasion_score(
@@ -384,10 +387,10 @@ def calculate_season_score(
         top,
         bottom,
         dress,
-        shoes,
     ]
 
     supporting_items = [
+        shoes,
         bag,
         accessory,
     ]
@@ -459,10 +462,10 @@ def calculate_style_score(
         top,
         bottom,
         dress,
-        shoes,
     ]
 
     supporting_items = [
+        shoes,
         bag,
         accessory,
     ]
@@ -572,7 +575,7 @@ def calculate_completeness(
         if shoes:
             return 5
 
-        return 2
+        return 3
 
     # Separates outfit
     if top and bottom:
@@ -635,23 +638,12 @@ def score_outfit(
             top,
             bottom,
             dress,
-            shoes,
         ]
         if item is not None
     ]
 
-    # Need a real core outfit.
-    if dress:
-
-        if shoes is None:
-            return 0, breakdown
-
-    elif top and bottom:
-
-        if shoes is None:
-            return 0, breakdown
-
-    else:
+    # Need a real core outfit (Dress OR Top + Bottom).
+    if not dress and not (top and bottom):
         return 0, breakdown
 
     # -----------------------------------------------------

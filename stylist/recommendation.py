@@ -1,9 +1,11 @@
 import itertools
+import random
 
 from .filters import get_items
 from .selectors import (
     choose_best_bag,
     choose_best_accessory,
+    is_style_clashing,
 )
 from .scoring import score_outfit
 from .explanation import build_reason
@@ -13,8 +15,9 @@ from .explanation import build_reason
 # SETTINGS
 # ---------------------------------------------------------
 
-MINIMUM_OUTFIT_SCORE = 60
+MINIMUM_OUTFIT_SCORE = 45
 MAX_RECOMMENDATIONS = 3
+VARIETY_SCORE_MARGIN = 8
 
 
 # ---------------------------------------------------------
@@ -75,12 +78,6 @@ def is_same_core_outfit(
 ):
     """
     Reject only an identical core outfit.
-
-    Example:
-
-    White top + blue jeans + white shoes
-
-    repeated with another bag is NOT a new outfit.
     """
 
     current_signature = core_signature(
@@ -105,18 +102,6 @@ def core_difference_score(
     """
     Measure how different a candidate is from
     already selected recommendations.
-
-    Different Top:
-        +3
-
-    Different Bottom:
-        +3
-
-    Different Dress:
-        +3
-
-    Different Shoes:
-        +1
     """
 
     if not selected_outfits:
@@ -160,11 +145,6 @@ def core_difference_score(
 def get_trend_score(outfit):
     """
     Estimate the fashion/style strength of an outfit.
-
-    This does NOT replace the main outfit score.
-
-    It is only used to select the Trending Look from
-    already-good candidates.
     """
 
     breakdown = outfit.get(
@@ -187,7 +167,6 @@ def get_trend_score(outfit):
         0
     )
 
-    # Style is the strongest trend signal.
     trend_score = (
         style_points * 2
         + color_points
@@ -195,6 +174,31 @@ def get_trend_score(outfit):
     )
 
     return trend_score
+
+
+def pick_weighted_top(scored_pairs, margin=VARIETY_SCORE_MARGIN):
+    """
+    Select an outfit from the top-scoring pool so repeated
+    generations provide fresh recommendations while keeping
+    scores high.
+    """
+
+    if not scored_pairs:
+        return None
+
+    scored_pairs.sort(key=lambda item: item[0], reverse=True)
+    best_score = scored_pairs[0][0]
+
+    top_pool = [
+        (max(score, 1), candidate)
+        for score, candidate in scored_pairs
+        if score >= best_score - margin
+    ]
+
+    weights = [score for score, _ in top_pool]
+    choices = [candidate for _, candidate in top_pool]
+
+    return random.choices(choices, weights=weights, k=1)[0]
 
 
 # ---------------------------------------------------------
@@ -210,12 +214,7 @@ def add_best_accessories(
     style
 ):
     """
-    Add the strongest compatible bag and accessory.
-
-    Accessories are optional.
-
-    They improve a good outfit but do not replace the
-    quality of the core outfit.
+    Add a compatible bag and accessory.
     """
 
     shoes = outfit.get(
@@ -257,22 +256,9 @@ def build_candidates(
 ):
     """
     Generate all possible valid outfit combinations.
-
-    Separates:
-        Top × Bottom × Shoes
-
-    Dresses:
-        Dress × Shoes
-
-    Bags and accessories are added after the core outfit
-    is established.
     """
 
     candidates = []
-
-    # -----------------------------------------------------
-    # FILTER WARDROBE
-    # -----------------------------------------------------
 
     tops = get_items(
         items,
@@ -306,6 +292,14 @@ def build_candidates(
         style,
     )
 
+    # Avoid pairing casual/sporty shoes with dressy occasions if non-clashing shoes exist
+    non_clashing_shoes = [
+        shoe for shoe in shoes
+        if not is_style_clashing(shoe, occasion)
+    ]
+    if non_clashing_shoes:
+        shoes = non_clashing_shoes
+
     bags = get_items(
         items,
         "Bag",
@@ -322,13 +316,15 @@ def build_candidates(
         style,
     )
 
+    shoe_options = shoes if shoes else [None]
+
     # -----------------------------------------------------
     # DRESS + SHOES
     # -----------------------------------------------------
 
     for dress, shoe in itertools.product(
         dresses,
-        shoes,
+        shoe_options,
     ):
 
         outfit = {
@@ -340,7 +336,6 @@ def build_candidates(
             "Accessory": None,
         }
 
-        # First evaluate the core outfit.
         score, breakdown = score_outfit(
             dress=dress,
             shoes=shoe,
@@ -350,7 +345,6 @@ def build_candidates(
             color=color,
         )
 
-        # Invalid core outfit.
         if score <= 0:
             continue
 
@@ -363,7 +357,6 @@ def build_candidates(
             style,
         )
 
-        # Recalculate with supporting items.
         score, breakdown = score_outfit(
             dress=dress,
             shoes=shoe,
@@ -389,15 +382,8 @@ def build_candidates(
     for top, bottom, shoe in itertools.product(
         tops,
         bottoms,
-        shoes,
+        shoe_options,
     ):
-
-        # -------------------------------------------------
-        # IMPORTANT:
-        #
-        # Evaluate the actual Top + Bottom + Shoes
-        # combination first.
-        # -------------------------------------------------
 
         score, breakdown = score_outfit(
             top=top,
@@ -409,7 +395,6 @@ def build_candidates(
             color=color,
         )
 
-        # Reject combinations that are fundamentally bad.
         if score <= 0:
             continue
 
@@ -431,7 +416,6 @@ def build_candidates(
             style,
         )
 
-        # Re-score the complete outfit.
         score, breakdown = score_outfit(
             top=top,
             bottom=bottom,
@@ -460,16 +444,19 @@ def build_candidates(
 
 def select_best_match(candidates):
     """
-    Best Match is simply the strongest complete outfit.
+    Select a top-scoring complete outfit with slight variety
+    across runs.
     """
 
     if not candidates:
         return None
 
-    return max(
-        candidates,
-        key=calculate_candidate_score,
-    )
+    scored_pairs = [
+        (calculate_candidate_score(candidate), candidate)
+        for candidate in candidates
+    ]
+
+    return pick_weighted_top(scored_pairs)
 
 
 # ---------------------------------------------------------
@@ -482,11 +469,7 @@ def select_alternative(
 ):
     """
     Alternative Look:
-
-    - Must be good enough.
-    - Must have a different core clothing combination.
-    - Should remain close to the best score.
-    - Prefers meaningful clothing variation.
+    Different core clothing combination with variety across runs.
     """
 
     if not candidates:
@@ -510,8 +493,7 @@ def select_alternative(
             candidate
         )
 
-        # Do not choose something dramatically worse.
-        if score < best_score - 15:
+        if score < best_score - 18:
             continue
 
         difference = core_difference_score(
@@ -526,15 +508,7 @@ def select_alternative(
             )
         )
 
-    if not alternative_candidates:
-        return None
-
-    alternative_candidates.sort(
-        key=lambda value: value[0],
-        reverse=True,
-    )
-
-    return alternative_candidates[0][1]
+    return pick_weighted_top(alternative_candidates)
 
 
 # ---------------------------------------------------------
@@ -547,10 +521,7 @@ def select_trending(
 ):
     """
     Trending Look:
-
-    - Must still be a genuinely good outfit.
-    - Must be different from the already selected looks.
-    - Gives extra weight to style and color character.
+    Distinct look emphasizing style and color character.
     """
 
     if not candidates:
@@ -582,7 +553,6 @@ def select_trending(
             candidate
         )
 
-        # Main outfit score remains dominant.
         final_trend_score = (
             base_score * 2
             + trend_score
@@ -596,15 +566,7 @@ def select_trending(
             )
         )
 
-    if not trending_candidates:
-        return None
-
-    trending_candidates.sort(
-        key=lambda value: value[0],
-        reverse=True,
-    )
-
-    return trending_candidates[0][1]
+    return pick_weighted_top(trending_candidates)
 
 
 # ---------------------------------------------------------
@@ -615,13 +577,9 @@ def select_best_outfits(candidates):
     """
     Create the three ALAMARAi recommendation roles:
 
-        1. Best Match
-        2. Alternative Look
-        3. Trending Look
-
-    No wardrobe-item reuse restriction exists.
-
-    Only duplicate core combinations are prevented.
+    1. Best Match
+    2. Alternative Look
+    3. Trending Look
     """
 
     valid_candidates = [
@@ -634,10 +592,6 @@ def select_best_outfits(candidates):
     if not valid_candidates:
         return []
 
-    # -----------------------------------------------------
-    # BEST MATCH
-    # -----------------------------------------------------
-
     best_match = select_best_match(
         valid_candidates
     )
@@ -649,10 +603,6 @@ def select_best_outfits(candidates):
         best_match
     ]
 
-    # -----------------------------------------------------
-    # ALTERNATIVE
-    # -----------------------------------------------------
-
     alternative = select_alternative(
         valid_candidates,
         best_match,
@@ -662,10 +612,6 @@ def select_best_outfits(candidates):
         selected.append(
             alternative
         )
-
-    # -----------------------------------------------------
-    # TRENDING
-    # -----------------------------------------------------
 
     trending = select_trending(
         valid_candidates,
@@ -693,29 +639,12 @@ def choose_best_outfits(
 ):
     """
     Main ALAMARAi recommendation engine.
-
-    Process:
-
-    1. Load the user's wardrobe.
-    2. Filter suitable wardrobe items.
-    3. Generate all possible core combinations.
-    4. Validate the core outfit.
-    5. Find matching shoes/accessories.
-    6. Score the complete outfit.
-    7. Remove weak combinations.
-    8. Select Best Match.
-    9. Select Alternative Look.
-    10. Select Trending Look.
     """
 
     items = list(items)
 
     if not items:
         return []
-
-    # -----------------------------------------------------
-    # GENERATE ALL CANDIDATES
-    # -----------------------------------------------------
 
     candidates = build_candidates(
         items,
@@ -725,27 +654,15 @@ def choose_best_outfits(
         color,
     )
 
-    # -----------------------------------------------------
-    # SELECT FINAL RECOMMENDATIONS
-    # -----------------------------------------------------
-
     final_outfits = select_best_outfits(
         candidates
     )
-
-    # -----------------------------------------------------
-    # ADD EXPLANATIONS
-    # -----------------------------------------------------
 
     for outfit in final_outfits:
 
         outfit["reason"] = build_reason(
             outfit
         )
-
-        # -------------------------------------------------
-        # SEARCH QUERY
-        # -------------------------------------------------
 
         search_parts = []
 
@@ -776,10 +693,6 @@ def choose_best_outfits(
                 search_parts
             )
         )
-
-        # -------------------------------------------------
-        # SHOPPING QUERY
-        # -------------------------------------------------
 
         keywords = []
 
