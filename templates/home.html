@@ -144,7 +144,7 @@ body {
 }
 
 /* =====================================
-   1. WELCOME HERO
+1. WELCOME HERO
 ===================================== */
 .dashboard-hero {
     display: grid;
@@ -216,7 +216,7 @@ body {
 }
 
 /* =====================================
-   2. WARDROBE STATISTICS
+2. WARDROBE STATISTICS
 ===================================== */
 .stats-grid {
     display: grid;
@@ -264,7 +264,7 @@ body {
 }
 
 /* =====================================
-   3. WARDROBE CATEGORIES (EDITORIAL)
+3. WARDROBE CATEGORIES (EDITORIAL)
 ===================================== */
 .categories-grid {
     display: grid;
@@ -363,7 +363,7 @@ body {
 }
 
 /* =====================================
-   4. WARDROBE DISTRIBUTION
+4. WARDROBE DISTRIBUTION
 ===================================== */
 .distribution-card {
     background: var(--card-pure);
@@ -416,7 +416,7 @@ body {
 }
 
 /* =====================================
-   5. RECENTLY ADDED (Horizontal)
+5. RECENTLY ADDED (Horizontal)
 ===================================== */
 .recent-grid {
     display: grid;
@@ -473,7 +473,7 @@ body {
 }
 
 /* =====================================
-   6. WARDROBE INSIGHTS
+6. WARDROBE INSIGHTS
 ===================================== */
 .insights-card {
     background: var(--card-pure);
@@ -670,7 +670,7 @@ body {
 }
 
 /* =====================================
-   9. SMART STYLING BANNER
+9. SMART STYLING BANNER
 ===================================== */
 .styling-banner {
     background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
@@ -720,7 +720,7 @@ body {
 }
 
 /* =====================================
-   10. QUICK ACTIONS
+10. QUICK ACTIONS
 ===================================== */
 .quick-actions {
     display: grid;
@@ -1074,11 +1074,21 @@ body {
                 <h2>{{ weather.temperature|default:"28" }}°C</h2>
                 <p>{{ weather.condition|default:"Sunny" }}</p>
             </div>
-            {% if weather.icon %}
-            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Weather" style="width: 100px;">
-            {% else %}
-            <i class="fa-solid fa-sun" style="font-size: 4.5rem; color: var(--gold);"></i>
-            {% endif %}
+            {% with cond=weather.condition|lower %}
+                {% if 'rain' in cond or 'drizzle' in cond %}
+                    <i class="fa-solid fa-cloud-rain" style="font-size: 4rem; color: var(--gold);"></i>
+                {% elif 'storm' in cond or 'thunder' in cond %}
+                    <i class="fa-solid fa-cloud-bolt" style="font-size: 4rem; color: var(--gold);"></i>
+                {% elif 'cloud' in cond %}
+                    <i class="fa-solid fa-cloud" style="font-size: 4rem; color: var(--gold);"></i>
+                {% elif 'mist' in cond or 'haze' in cond or 'fog' in cond %}
+                    <i class="fa-solid fa-smog" style="font-size: 4rem; color: var(--gold);"></i>
+                {% elif weather.icon and 'n' in weather.icon %}
+                    <i class="fa-solid fa-moon" style="font-size: 4rem; color: var(--gold);"></i>
+                {% else %}
+                    <i class="fa-solid fa-sun" style="font-size: 4.5rem; color: var(--gold);"></i>
+                {% endif %}
+            {% endwith %}
         </div>
         <div class="weather-details">
             <div class="w-detail">
@@ -1146,7 +1156,7 @@ body {
         <!-- 4. MILD/COMFORTABLE FALLBACK -->
         {% else %}
             {% if current_day|divisibleby:"2" %}
-                Today brings a comfortable {{ weather.temperature }}°C with {{ weather.condition|lower }}. It's the perfect weather for classic, versatile outfits without heavy layers.
+                Today brings a comfortable {{ weather.temperature }}°C ({{ weather.condition|lower }}). It's the perfect weather for classic, versatile outfits without heavy layers.
                 {% if latest_top and latest_bottom %}
                     Why not put together your <strong>{{ latest_top.color|default:'' }} {{ latest_top.name }}</strong> and <strong>{{ latest_bottom.name }}</strong>?
                 {% else %}

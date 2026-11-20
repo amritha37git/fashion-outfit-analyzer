@@ -444,8 +444,8 @@ def build_candidates(
 
 def select_best_match(candidates):
     """
-    Select a top-scoring complete outfit with slight variety
-    across runs.
+    Select a top-scoring complete outfit (randomly breaking ties
+    only among outfits with the exact highest score).
     """
 
     if not candidates:
@@ -456,7 +456,7 @@ def select_best_match(candidates):
         for candidate in candidates
     ]
 
-    return pick_weighted_top(scored_pairs)
+    return pick_weighted_top(scored_pairs, margin=0)
 
 
 # ---------------------------------------------------------
@@ -577,9 +577,9 @@ def select_best_outfits(candidates):
     """
     Create the three ALAMARAi recommendation roles:
 
-    1. Best Match
-    2. Alternative Look
-    3. Trending Look
+1. Best Match
+2. Alternative Look
+3. Trending Look
     """
 
     valid_candidates = [

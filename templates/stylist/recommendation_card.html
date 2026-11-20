@@ -801,7 +801,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
-    align-items: start;
+    align-items: stretch;
 }
 
 
@@ -809,7 +809,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-height: 384px;
+    height: 100%;
 }
 
 
@@ -839,7 +839,8 @@
 
 
 .outfit-piece-card.primary-piece .piece-img-box {
-    min-height: 150px;
+    flex: 1;
+    min-height: 186px;
     background: #F4F7F9;
     display: flex;
     align-items: center;
@@ -857,6 +858,16 @@
     box-sizing: border-box;
     background: #F8FAFC;
     transition: transform 0.5s ease;
+}
+
+
+.outfit-piece-card.primary-piece:only-child .piece-img-box {
+    min-height: 430px;
+}
+
+
+.outfit-piece-card.primary-piece:only-child .piece-img-box img {
+    max-height: 410px;
 }
 
 
@@ -1091,6 +1102,10 @@
 
     .outfit-piece-card.primary-piece .piece-img-box {
         min-height: 200px;
+    }
+
+    .outfit-piece-card.primary-piece:only-child .piece-img-box {
+        min-height: 280px;
     }
 
     .outfit-luxury-card {
